@@ -12,6 +12,6 @@ namespace ResellioBackend.Models.Users
         public string OrganiserName { get; set; }
 
         [Required]
-        public bool IsVerified;
+        public bool IsVerified { get; set; }
     }
 }
