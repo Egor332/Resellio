@@ -1,5 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
+using ResellioBackend.Services.Abstractions;
+using ResellioBackend.Services.Implementations;
+using System.Security.Cryptography;
 
 namespace ResellioBackend
 {
@@ -11,13 +14,16 @@ namespace ResellioBackend
             var configuration = builder.Configuration;
             
             // Add services to the container.
-
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // DbContext
             var connectionString = configuration.GetConnectionString("DbConnectionString");
             builder.Services.AddDbContext<ResellioDbContext>(options => options.UseSqlServer(connectionString));
+
+            // Services
+            builder.Services.AddTransient<IPasswordService, Hmacsha256PasswordService>();
 
             var app = builder.Build();
 
