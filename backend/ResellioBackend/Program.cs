@@ -24,6 +24,7 @@ namespace ResellioBackend
 
             // Services
             builder.Services.AddTransient<IPasswordService, Hmacsha256PasswordService>();
+            builder.Services.AddTransient<ITokenGenerator, JwtGenerator>();
 
             var app = builder.Build();
 
@@ -37,7 +38,6 @@ namespace ResellioBackend
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
