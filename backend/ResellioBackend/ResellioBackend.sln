@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResellioBackend", "ResellioBackend.csproj", "{4363FB98-75B6-4B46-98EC-A7D81AB41F7B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResellioBackendTests", "..\ResellioBackendTests\ResellioBackendTests.csproj", "{382D14AC-2036-4252-A919-82240A987616}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4363FB98-75B6-4B46-98EC-A7D81AB41F7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4363FB98-75B6-4B46-98EC-A7D81AB41F7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4363FB98-75B6-4B46-98EC-A7D81AB41F7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{382D14AC-2036-4252-A919-82240A987616}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{382D14AC-2036-4252-A919-82240A987616}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{382D14AC-2036-4252-A919-82240A987616}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{382D14AC-2036-4252-A919-82240A987616}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
