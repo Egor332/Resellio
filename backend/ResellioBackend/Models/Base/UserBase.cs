@@ -1,5 +1,6 @@
 ﻿using ResellioBackend.Results;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace ResellioBackend.Models.Base
 {
@@ -32,6 +33,8 @@ namespace ResellioBackend.Models.Base
         [Required]
         public bool IsActive { get; set; }
 
+        public abstract List<Claim> GetClaims();
+
         public virtual ResultBase ValidateAccount()
         {
             if (IsActive)
@@ -50,6 +53,16 @@ namespace ResellioBackend.Models.Base
                     Message = "This account was deactivated"
                 };
             }
+        }
+
+        protected List<Claim> GetBaseClaims()
+        {
+            List<Claim> claims = new List<Claim>();
+            Claim emailClaim = new Claim("Email", Email);
+            Claim idClaim = new Claim("UserId", UserId.ToString());
+            claims.Add(emailClaim);
+            claims.Add(idClaim);
+            return claims;
         }
     }
 }

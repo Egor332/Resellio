@@ -1,6 +1,8 @@
-﻿using ResellioBackend.Models.Base;
+﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+using ResellioBackend.Models.Base;
 using ResellioBackend.Results;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace ResellioBackend.Models.Users
 {
@@ -38,6 +40,15 @@ namespace ResellioBackend.Models.Users
                     Message = "Your account have not been verified yet"
                 };
             }
+        }
+
+        public override List<Claim> GetClaims()
+        {
+            var claims = GetBaseClaims();
+            Claim roleClaim = new Claim("Role", "Organiser");
+            claims.Add(roleClaim);
+
+            return claims;
         }
     }
 }
