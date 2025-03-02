@@ -1,29 +1,29 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ResellioBackend.DTOs.Users;
-using ResellioBackend.Factories.Abstractions;
 using ResellioBackend.Services.Abstractions;
 
 namespace ResellioBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomersController : ControllerBase
+    public class OrganisersController : ControllerBase
     {
         private readonly IRegistrationService _registrationService;
 
-        public CustomersController(IRegistrationService registrationService) 
+        public OrganisersController(IRegistrationService registrationService)
         {
             _registrationService = registrationService;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody]RegisterCustomerDto registrationInfo) 
+        public async Task<IActionResult> Register([FromBody] RegisterOrganiserDto registrationInfo)
         {
             var result = await _registrationService.RegisterUserAsync(registrationInfo);
+            // TODO if not microservice then we should send an email
             if (result.Success)
             {
-                return Ok(new {result.Id, result.Message});
+                return Ok(new { result.Id, result.Message });
             }
             else
             {
