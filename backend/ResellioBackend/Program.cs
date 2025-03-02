@@ -1,5 +1,9 @@
 
 using Microsoft.EntityFrameworkCore;
+using ResellioBackend.Factories.Abstractions;
+using ResellioBackend.Factories.Implementations;
+using ResellioBackend.Repositories.Abstractions;
+using ResellioBackend.Repositories.Implementations;
 using ResellioBackend.Services.Abstractions;
 using ResellioBackend.Services.Implementations;
 using System.Security.Cryptography;
@@ -25,6 +29,12 @@ namespace ResellioBackend
             // Services
             builder.Services.AddTransient<IPasswordService, Hmacsha256PasswordService>();
             builder.Services.AddTransient<ITokenGenerator, JwtGenerator>();
+
+            // Repositories
+            builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));
+
+            // Factory
+            builder.Services.AddTransient<IUserFactory, UserFactory>();
 
             var app = builder.Build();
 
