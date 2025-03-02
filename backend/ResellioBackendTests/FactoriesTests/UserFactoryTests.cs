@@ -24,7 +24,6 @@ namespace ResellioBackendTests.FactoriesTests
             var dto = new RegisterCustomerDto
             {
                 Email = "customer@example.com",
-                Login = "customerLogin",
                 FirstName = "John",
                 LastName = "Doe"
             };
@@ -35,11 +34,10 @@ namespace ResellioBackendTests.FactoriesTests
             // Assert            
             result.Should().BeOfType<Customer>();
             result.Email.Should().Be(dto.Email);
-            result.Login.Should().Be(dto.Login);
             result.FirstName.Should().Be(dto.FirstName);
             result.LastName.Should().Be(dto.LastName);
             result.CreatedDate.Should().Be(DateTime.Now.Date);
-            result.IsActive.Should().BeTrue();            
+            result.IsActive.Should().BeTrue();
         }
 
         [Fact]
@@ -49,7 +47,6 @@ namespace ResellioBackendTests.FactoriesTests
             var dto = new RegisterOrganiserDto
             {
                 Email = "organiser@example.com",
-                Login = "organiserLogin",
                 FirstName = "Jane",
                 LastName = "Smith",
                 OrganiserName = "name of organiser"
@@ -61,12 +58,11 @@ namespace ResellioBackendTests.FactoriesTests
             // Assert
             result.Should().BeOfType<Organiser>();
             result.Email.Should().Be(dto.Email);
-            result.Login.Should().Be(dto.Login);
             result.FirstName.Should().Be(dto.FirstName);
             result.LastName.Should().Be(dto.LastName);
             result.CreatedDate.Should().Be(DateTime.Now.Date);
             result.IsActive.Should().BeTrue();
-            ((Organiser)result).IsVerified.Should().BeTrue();
+            ((Organiser)result).IsVerified.Should().BeFalse();
             ((Organiser)result).OrganiserName.Should().Be(dto.OrganiserName);
         }
     }

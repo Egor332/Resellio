@@ -16,10 +16,10 @@ namespace ResellioBackend.Factories.Implementations
                     var newCustomer = new Customer
                     {
                         Email = customerDto.Email,
-                        Login = customerDto.Login,
                         FirstName = customerDto.FirstName,
                         LastName = customerDto.LastName,
                         CreatedDate = DateTime.Now.Date,
+                        IsActive = true
                     };
                     return newCustomer;
                 case RegisterOrganiserDto organiserDto:
@@ -27,10 +27,10 @@ namespace ResellioBackend.Factories.Implementations
                     {
                         OrganiserName = organiserDto.OrganiserName,
                         Email = organiserDto.Email,
-                        Login = organiserDto.Login,
                         FirstName = organiserDto.FirstName,
                         LastName = organiserDto.LastName,
                         CreatedDate = DateTime.Now.Date,
+                        IsActive = true,
                         IsVerified = false
                     };
                     return newOrganiser;

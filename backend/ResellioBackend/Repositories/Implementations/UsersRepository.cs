@@ -33,9 +33,9 @@ namespace ResellioBackend.Repositories.Implementations
             return entity;
         }
 
-        public async Task<T?> GetByLoginAsync(string login)
+        public async Task<T?> GetByEmailAsync(string email)
         {
-            var entity = await _dbSet.FirstOrDefaultAsync(e => e.Login == login);
+            var entity = await _dbSet.FirstOrDefaultAsync(e => e.Email == email);
             return entity;
         }
 

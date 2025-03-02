@@ -12,10 +12,6 @@ namespace ResellioBackend.Models.Base
         public string Email { get; set; }
 
         [Required]
-        [MaxLength(50)]
-        public string Login { get; set; }
-
-        [Required]
         public string PasswordHash { get; set; }
 
         [Required]

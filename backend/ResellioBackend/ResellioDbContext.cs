@@ -25,7 +25,7 @@ namespace ResellioBackend
 
             // Add Index on Login Column
             modelBuilder.Entity<UserBase>()
-                .HasIndex(u => u.Login)
+                .HasIndex(u => u.Email)
                 .IsUnique();
 
             base.OnModelCreating(modelBuilder);

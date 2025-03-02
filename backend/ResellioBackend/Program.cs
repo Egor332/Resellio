@@ -29,6 +29,7 @@ namespace ResellioBackend
             // Services
             builder.Services.AddTransient<IPasswordService, Hmacsha256PasswordService>();
             builder.Services.AddTransient<ITokenGenerator, JwtGenerator>();
+            builder.Services.AddTransient<IRegistrationService, RegistrationService>();
 
             // Repositories
             builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));
