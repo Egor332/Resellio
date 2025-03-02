@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ResellioBackend.Results;
+using System.ComponentModel.DataAnnotations;
 
 namespace ResellioBackend.Models.Base
 {
@@ -30,5 +31,25 @@ namespace ResellioBackend.Models.Base
 
         [Required]
         public bool IsActive { get; set; }
+
+        public virtual ResultBase ValidateAccount()
+        {
+            if (IsActive)
+            {
+                return new ResultBase()
+                {
+                    Success = true,
+                    Message = ""
+                };
+            }
+            else
+            {
+                return new ResultBase()
+                {
+                    Success = false,
+                    Message = "This account was deactivated"
+                };
+            }
+        }
     }
 }
