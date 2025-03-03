@@ -1,4 +1,19 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using ResellioBackend.UserManagmentSystem.Factories.Abstractions;
+using ResellioBackend.UserManagmentSystem.Factories.Implementations;
+using ResellioBackend.UserManagmentSystem.Repositories.Abstractions;
+using ResellioBackend.UserManagmentSystem.Repositories.Implementations;
+using ResellioBackend.UserManagmentSystem.Services.Abstractions;
+using ResellioBackend.UserManagmentSystem.Services.Implementations;
+using ResellioBackend.UserManagmentSystem.Statics;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+
 namespace ResellioBackend
 {
     public class Program
@@ -6,13 +21,97 @@ namespace ResellioBackend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            var configuration = builder.Configuration;
+            
             // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // DbContext
+            var connectionString = configuration.GetConnectionString("DbConnectionString");
+            builder.Services.AddDbContext<ResellioDbContext>(options => options.UseSqlServer(connectionString));
+
+            // Authentication and Authorization
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = configuration["JwtParameters:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtParameters:AuthenticationSecretKey"]))
+                };
+            });
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(AuthorizationPolicies.CustomerPolicy, policy => policy.RequireClaim("Role", "Customer"));
+                options.AddPolicy(AuthorizationPolicies.OrganiserPolicy, policy => policy.RequireClaim("Role", "Organiser"));
+                options.AddPolicy(AuthorizationPolicies.AdminPolicy, policy => policy.RequireClaim("Role", "Admin"));
+            });
+
+            // Add authorization to swager
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'"
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
+
+            // Services
+            builder.Services.AddTransient<IPasswordService, Hmacsha256PasswordService>();
+            builder.Services.AddTransient<ITokenGenerator, JwtGenerator>();
+            builder.Services.AddTransient<IRegistrationService, RegistrationService>();
+            builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
+
+            // Repositories
+            builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));
+
+            // Factory
+            builder.Services.AddTransient<IUserFactory, UserFactory>();
+
+            // CORS
+            var allowedOrigins = configuration["AllowedOrigins"];
+
+            if (allowedOrigins != null)
+                builder.Services.AddCors(options =>
+                {
+                    options.AddPolicy("CorsPolicy", corsPolicyBuilder =>
+                    {
+                        corsPolicyBuilder.WithOrigins(allowedOrigins)
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials();
+                    });
+                });
 
             var app = builder.Build();
 
@@ -23,10 +122,10 @@ namespace ResellioBackend
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseHttpsRedirection();
 
             app.MapControllers();
 
