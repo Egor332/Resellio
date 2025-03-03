@@ -98,7 +98,20 @@ namespace ResellioBackend
             // Factory
             builder.Services.AddTransient<IUserFactory, UserFactory>();
 
+            // CORS
+            var allowedOrigins = configuration["AllowedOrigins"];
 
+            if (allowedOrigins != null)
+                builder.Services.AddCors(options =>
+                {
+                    options.AddPolicy("CorsPolicy", corsPolicyBuilder =>
+                    {
+                        corsPolicyBuilder.WithOrigins(allowedOrigins)
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials();
+                    });
+                });
 
             var app = builder.Build();
 
