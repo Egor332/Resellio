@@ -7,7 +7,7 @@ namespace ResellioBackend.Services.Implementations
 {
     public class JwtGenerator : ITokenGenerator
     {
-        public string GenerateToken(List<Claim> claims, int expirationInMinuts, byte[] key, string issuer, string audience)
+        public string GenerateToken(List<Claim> claims, int expirationInMinutes, byte[] key, string issuer, string audience)
         {
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -15,7 +15,7 @@ namespace ResellioBackend.Services.Implementations
                 Issuer = issuer,
                 Audience = audience,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                Expires = DateTime.UtcNow.AddMinutes(expirationInMinuts)
+                Expires = DateTime.UtcNow.AddMinutes(expirationInMinutes)
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
