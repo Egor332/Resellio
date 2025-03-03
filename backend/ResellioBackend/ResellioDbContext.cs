@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
-using ResellioBackend.Models.Base;
-using ResellioBackend.Models.Users;
+using ResellioBackend.UserManagmentSystem.Models.Base;
+using ResellioBackend.UserManagmentSystem.Models.Users;
 
 namespace ResellioBackend
 {
