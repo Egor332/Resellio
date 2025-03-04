@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using ResellioBackend.UserManagmentSystem.Factories.Abstractions;
-using ResellioBackend.UserManagmentSystem.Factories.Implementations;
-using ResellioBackend.UserManagmentSystem.Repositories.Abstractions;
-using ResellioBackend.UserManagmentSystem.Repositories.Implementations;
-using ResellioBackend.UserManagmentSystem.Services.Abstractions;
-using ResellioBackend.UserManagmentSystem.Services.Implementations;
-using ResellioBackend.UserManagmentSystem.Statics;
+using ResellioBackend.UserManagementSystem.Factories.Abstractions;
+using ResellioBackend.UserManagementSystem.Factories.Implementations;
+using ResellioBackend.UserManagementSystem.Repositories.Abstractions;
+using ResellioBackend.UserManagementSystem.Repositories.Implementations;
+using ResellioBackend.UserManagementSystem.Services.Abstractions;
+using ResellioBackend.UserManagementSystem.Services.Implementations;
+using ResellioBackend.UserManagementSystem.Statics;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -52,9 +52,9 @@ namespace ResellioBackend
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy(AuthorizationPolicies.CustomerPolicy, policy => policy.RequireClaim("Role", "Customer"));
-                options.AddPolicy(AuthorizationPolicies.OrganiserPolicy, policy => policy.RequireClaim("Role", "Organiser"));
-                options.AddPolicy(AuthorizationPolicies.AdminPolicy, policy => policy.RequireClaim("Role", "Admin"));
+                options.AddPolicy(AuthorizationPolicies.CustomerPolicy, policy => policy.RequireClaim(BearerTokenClaimsNames.Role, "Customer"));
+                options.AddPolicy(AuthorizationPolicies.OrganiserPolicy, policy => policy.RequireClaim(BearerTokenClaimsNames.Role, "Organiser"));
+                options.AddPolicy(AuthorizationPolicies.AdminPolicy, policy => policy.RequireClaim(BearerTokenClaimsNames.Role, "Admin"));
             });
 
             // Add authorization to swager
