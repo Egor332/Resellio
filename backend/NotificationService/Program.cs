@@ -1,4 +1,7 @@
 
+using NotificationService.Services.Abstractions;
+using NotificationService.Services.Implementations;
+
 namespace NotificationService
 {
     public class Program
@@ -13,6 +16,9 @@ namespace NotificationService
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Services
+            builder.Services.AddTransient<ICustomEmailSender, SendGridEmailSender>();
 
             var app = builder.Build();
 

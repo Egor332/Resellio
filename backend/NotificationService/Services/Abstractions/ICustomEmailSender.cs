@@ -1,4 +1,4 @@
-﻿namespace ResellioBackend.UserManagementSystem.Services.Abstractions
+﻿namespace NotificationService.Services.Abstractions
 {
     public interface ICustomEmailSender
     {

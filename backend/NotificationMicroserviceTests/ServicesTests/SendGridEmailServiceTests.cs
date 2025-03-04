@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Moq;
-using ResellioBackend.UserManagementSystem.Services.Implementations;
+using NotificationService.Services.Implementations;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
@@ -10,7 +10,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
+namespace NotificationServiceTests.ServicesTests
 {
     public class SendGridEmailSenderTests
     {

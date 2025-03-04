@@ -1,8 +1,9 @@
-﻿using SendGrid.Helpers.Mail;
+﻿using NotificationService.Services.Abstractions;
 using SendGrid;
-using ResellioBackend.UserManagementSystem.Services.Abstractions;
+using SendGrid.Helpers.Mail;
+using System.Net.Mail;
 
-namespace ResellioBackend.UserManagementSystem.Services.Implementations
+namespace NotificationService.Services.Implementations
 {
     public class SendGridEmailSender : ICustomEmailSender
     {
