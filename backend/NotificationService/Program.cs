@@ -1,4 +1,5 @@
 
+using NotificationService.Consumers;
 using NotificationService.Services.Abstractions;
 using NotificationService.Services.Implementations;
 
@@ -19,6 +20,8 @@ namespace NotificationService
 
             // Services 
             builder.Services.AddTransient<ICustomEmailSender, SendGridEmailSender>();
+
+            builder.Services.AddHostedService<KafkaConsumer>();
 
             var app = builder.Build();
 
