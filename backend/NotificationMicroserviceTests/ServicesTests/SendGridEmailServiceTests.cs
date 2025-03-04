@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Moq;
+using NotificationService.Models;
 using NotificationService.Services.Implementations;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -16,6 +17,7 @@ namespace NotificationServiceTests.ServicesTests
     {
         private readonly Mock<ISendGridClient> _sendGridClientMock;
         private readonly SendGridEmailSender _emailSender;
+        private readonly EmailMessageModel _exampleMessage;
 
         public SendGridEmailSenderTests()
         {
@@ -34,6 +36,14 @@ namespace NotificationServiceTests.ServicesTests
             {
                 ClientFactory = () => _sendGridClientMock.Object
             };
+
+            _exampleMessage = new EmailMessageModel()
+            {
+                Email = "test@example.com",
+                Subject = "Subject",
+                PlainTextContent = "Text",
+                HtmlContent = "HTML",
+            };
         }
 
         [Fact]
@@ -46,7 +56,7 @@ namespace NotificationServiceTests.ServicesTests
                 .ReturnsAsync(response);
 
             // Act
-            var result = await _emailSender.SendEmailAsync("test@example.com", "Subject", "Text", "HTML");
+            var result = await _emailSender.SendEmailAsync(_exampleMessage);
 
             // Assert
             Assert.True(result);
@@ -62,7 +72,7 @@ namespace NotificationServiceTests.ServicesTests
                 .ReturnsAsync(response);
 
             // Act
-            var result = await _emailSender.SendEmailAsync("test@example.com", "Subject", "Text", "HTML");
+            var result = await _emailSender.SendEmailAsync(_exampleMessage);
 
             // Assert
             Assert.False(result);
@@ -78,13 +88,13 @@ namespace NotificationServiceTests.ServicesTests
                 .ReturnsAsync(response);
 
             // Act
-            await _emailSender.SendEmailAsync("to@example.com", "Subject", "PlainText", "HtmlContent");
+            await _emailSender.SendEmailAsync(_exampleMessage);
 
             // Assert
             _sendGridClientMock.Verify(c => c.SendEmailAsync(It.Is<SendGridMessage>(msg =>
                 msg.From.Email == "noreply@resellio.com" &&
                 msg.Subject == "Subject" &&
-                msg.Personalizations[0].Tos[0].Email == "to@example.com"
+                msg.Personalizations[0].Tos[0].Email == "test@example.com"
             ), default), Times.Once);
         }
     }

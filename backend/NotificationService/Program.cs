@@ -17,7 +17,7 @@ namespace NotificationService
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            // Services
+            // Services 
             builder.Services.AddTransient<ICustomEmailSender, SendGridEmailSender>();
 
             var app = builder.Build();
