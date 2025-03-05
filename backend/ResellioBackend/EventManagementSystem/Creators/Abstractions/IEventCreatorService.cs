@@ -1,10 +1,9 @@
 using ResellioBackend.EventManagementSystem.DTOs;
 using ResellioBackend.Results;
-using ResellioBackend.UserManagementSystem.Models;
 
-namespace ResellioBackend.EventManagementSystem.Services.Abstractions;
+namespace ResellioBackend.EventManagementSystem.Creators.Abstractions;
 
-public interface IEventService
+public interface IEventCreatorService
 {
     Task<ResultBase> CreateEventAsync(EventDto eventDto, int organiserId);
 }
