@@ -1,25 +1,18 @@
-namespace ResellioBackend.UserManagementSystem.Models;
-using System.ComponentModel.DataAnnotations;
+namespace ResellioBackend.UserManagementSystem.DTOs;
 
-public class TicketType
+public class TicketTypeDTO
 {
-    [Key] 
     public int TypeId { get; set; }
     
-    [Required]
-    public Event Event { get; set; }
+    public int EventId { get; set; }
     
     public string Description { get; set; }
     
-    [Required]
     public int MaxCount { get; set; }
     
-    [Required]
     public decimal Price { get; set; }
-
-    [Required]
+    
     public string Currency { get; set; }
     
-    [Required]
     public DateTime AvailableFrom { get; set; }
 }
