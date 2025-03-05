@@ -14,5 +14,5 @@ public class EventDto
 
     public DateTime End { get; set; }
     
-    public List<int> TicketTypeIds { get; set; }
+    public List<TicketTypeDto> TicketTypeIds { get; set; }
 }

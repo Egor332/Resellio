@@ -11,6 +11,8 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
         public int TicketId { get; set; }
 
         [Required]
+        public int TicketTypeId { get; set; }
+        [Required]
         public TicketType TicketType { get; set; }
 
         public Customer? Owner { get; set; }
