@@ -32,5 +32,5 @@ public class Event
     /// Name can be a little deceiving. It's a list of TicketTypes not Tickets. Each TicketType remebers all the Tickets of that type.
     /// </summary>
     [Required]
-    public List<TicketType> Tickets { get; set; }
+    public List<TicketType> TicketTypes { get; set; }
 }

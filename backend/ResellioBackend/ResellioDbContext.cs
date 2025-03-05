@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using ResellioBackend.EventManagementSystem.Models;
+using ResellioBackend.EventManagementSystem.Models.Base;
 using ResellioBackend.UserManagementSystem.Models;
 using ResellioBackend.UserManagementSystem.Models.Base;
 using ResellioBackend.UserManagementSystem.Models.Users;
@@ -26,6 +28,18 @@ namespace ResellioBackend
             .HasValue<Customer>("Customer")
             .HasValue<Organiser>("Organiser")
             .HasValue<Administrator>("Administrator");
+            
+            modelBuilder.Entity<Event>()
+                .HasMany(e => e.TicketTypes)
+                .WithOne(tt => tt.Event)
+                .HasForeignKey(tt => tt.EventId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            modelBuilder.Entity<TicketType>()
+                .HasMany(tt => tt.Tickets)
+                .WithOne(t => t.TicketType)
+                .HasForeignKey(t => t.TicketTypeId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Add Index on Login Column
             modelBuilder.Entity<UserBase>()

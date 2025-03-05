@@ -39,8 +39,11 @@ public class EventCreatorService: IEventCreatorService
             Name = eventDto.Name,
             Description = eventDto.Description,
             Start = eventDto.Start,
-            End = eventDto.End
+            End = eventDto.End,
+            TicketTypes = new List<TicketType>()
         };
+        
+        
         
         await _eventRepository.AddAsync(newEvent);
         
