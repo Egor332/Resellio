@@ -5,5 +5,5 @@ namespace ResellioBackend.EventManagementSystem.Services.Abstractions;
 
 public interface IEventService
 {
-    Task<Event> CreateEventAsync(EventDTO eventDto, int organiserId);
+    Task<Event> CreateEventAsync(EventDto eventDto, int organiserId);
 }

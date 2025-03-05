@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using ResellioBackend.UserManagementSystem.Models;
 using ResellioBackend.UserManagementSystem.Models.Base;
 using ResellioBackend.UserManagementSystem.Models.Users;
 
@@ -13,6 +14,9 @@ namespace ResellioBackend
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Organiser> Organisers { get; set; }
         public DbSet<Administrator> Administrators { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<TicketType> TicketTypes { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

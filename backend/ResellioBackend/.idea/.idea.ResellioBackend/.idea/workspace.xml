@@ -9,21 +9,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="97154ca5-6890-4747-ac0c-399e362971eb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/EventManagementSystem/Services/Abstractions/IEventService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EventManagementSystem/Services/Implementations/EventService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ResellioBackend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ResellioBackend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserManagementSystem/DTOs/EventDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EventManagementSystem/DTOs/EventDTO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserManagementSystem/DTOs/TicketDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EventManagementSystem/DTOs/TicketDTO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserManagementSystem/DTOs/TicketTypeDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EventManagementSystem/DTOs/TicketTypeDTO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserManagementSystem/Models/Event.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EventManagementSystem/Models/Event.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserManagementSystem/Models/Ticket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EventManagementSystem/Models/Ticket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserManagementSystem/Models/TicketType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EventManagementSystem/Models/TicketType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserManagementSystem/Services/Abstractions/IEventService.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserManagementSystem/Services/Abstractions/ITicketService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EventManagementSystem/Services/Abstractions/ITicketService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserManagementSystem/Services/Abstractions/ITicketTypeService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EventManagementSystem/Services/Abstractions/ITicketTypeService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserManagementSystem/Services/Implementations/EventService.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserManagementSystem/Services/Implementations/TicketService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EventManagementSystem/Services/Implementations/TicketService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserManagementSystem/Services/Implementations/TicketTypeService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EventManagementSystem/Services/Implementations/TicketTypeService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EventManagementSystem/Services/Abstractions/IEventService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EventManagementSystem/Services/Abstractions/IEventService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EventManagementSystem/Services/Abstractions/ITicketTypeService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EventManagementSystem/Services/Abstractions/ITicketTypeService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EventManagementSystem/Services/Implementations/EventService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EventManagementSystem/Services/Implementations/EventService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EventManagementSystem/Services/Implementations/TicketTypeService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EventManagementSystem/Services/Implementations/TicketTypeService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ResellioDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ResellioDbContext.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +60,7 @@
       <option name="presentableId" value="Default" />
       <updated>1741179259997</updated>
       <workItem from="1741179261797" duration="6876000" />
-      <workItem from="1741186747194" duration="1072000" />
+      <workItem from="1741186747194" duration="2721000" />
     </task>
     <servers />
   </component>

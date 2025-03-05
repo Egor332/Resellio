@@ -12,7 +12,7 @@ public class TicketTypeService
         _context = context;
     }
 
-    public async Task<TicketType> CreateTicketTypeAsync(TicketTypeDTO ticketTypeDto, Event createdEvent)
+    public async Task<TicketType> CreateTicketTypeAsync(TicketTypeDto ticketTypeDto, Event createdEvent)
     {
         throw new NotImplementedException();
     }
