@@ -1,6 +1,6 @@
 namespace ResellioBackend.EventManagementSystem.DTOs;
 
-public class EventDTO
+public class EventDto
 {
     public int EventId { get; set; }
     
