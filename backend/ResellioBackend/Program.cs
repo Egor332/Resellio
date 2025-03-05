@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ResellioBackend.Kafka;
 using ResellioBackend.UserManagementSystem.Factories.Abstractions;
 using ResellioBackend.UserManagementSystem.Factories.Implementations;
 using ResellioBackend.UserManagementSystem.Repositories.Abstractions;
@@ -31,6 +32,9 @@ namespace ResellioBackend
             // DbContext
             var connectionString = configuration.GetConnectionString("DbConnectionString");
             builder.Services.AddDbContext<ResellioDbContext>(options => options.UseSqlServer(connectionString));
+
+            // Kafka
+            builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
 
             // Authentication and Authorization
             builder.Services.AddAuthentication(options =>
