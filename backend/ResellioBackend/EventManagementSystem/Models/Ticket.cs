@@ -1,8 +1,7 @@
-
 using System;using System.ComponentModel.DataAnnotations;
 using ResellioBackend.UserManagementSystem.Models.Users;
 
-namespace ResellioBackend.UserManagementSystem.Models.Base
+namespace ResellioBackend.EventManagementSystem.Models.Base
 {
     public class Ticket
     {

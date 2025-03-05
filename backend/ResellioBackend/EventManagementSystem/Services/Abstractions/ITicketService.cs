@@ -1,5 +1,5 @@
-using ResellioBackend.UserManagementSystem.Models;
-using ResellioBackend.UserManagementSystem.Models.Base;
+using ResellioBackend.EventManagementSystem.Models;
+using ResellioBackend.EventManagementSystem.Models.Base;
 
 namespace ResellioBackend.EventManagementSystem.Services.Abstractions;
 

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using ResellioBackend.UserManagementSystem.Models.Base;
 using ResellioBackend.UserManagementSystem.Models.Users;
 
-namespace ResellioBackend.UserManagementSystem.Models;
+namespace ResellioBackend.EventManagementSystem.Models;
 
 public class Event
 {

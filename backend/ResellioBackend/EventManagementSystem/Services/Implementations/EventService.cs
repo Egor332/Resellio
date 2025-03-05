@@ -1,7 +1,14 @@
 using ResellioBackend.EventManagementSystem.DTOs;
 using ResellioBackend.EventManagementSystem.Services.Abstractions;
+using ResellioBackend.Results;
 using ResellioBackend.UserManagementSystem.Models;
+using ResellioBackend.UserManagementSystem.Models.Base;
 using ResellioBackend.UserManagementSystem.Models.Users;
+using ResellioBackend.UserManagementSystem.Repositories.Abstractions;
+using ResellioBackend.UserManagementSystem.Repositories.Implementations;
+using ResellioBackend.EventManagementSystem.DTOs;
+using ResellioBackend.EventManagementSystem.Services.Abstractions;
+using ResellioBackend.EventManagementSystem.Models;
 
 namespace ResellioBackend.EventManagementSystem.Services.Implementations;
 

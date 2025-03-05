@@ -1,5 +1,5 @@
 using ResellioBackend.EventManagementSystem.DTOs;
-using ResellioBackend.UserManagementSystem.Models;
+using ResellioBackend.EventManagementSystem.Models;
 
 namespace ResellioBackend.EventManagementSystem.Services.Implementations;
 

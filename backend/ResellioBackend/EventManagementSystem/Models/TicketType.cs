@@ -1,6 +1,6 @@
-namespace ResellioBackend.UserManagementSystem.Models;
 using System.ComponentModel.DataAnnotations;
 
+namespace ResellioBackend.EventManagementSystem.Models;
 public class TicketType
 {
     [Key] 
