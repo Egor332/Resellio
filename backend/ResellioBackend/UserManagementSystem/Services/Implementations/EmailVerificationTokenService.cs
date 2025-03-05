@@ -17,7 +17,7 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
         public EmailVerificationTokenService(ITokenGenerator tokenGenerator, IConfiguration configuraiton)
         {
              _tokenGenerator = tokenGenerator;
-            _secretKey = Encoding.UTF8.GetBytes(configuraiton["JwtParameters:EmailVerificaationSecretKey"]);
+            _secretKey = Encoding.UTF8.GetBytes(configuraiton["JwtParameters:EmailVerificationSecretKey"]);
         }
 
         public string GetEmailVerificationToken(int id)
@@ -41,25 +41,53 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(_secretKey)
             };
+            // Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException
+            try
+            {
+                var claims = tokenHandler.ValidateToken(token, validationParameters, out _);
+                var idClaim = claims.FindFirst(_idClaimName);
+                if ((idClaim == null) || (string.IsNullOrEmpty(idClaim.Value)))
+                {
+                    return new ValidateEmailVerificationTokenResult
+                    {
+                        Success = false,
+                        Message = "Incorrect token provided"
+                    };
+                }
 
-            var claims = tokenHandler.ValidateToken(token, validationParameters, out _);
-            var idClaim = claims.FindFirst(_idClaimName);
-            if ((idClaim == null) || (string.IsNullOrEmpty(idClaim.Value)))                
+                var id = int.Parse(idClaim.Value);
+
+                return new ValidateEmailVerificationTokenResult
+                {
+                    Success = true,
+                    UserId = id,
+                };
+            }
+            catch (SecurityTokenExpiredException)
             {
                 return new ValidateEmailVerificationTokenResult
                 {
                     Success = false,
-                    Message = "Incorrect token provided"
+                    Message = "Token has expired."
                 };
             }
-
-            var id = int.Parse(idClaim.Value);
-
-            return new ValidateEmailVerificationTokenResult
+            catch (SecurityTokenInvalidSignatureException)
             {
-                Success = true,
-                UserId = id,
-            };
+                return new ValidateEmailVerificationTokenResult
+                {
+                    Success = false,
+                    Message = "Invalid token signature."
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ValidateEmailVerificationTokenResult
+                {
+                    Success = false,
+                    Message = $"Invalid token: {ex.Message}"
+                };
+            }
+            
         }
     }
 }
