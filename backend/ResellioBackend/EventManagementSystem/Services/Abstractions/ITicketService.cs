@@ -1,7 +1,7 @@
 using ResellioBackend.UserManagementSystem.Models;
 using ResellioBackend.UserManagementSystem.Models.Base;
 
-namespace ResellioBackend.UserManagementSystem.Services.Abstractions;
+namespace ResellioBackend.EventManagementSystem.Services.Abstractions;
 
 public interface ITicketService
 {

@@ -1,7 +1,7 @@
-using ResellioBackend.UserManagementSystem.DTOs;
+using ResellioBackend.EventManagementSystem.DTOs;
 using ResellioBackend.UserManagementSystem.Models;
 
-namespace ResellioBackend.UserManagementSystem.Services.Implementations;
+namespace ResellioBackend.EventManagementSystem.Services.Implementations;
 
 public class TicketTypeService
 {

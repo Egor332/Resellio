@@ -1,6 +1,4 @@
-using ResellioBackend.UserManagementSystem.Models.Users;
-
-namespace ResellioBackend.UserManagementSystem.DTOs;
+namespace ResellioBackend.EventManagementSystem.DTOs;
 
 public class EventDTO
 {

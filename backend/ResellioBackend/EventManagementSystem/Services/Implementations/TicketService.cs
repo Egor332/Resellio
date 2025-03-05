@@ -1,6 +1,6 @@
 using ResellioBackend.UserManagementSystem.Models;
 
-namespace ResellioBackend.UserManagementSystem.Services.Implementations;
+namespace ResellioBackend.EventManagementSystem.Services.Implementations;
 
 public class TicketService
 {
