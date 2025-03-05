@@ -6,7 +6,7 @@ public class EventDTO
 {
     public int EventId { get; set; }
     
-    public int OrganiserId { get; set; }
+    // no organiser id here – we will get it from the JWT token
     
     public string Name { get; set; }
 
