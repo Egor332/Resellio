@@ -37,7 +37,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.FactoriesTests
             result.FirstName.Should().Be(dto.FirstName);
             result.LastName.Should().Be(dto.LastName);
             result.CreatedDate.Should().Be(DateTime.Now.Date);
-            result.IsActive.Should().BeTrue();
+            result.IsActive.Should().BeFalse();
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.FactoriesTests
             result.FirstName.Should().Be(dto.FirstName);
             result.LastName.Should().Be(dto.LastName);
             result.CreatedDate.Should().Be(DateTime.Now.Date);
-            result.IsActive.Should().BeTrue();
+            result.IsActive.Should().BeFalse();
             ((Organiser)result).IsVerified.Should().BeFalse();
             ((Organiser)result).OrganiserName.Should().Be(dto.OrganiserName);
         }

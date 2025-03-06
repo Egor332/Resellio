@@ -19,7 +19,7 @@ namespace ResellioBackend.UserManagementSystem.Factories.Implementations
                         FirstName = customerDto.FirstName,
                         LastName = customerDto.LastName,
                         CreatedDate = DateTime.Now.Date,
-                        IsActive = true
+                        IsActive = false
                     };
                     return newCustomer;
                 case RegisterOrganiserDto organiserDto:
@@ -30,7 +30,7 @@ namespace ResellioBackend.UserManagementSystem.Factories.Implementations
                         FirstName = organiserDto.FirstName,
                         LastName = organiserDto.LastName,
                         CreatedDate = DateTime.Now.Date,
-                        IsActive = true,
+                        IsActive = false,
                         IsVerified = false
                     };
                     return newOrganiser;
