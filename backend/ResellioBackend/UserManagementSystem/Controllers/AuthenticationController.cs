@@ -11,9 +11,11 @@ namespace ResellioBackend.UserManagementSystem.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
-        public AuthenticationController(IAuthenticationService authenticationService)
+        private readonly IConfirmEmailService _confirmEmailService;
+        public AuthenticationController(IAuthenticationService authenticationService, IConfirmEmailService confirmEmailService)
         {
             _authenticationService = authenticationService;
+            _confirmEmailService = confirmEmailService;
         }
 
         [HttpPost("login")]
@@ -33,7 +35,16 @@ namespace ResellioBackend.UserManagementSystem.Controllers
         [HttpGet("confirm-email")]
         public async Task<IActionResult> ConfirmEmail([FromQuery]string token)
         {
-            return Ok();
+            var result = await _confirmEmailService.ConfirmEmailAsync(token);
+            if (result.Success)
+            {
+                return Ok(new { result.Message });
+            }
+            else
+            {
+                return BadRequest(new { result.Message });
+            }
+            
         }
     }
 }

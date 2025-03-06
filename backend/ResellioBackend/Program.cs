@@ -100,6 +100,7 @@ namespace ResellioBackend
             builder.Services.AddTransient<IRegistrationService, RegistrationService>();
             builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
             builder.Services.AddTransient<IEmailVerificationTokenService, EmailVerificationTokenService>();
+            builder.Services.AddTransient<IConfirmEmailService, ConfirmEmailService>();
 
             // Repositories
             builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));
