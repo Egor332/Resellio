@@ -58,6 +58,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
             _userRepositoryMock.Setup(repo => repo.GetByEmailAsync(dto.Email)).ReturnsAsync((UserBase)null);
             _userFactoryMock.Setup(factory => factory.CreateNewUserWithoutPassword(dto)).Returns(newUser);
             _passwordServiceMock.Setup(service => service.HashPassword(dto.Password)).Returns(("hashedPassword", "salt"));
+            _emailVerificationServiceMock.Setup(v => v.CreateAndSendVerificationEmailAsync(It.IsAny<UserBase>())).Returns(Task.CompletedTask);
 
             // Act
             var result = await _registrationService.RegisterUserAsync(dto);
