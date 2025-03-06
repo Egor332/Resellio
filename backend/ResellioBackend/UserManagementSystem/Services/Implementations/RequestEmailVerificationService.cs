@@ -19,7 +19,7 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
         public async Task<ResultBase> ResentEmailVerificationMessageAsync(string email)
         {
             var user = await _usersRepository.GetByEmailAsync(email);
-            if ((user == null) || (user.IsActive == false))
+            if ((user == null) || (user.IsActive == true))
             {
                 return new ResultBase()
                 {
