@@ -35,7 +35,7 @@ namespace ResellioBackend
 
             // .NET services
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddTransient<LinkGenerator>();
+            // builder.Services.AddTransient<LinkGenerator>();
 
             // Kafka
             builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
@@ -101,6 +101,7 @@ namespace ResellioBackend
             builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
             builder.Services.AddTransient<IEmailVerificationTokenService, EmailVerificationTokenService>();
             builder.Services.AddTransient<IConfirmEmailService, ConfirmEmailService>();
+            builder.Services.AddTransient<IEmailVerificationService, EmailVerificationService>();
 
             // Repositories
             builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));
