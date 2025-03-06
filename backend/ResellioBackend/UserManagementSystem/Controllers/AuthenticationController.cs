@@ -12,10 +12,12 @@ namespace ResellioBackend.UserManagementSystem.Controllers
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IConfirmEmailService _confirmEmailService;
-        public AuthenticationController(IAuthenticationService authenticationService, IConfirmEmailService confirmEmailService)
+        private readonly IRequestEmailVerificationService _requestEmailVerificationService;
+        public AuthenticationController(IAuthenticationService authenticationService, IConfirmEmailService confirmEmailService,  IRequestEmailVerificationService requestEmailVerificationService)
         {
             _authenticationService = authenticationService;
             _confirmEmailService = confirmEmailService;
+            _requestEmailVerificationService = requestEmailVerificationService;
         }
 
         [HttpPost("login")]
@@ -43,8 +45,21 @@ namespace ResellioBackend.UserManagementSystem.Controllers
             else
             {
                 return BadRequest(new { result.Message });
+            }            
+        }
+
+        [HttpPost("resent-verification-email")]
+        public async Task<IActionResult> ResentVerificationEmail([FromBody]EmailDto emailDto)
+        {
+            var result = await _requestEmailVerificationService.ResentEmailVerificationMessageAsync(emailDto.Email);
+            if (result.Success)
+            {
+                return Ok(new { result.Message });
             }
-            
+            else
+            {
+                return BadRequest(new { result.Message }); 
+            }
         }
     }
 }
