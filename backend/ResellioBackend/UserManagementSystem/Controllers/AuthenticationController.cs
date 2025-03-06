@@ -29,5 +29,11 @@ namespace ResellioBackend.UserManagementSystem.Controllers
                 return BadRequest(new { result.Message });
             }
         }
+
+        [HttpGet("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail([FromQuery]string token)
+        {
+            return Ok();
+        }
     }
 }

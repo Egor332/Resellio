@@ -33,6 +33,10 @@ namespace ResellioBackend
             var connectionString = configuration.GetConnectionString("DbConnectionString");
             builder.Services.AddDbContext<ResellioDbContext>(options => options.UseSqlServer(connectionString));
 
+            // .NET services
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddTransient<LinkGenerator>();
+
             // Kafka
             builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
 
