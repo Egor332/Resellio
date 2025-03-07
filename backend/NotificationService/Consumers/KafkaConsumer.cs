@@ -36,6 +36,7 @@ namespace NotificationService.Consumers
                         var consumeResult = _consumer.Consume(cancellationToken);
                         var emailMessage = JsonSerializer.Deserialize<EmailMessageModel>(consumeResult.Message.Value);
                         await _emailSender.SendEmailAsync(emailMessage);
+                        Console.WriteLine("Email sent");
 
                     }
                 }

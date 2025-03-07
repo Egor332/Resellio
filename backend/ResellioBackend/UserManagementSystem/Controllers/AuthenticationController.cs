@@ -11,9 +11,13 @@ namespace ResellioBackend.UserManagementSystem.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
-        public AuthenticationController(IAuthenticationService authenticationService)
+        private readonly IConfirmEmailService _confirmEmailService;
+        private readonly IRequestEmailVerificationService _requestEmailVerificationService;
+        public AuthenticationController(IAuthenticationService authenticationService, IConfirmEmailService confirmEmailService,  IRequestEmailVerificationService requestEmailVerificationService)
         {
             _authenticationService = authenticationService;
+            _confirmEmailService = confirmEmailService;
+            _requestEmailVerificationService = requestEmailVerificationService;
         }
 
         [HttpPost("login")]
@@ -27,6 +31,34 @@ namespace ResellioBackend.UserManagementSystem.Controllers
             else
             {
                 return BadRequest(new { result.Message });
+            }
+        }
+
+        [HttpGet("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail([FromQuery]string token)
+        {
+            var result = await _confirmEmailService.ConfirmEmailAsync(token);
+            if (result.Success)
+            {
+                return Ok(new { result.Message });
+            }
+            else
+            {
+                return BadRequest(new { result.Message });
+            }            
+        }
+
+        [HttpPost("resent-verification-email")]
+        public async Task<IActionResult> ResentVerificationEmail([FromBody]EmailDto emailDto)
+        {
+            var result = await _requestEmailVerificationService.ResentEmailVerificationMessageAsync(emailDto.Email);
+            if (result.Success)
+            {
+                return Ok(new { result.Message });
+            }
+            else
+            {
+                return BadRequest(new { result.Message }); 
             }
         }
     }

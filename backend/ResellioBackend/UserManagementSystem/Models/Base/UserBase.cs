@@ -51,7 +51,7 @@ namespace ResellioBackend.UserManagementSystem.Models.Base
                 return new ResultBase()
                 {
                     Success = false,
-                    Message = "This account was deactivated"
+                    Message = "This email was not confirmed"
                 };
             }
         }

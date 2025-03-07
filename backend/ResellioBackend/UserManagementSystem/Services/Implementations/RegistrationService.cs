@@ -12,12 +12,14 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
         private readonly IUsersRepository<UserBase> _userRepository;
         private readonly IUserFactory _userFactory;
         private readonly IPasswordService _passwordService;
+        private readonly IEmailVerificationService _emailVerificationService;
 
-        public RegistrationService(IUsersRepository<UserBase> userRepository, IUserFactory userFactory, IPasswordService passwordService)
+        public RegistrationService(IUsersRepository<UserBase> userRepository, IUserFactory userFactory, IPasswordService passwordService, IEmailVerificationService emailVerificationService)
         {
             _userRepository = userRepository;
             _userFactory = userFactory;
             _passwordService = passwordService;
+            _emailVerificationService = emailVerificationService;
         }
 
         public async Task<RegistrationResult> RegisterUserAsync(RegisterUserDto dto)
@@ -40,6 +42,8 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
 
             await _userRepository.AddAsync(newUser);
             int newUserId = newUser.UserId;
+
+            await _emailVerificationService.CreateAndSendVerificationEmailAsync(newUser);
 
             return new RegistrationResult()
             {

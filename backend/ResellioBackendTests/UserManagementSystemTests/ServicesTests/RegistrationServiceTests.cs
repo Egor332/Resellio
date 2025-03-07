@@ -20,6 +20,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         private readonly Mock<IUsersRepository<UserBase>> _userRepositoryMock;
         private readonly Mock<IUserFactory> _userFactoryMock;
         private readonly Mock<IPasswordService> _passwordServiceMock;
+        private readonly Mock<IEmailVerificationService> _emailVerificationServiceMock;
         private readonly RegistrationService _registrationService;
 
         public RegistrationServiceTests()
@@ -27,7 +28,8 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
             _userRepositoryMock = new Mock<IUsersRepository<UserBase>>();
             _userFactoryMock = new Mock<IUserFactory>();
             _passwordServiceMock = new Mock<IPasswordService>();
-            _registrationService = new RegistrationService(_userRepositoryMock.Object, _userFactoryMock.Object, _passwordServiceMock.Object);
+            _emailVerificationServiceMock = new Mock<IEmailVerificationService>();
+            _registrationService = new RegistrationService(_userRepositoryMock.Object, _userFactoryMock.Object, _passwordServiceMock.Object, _emailVerificationServiceMock.Object);
         }
 
         [Fact]
@@ -56,6 +58,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
             _userRepositoryMock.Setup(repo => repo.GetByEmailAsync(dto.Email)).ReturnsAsync((UserBase)null);
             _userFactoryMock.Setup(factory => factory.CreateNewUserWithoutPassword(dto)).Returns(newUser);
             _passwordServiceMock.Setup(service => service.HashPassword(dto.Password)).Returns(("hashedPassword", "salt"));
+            _emailVerificationServiceMock.Setup(v => v.CreateAndSendVerificationEmailAsync(It.IsAny<UserBase>())).Returns(Task.CompletedTask);
 
             // Act
             var result = await _registrationService.RegisterUserAsync(dto);

@@ -33,6 +33,10 @@ namespace ResellioBackend
             var connectionString = configuration.GetConnectionString("DbConnectionString");
             builder.Services.AddDbContext<ResellioDbContext>(options => options.UseSqlServer(connectionString));
 
+            // .NET services
+            builder.Services.AddHttpContextAccessor();
+            // builder.Services.AddTransient<LinkGenerator>();
+
             // Kafka
             builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
 
@@ -95,6 +99,10 @@ namespace ResellioBackend
             builder.Services.AddTransient<ITokenGenerator, JwtGenerator>();
             builder.Services.AddTransient<IRegistrationService, RegistrationService>();
             builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddTransient<IEmailVerificationTokenService, EmailVerificationTokenService>();
+            builder.Services.AddTransient<IConfirmEmailService, ConfirmEmailService>();
+            builder.Services.AddTransient<IEmailVerificationService, EmailVerificationService>();
+            builder.Services.AddTransient<IRequestEmailVerificationService, RequestEmailVerificationService>();
 
             // Repositories
             builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));
