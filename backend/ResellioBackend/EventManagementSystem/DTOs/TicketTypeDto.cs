@@ -2,10 +2,6 @@ namespace ResellioBackend.EventManagementSystem.DTOs;
 
 public class TicketTypeDto
 {
-    public int TypeId { get; set; }
-    
-    public int EventId { get; set; }
-    
     public string Description { get; set; }
     
     public int MaxCount { get; set; }

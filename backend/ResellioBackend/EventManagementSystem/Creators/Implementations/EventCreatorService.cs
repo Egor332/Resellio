@@ -53,7 +53,7 @@ public class EventCreatorService: IEventCreatorService
         // newEvent.TicketTypes.AddRange(ticketTypes);
         
         // for now let's keep it sequential as it's easier to understand
-        foreach (TicketTypeDto ticketTypeDto in eventDto.TicketTypes)
+        foreach (TicketTypeDto ticketTypeDto in eventDto.TicketTypeDtos)
         {
             newEvent.TicketTypes.Add(await _ticketTypeCreatorService.CreateTicketTypeAsync(ticketTypeDto, newEvent));
         }

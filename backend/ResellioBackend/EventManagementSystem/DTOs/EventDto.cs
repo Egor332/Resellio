@@ -2,9 +2,7 @@ namespace ResellioBackend.EventManagementSystem.DTOs;
 
 public class EventDto
 {
-    public int EventId { get; set; }
-    
-    // no organiser id here – we will get it from the JWT token
+    // no organiser here – we will get it from the JWT token
     
     public string Name { get; set; }
 
@@ -14,5 +12,5 @@ public class EventDto
 
     public DateTime End { get; set; }
     
-    public List<TicketTypeDto> TicketTypes { get; set; }
+    public List<TicketTypeDto> TicketTypeDtos { get; set; }
 }
