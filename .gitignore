@@ -682,3 +682,4 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/rider,visualstudio,csharp,react
 /backend/ResellioBackend/appsettings.Development.json
+backend/ResellioBackend/.idea/.idea.ResellioBackend/.idea/workspace.xml
