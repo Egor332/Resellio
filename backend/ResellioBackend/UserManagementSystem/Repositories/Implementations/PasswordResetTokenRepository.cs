@@ -33,7 +33,7 @@ namespace ResellioBackend.UserManagementSystem.Repositories.Implementations
             return tokenInfo;
         }
 
-        public async Task<List<PasswordResetTokenInfo>?> GetUserTokensAsync(int ownerId)
+        public async Task<List<PasswordResetTokenInfo>> GetUserTokensAsync(int ownerId)
         {
             var tokensInfoList = await _passwordResetTokens.Where(t => t.OwnerId == ownerId).ToListAsync();
             return tokensInfoList;

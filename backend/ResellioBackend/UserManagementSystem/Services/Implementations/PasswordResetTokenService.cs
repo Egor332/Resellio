@@ -36,9 +36,9 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
             var newTokenGuid = Guid.NewGuid();
             List<Claim> claims = new List<Claim>();
             Claim idClaim = new Claim(IdClaimName, newTokenGuid.ToString());
-            Claim userIdCliam = new Claim(UserIdClaimName, userId.ToString());
+            Claim userIdClaim = new Claim(UserIdClaimName, userId.ToString());
             claims.Add(idClaim);
-            claims.Add(userIdCliam);
+            claims.Add(userIdClaim);
             var newToken = _tokenGenerator.GenerateToken(claims, 10, _secretKey, "", "");
 
             var newTokenInfo = new PasswordResetTokenInfo()

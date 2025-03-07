@@ -7,6 +7,6 @@ namespace ResellioBackend.UserManagementSystem.Repositories.Abstractions
         public Task<PasswordResetTokenInfo?> GetByIdAsync(Guid id);
         public Task AddTokenAsync(PasswordResetTokenInfo token);
         public Task DeleteTokenAsync(PasswordResetTokenInfo token);
-        public Task<List<PasswordResetTokenInfo>?> GetUserTokensAsync(int ownerId);
+        public Task<List<PasswordResetTokenInfo>> GetUserTokensAsync(int ownerId);
     }
 }
