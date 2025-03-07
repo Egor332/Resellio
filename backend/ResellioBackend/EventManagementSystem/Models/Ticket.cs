@@ -8,7 +8,7 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
         // TODO: add other properties
         
         [Key]
-        public int TicketId { get; set; }
+        public Guid TicketId { get; set; }
 
         [Required]
         public int TicketTypeId { get; set; }
