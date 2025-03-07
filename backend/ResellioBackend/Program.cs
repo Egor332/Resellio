@@ -106,6 +106,7 @@ namespace ResellioBackend
 
             // Repositories
             builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));
+            builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
 
             // Factory
             builder.Services.AddTransient<IUserFactory, UserFactory>();
