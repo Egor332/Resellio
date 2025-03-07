@@ -99,7 +99,7 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
 
         private async Task SendPasswordResetEmailAsync(UserBase user, string token)
         {
-            var confirmationLink = _linkGenerator.GetUriByAction(
+            var resetLink = _linkGenerator.GetUriByAction(
                 _httpContextAccessor.HttpContext,
                 action: "RedirectToForm",
                 controller: "PasswordReset",
@@ -111,7 +111,7 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
             {
                 Email = user.Email,
                 Subject = "Resellio password reset",
-                HtmlContent = $"Click this link to reset your password: {confirmationLink}"
+                HtmlContent = $"Click this link to reset your password: {resetLink}"
             };
 
             await _kafkaProducerService.SendMessageAsync(resetPasswordEmail);
