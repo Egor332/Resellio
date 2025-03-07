@@ -1,6 +1,7 @@
 using ResellioBackend.EventManagementSystem.Creators.Abstractions;
 using ResellioBackend.EventManagementSystem.Models;
 using ResellioBackend.EventManagementSystem.Models.Base;
+using ResellioBackend.EventManagementSystem.Results;
 using ResellioBackend.UserManagementSystem.Models.Users;
 
 namespace ResellioBackend.EventManagementSystem.Creators.Implementations;
@@ -14,7 +15,7 @@ public class TicketCreatorService: ITicketCreatorService
         _context = context;
     }
 
-    public async Task<Ticket> CreateTicketAsync(TicketType ticketType)
+    public async Task<Result<Ticket>> CreateTicketAsync(TicketType ticketType)
     {
         throw new NotImplementedException();
     }

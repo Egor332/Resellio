@@ -1,19 +1,24 @@
 using ResellioBackend.EventManagementSystem.Creators.Abstractions;
 using ResellioBackend.EventManagementSystem.DTOs;
 using ResellioBackend.EventManagementSystem.Models;
+using ResellioBackend.EventManagementSystem.Models.Base;
+using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
+using ResellioBackend.EventManagementSystem.Results;
 
 namespace ResellioBackend.EventManagementSystem.Creators.Implementations;
 
 public class TicketTypeCreatorService: ITicketTypeCreatorService
 {
-    private readonly ResellioDbContext _context;
+    public readonly ITicketTypesRepository _ticketTypesRepository;
+    public readonly ITicketCreatorService _ticketCreatorService;
 
-    public TicketTypeCreatorService(ResellioDbContext context)
+    public TicketTypeCreatorService(ITicketTypesRepository ticketTypesRepository, ITicketCreatorService ticketCreatorService)
     {
-        _context = context;
+        _ticketTypesRepository = ticketTypesRepository;
+        _ticketCreatorService = ticketCreatorService;
     }
 
-    public async Task<TicketType> CreateTicketTypeAsync(TicketTypeDto ticketTypeDto, Event createdEvent)
+    public async Task<Result<TicketType>> CreateTicketTypeAsync(TicketTypeDto ticketTypeDto, Event createdEvent)
     {
         throw new NotImplementedException();
     }

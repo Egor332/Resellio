@@ -55,7 +55,15 @@ public class EventCreatorService: IEventCreatorService
         // for now let's keep it sequential as it's easier to understand
         foreach (TicketTypeDto ticketTypeDto in eventDto.TicketTypeDtos)
         {
-            newEvent.TicketTypes.Add(await _ticketTypeCreatorService.CreateTicketTypeAsync(ticketTypeDto, newEvent));
+            var result = await _ticketTypeCreatorService.CreateTicketTypeAsync(ticketTypeDto, newEvent);
+            if (result.Success)
+                newEvent.TicketTypes.Add(result.Data);
+            else
+                return new ResultBase()
+                {
+                    Success = false,
+                    Message = "Failed to create ticket type"
+                };
         }
         
         await _eventRepository.AddAsync(newEvent);
