@@ -42,7 +42,7 @@ public class TicketTypeCreatorService: ITicketTypeCreatorService
                 {
                     Success = false,
                     Message = "Failed to create all tickets"
-                    // TODO: make so that failure creating one ticket doesn't fail the whole event
+                    // TODO: right now failure creating one ticket fails the whole event
                 };
         }
 
