@@ -20,6 +20,40 @@ public class TicketTypeCreatorService: ITicketTypeCreatorService
 
     public async Task<Result<TicketType>> CreateTicketTypeAsync(TicketTypeDto ticketTypeDto, Event createdEvent)
     {
-        throw new NotImplementedException();
+        TicketType newTicketType = new TicketType()
+        {
+            Event = createdEvent,
+            Description = ticketTypeDto.Description,
+            MaxCount = ticketTypeDto.MaxCount,
+            Price = ticketTypeDto.Price,
+            Currency = ticketTypeDto.Currency,
+            AvailableFrom = ticketTypeDto.AvailableFrom,
+            Tickets = new List<Ticket>()
+        };
+
+        // TODO: maybe parallelize this
+        for (int i = 0; i < ticketTypeDto.MaxCount; i++)
+        {
+            var result = await _ticketCreatorService.CreateTicketAsync(newTicketType);
+            if (result.Success)
+                newTicketType.Tickets.Add(result.Data);
+            else
+                return new Result<TicketType>()
+                {
+                    Success = false,
+                    Message = "Failed to create all tickets"
+                    // TODO: make so that failure creating one ticket doesn't fail the whole event
+                };
+        }
+
+        await _ticketTypesRepository.AddAsync(newTicketType);
+
+        return new Result<TicketType>()
+        {
+            Success = true,
+            Message = "Created successfully",
+            Data = newTicketType
+        };
+
     }
 }
