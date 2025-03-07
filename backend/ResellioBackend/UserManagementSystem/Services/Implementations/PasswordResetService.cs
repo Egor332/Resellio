@@ -41,27 +41,9 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
                     Message = "If this user exist, we sent an email"
                 };
             }
-            var token = _passwordResetTokenService.CreateTokenWithDatabaseRecordAsync(user.UserId);
+            var token = await _passwordResetTokenService.CreateTokenWithDatabaseRecordAsync(user.UserId);
 
-            var userEmail = user.Email;
-            var subject = "Resellio password reset";
-            var confirmationLink = _linkGenerator.GetUriByAction(
-                _httpContextAccessor.HttpContext,
-                action: "RedirectToForm",
-                controller: "PasswordReset",
-                values: new { token },
-                scheme: _httpContextAccessor.HttpContext.Request.Scheme
-            );
-            var htmlContent = $"Click this link to reset your password: {confirmationLink}";
-
-            var resetPasswordEmail = new EmailForSendGrid()
-            {
-                Email = userEmail,
-                Subject = subject,
-                PlainTextContent = "",
-                HtmlContent = htmlContent
-            };
-            await _kafkaProducerService.SendMessageAsync(resetPasswordEmail);
+            await SendPasswordResetEmailAsync(user, token);
 
             return new ResultBase()
             {
@@ -106,16 +88,40 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
                 };
             }
 
-            (string passwordHash, string salt) = _passwordService.HashPassword(newPassword);
-            user.ChangePassword(passwordHash, salt);
-
-            await _usersRepository.UpdateAsync(user);
+            await UpdateUserPasswordAsync(user, newPassword);
 
             return new ResultBase()
             {
                 Success = true,
                 Message = "Password had been changed"
             };
+        }
+
+        private async Task SendPasswordResetEmailAsync(UserBase user, string token)
+        {
+            var confirmationLink = _linkGenerator.GetUriByAction(
+                _httpContextAccessor.HttpContext,
+                action: "RedirectToForm",
+                controller: "PasswordReset",
+                values: new { token },
+                scheme: _httpContextAccessor.HttpContext.Request.Scheme
+            );
+
+            var resetPasswordEmail = new EmailForSendGrid()
+            {
+                Email = user.Email,
+                Subject = "Resellio password reset",
+                HtmlContent = $"Click this link to reset your password: {confirmationLink}"
+            };
+
+            await _kafkaProducerService.SendMessageAsync(resetPasswordEmail);
+        }
+
+        private async Task UpdateUserPasswordAsync(UserBase user, string newPassword)
+        {
+            (string passwordHash, string salt) = _passwordService.HashPassword(newPassword);
+            user.ChangePassword(passwordHash, salt);
+            await _usersRepository.UpdateAsync(user);
         }
     }
 }
