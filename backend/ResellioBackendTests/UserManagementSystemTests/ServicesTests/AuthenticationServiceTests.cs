@@ -41,7 +41,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task AuthenticationService_LoginAsync_ShouldReturnError_WhenUserNotFound()
+        public async Task LoginAsync_ShouldReturnError_WhenUserNotFound()
         {
             // Arrange
             var credentials = new LoginCredentialsDto { Email = "test@example.com", Password = "password" };
@@ -56,7 +56,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task AuthenticationService_LoginAsync_ShouldReturnError_WhenPasswordIsWrong()
+        public async Task LoginAsync_ShouldReturnError_WhenPasswordIsWrong()
         {
             // Arrange
             var credentials = new LoginCredentialsDto { Email = "test@example.com", Password = "wrongpassword" };
@@ -74,7 +74,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task AuthenticationService_LoginAsync_ShouldReturnError_WhenAccountIsNotValid()
+        public async Task LoginAsync_ShouldReturnError_WhenAccountIsNotValid()
         {
             // Arrange
             var credentials = new LoginCredentialsDto { Email = "test@example.com", Password = "wrongpassword" };
@@ -91,7 +91,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task AuthenticationService_LoginAsync_ShouldReturnSuccess_WithValidCredentials()
+        public async Task LoginAsync_ShouldReturnSuccess_WithValidCredentials()
         {
             // Arrange
             var credentials = new LoginCredentialsDto { Email = "test@example.com", Password = "password" };

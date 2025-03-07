@@ -18,7 +18,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.FactoriesTests
         }
 
         [Fact]
-        public void CreateNewUserWithoutPassword_ShouldReturnCustomer_ForRegisterCustomerDto()
+        public void ShouldReturnCustomer_ForRegisterCustomerDto()
         {
             // Arrange
             var dto = new RegisterCustomerDto
@@ -41,7 +41,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.FactoriesTests
         }
 
         [Fact]
-        public void CreateNewUserWithoutPassword_ShouldReturnOrganiser_ForRegisterOrganiserDto()
+        public void ShouldReturnOrganiser_ForRegisterOrganiserDto()
         {
             // Arrange
             var dto = new RegisterOrganiserDto

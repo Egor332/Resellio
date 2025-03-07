@@ -33,7 +33,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task RegistrationService_RegisterUserAsync_ShouldReturnError_WhenUserWithEmailAlreadyExists()
+        public async Task RegisterUserAsync_ShouldReturnError_WhenUserWithEmailAlreadyExists()
         {
             // Arrange
             var dto = new RegisterCustomerDto { Email = "existing@example.com", Password = "password123" };
@@ -49,7 +49,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task RegistrationService_RegisterUserAsync_ShouldAddUserAndReturnSuccess_WhenEmailIsUnique()
+        public async Task RegisterUserAsync_ShouldAddUserAndReturnSuccess_WhenEmailIsUnique()
         {
             // Arrange
             var dto = new RegisterCustomerDto { Email = "new@example.com", Password = "password123" };

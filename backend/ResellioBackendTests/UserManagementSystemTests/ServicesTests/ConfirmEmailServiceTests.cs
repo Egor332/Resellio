@@ -31,7 +31,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task ConfirmEmailService_ConfirmEmailAsync_ShouldReturnSuccess_WhenTokenIsValidAndUserExists()
+        public async Task ConfirmEmailAsync_ShouldReturnSuccess_WhenTokenIsValidAndUserExists()
         {
             // Arrange
             var validToken = "validToken";
@@ -58,7 +58,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task ConfirmEmailService_ConfirmEmailAsync_ShouldReturnFailure_WhenTokenIsInvalid()
+        public async Task ConfirmEmailAsync_ShouldReturnFailure_WhenTokenIsInvalid()
         {
             // Arrange
             var invalidToken = "invalidToken";
@@ -80,7 +80,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task ConfirmEmailService_ConfirmEmailAsync_ShouldReturnFailure_WhenUserDoesNotExist()
+        public async Task ConfirmEmailAsync_ShouldReturnFailure_WhenUserDoesNotExist()
         {
             // Arrange
             var validToken = "validToken";

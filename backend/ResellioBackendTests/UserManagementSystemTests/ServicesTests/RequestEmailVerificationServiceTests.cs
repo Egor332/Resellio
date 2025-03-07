@@ -26,7 +26,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task RequestEmailVerificationService_ResentEmailVerificationMessageAsync_UserNotFound_ReturnsFailure()
+        public async Task ResentEmailVerificationMessageAsync_UserNotFound_ReturnsFailure()
         {
             // Arrange
             _mockUsersRepository.Setup(repo => repo.GetByEmailAsync(It.IsAny<string>()))
@@ -40,7 +40,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task RequestEmailVerificationService_ResentEmailVerificationMessageAsync_UserActive_ReturnsFailure()
+        public async Task ResentEmailVerificationMessageAsync_UserActive_ReturnsFailure()
         {
             // Arrange
             var inactiveUser = new Customer { IsActive = true };
@@ -55,7 +55,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task RequestEmailVerificationService_ResentEmailVerificationMessageAsync_ValidUser_SendsVerificationEmailAndReturnsSuccess()
+        public async Task ResentEmailVerificationMessageAsync_ValidUser_SendsVerificationEmailAndReturnsSuccess()
         {
             // Arrange
             var activeUser = new Customer { IsActive = false };

@@ -17,7 +17,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         private const string Audience = "https://target.com";
 
         [Fact]
-        public void JwtGenerator_GenerateToken_ReturnsNotEmptyJwt()
+        public void GenerateToken_ReturnsNotEmptyJwt()
         {
             // Arrange
             var claims = new List<Claim> { new Claim(JwtRegisteredClaimNames.Name, "testuser") };
@@ -31,7 +31,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public void JwtGenerator_GenerateToken_ContainsCorrectClaims()
+        public void GenerateToken_ContainsCorrectClaims()
         {
             // Arrange
             var claims = new List<Claim> { new Claim(JwtRegisteredClaimNames.Name, "testuser") };
@@ -47,7 +47,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public void JwtGenerator_GenerateToken_SetsCorrectIssuerAndAudience()
+        public void GenerateToken_SetsCorrectIssuerAndAudience()
         {
             // Arrange
             var claims = new List<Claim> { new Claim(JwtRegisteredClaimNames.Name, "testuser") };
@@ -64,7 +64,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public void JwtGenerator_GenerateToken_SetsExpirationCorrectly()
+        public void GenerateToken_SetsExpirationCorrectly()
         {
             // Arrange
             var claims = new List<Claim> { new Claim(JwtRegisteredClaimNames.Name, "testuser") };
@@ -81,7 +81,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public void JwtGenerator_GenerateToken_WithEmptyClaims_ShouldNotThrowException()
+        public void GenerateToken_WithEmptyClaims_ShouldNotThrowException()
         {
             // Arrange
             var claims = new List<Claim>();
@@ -95,7 +95,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public void JwtGenerator_GenerateToken_WithNullIssuerAndAudience_ShouldNotThrowException()
+        public void GenerateToken_WithNullIssuerAndAudience_ShouldNotThrowException()
         {
             // Arrange
             var claims = new List<Claim> { new Claim(JwtRegisteredClaimNames.Name, "testuser") };
