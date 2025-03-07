@@ -13,16 +13,17 @@ public class EventCreatorService: IEventCreatorService
 {
     private readonly IUsersRepository<Organiser> _userRepository;
     private readonly IEventsRepository _eventRepository;
+    private readonly ITicketTypeCreatorService _ticketTypeCreatorService;
 
-    public EventCreatorService(IUsersRepository<Organiser> userRepository, IEventsRepository eventRepository)
+    public EventCreatorService(IUsersRepository<Organiser> userRepository, IEventsRepository eventRepository, ITicketTypeCreatorService ticketTypeCreatorService)
     {
         _userRepository = userRepository;
         _eventRepository = eventRepository;
+        _ticketTypeCreatorService = ticketTypeCreatorService;
     }
 
     public async Task<ResultBase> CreateEventAsync(EventDto eventDto, int organiserId)
     {
-        
         var organiser = await _userRepository.GetByIdAsync(organiserId);
         if (organiser == null)
         {
@@ -43,7 +44,19 @@ public class EventCreatorService: IEventCreatorService
             TicketTypes = new List<TicketType>()
         };
         
+        // Create ticket types in parallel instead of a sequential foreach loop
+        // var ticketTypeTasks = eventDto.TicketTypes
+        //     .Select(ticketTypeDto => _ticketTypeCreatorService.CreateTicketTypeAsync(ticketTypeDto, newEvent))
+        //     .ToList();
+        //
+        // var ticketTypes = await Task.WhenAll(ticketTypeTasks);
+        // newEvent.TicketTypes.AddRange(ticketTypes);
         
+        // for now let's keep it sequential as it's easier to understand
+        foreach (TicketTypeDto ticketTypeDto in eventDto.TicketTypes)
+        {
+            newEvent.TicketTypes.Add(await _ticketTypeCreatorService.CreateTicketTypeAsync(ticketTypeDto, newEvent));
+        }
         
         await _eventRepository.AddAsync(newEvent);
         
