@@ -5,5 +5,5 @@ namespace ResellioBackend.EventManagementSystem.Creators.Abstractions;
 
 public interface ITicketCreatorService
 {
-    Task<Ticket> CreateTicketsAsync(TicketType ticketType);
+    Task<Ticket> CreateTicketAsync(TicketType ticketType);
 }
