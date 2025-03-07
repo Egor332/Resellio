@@ -41,7 +41,7 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(_secretKey)
             };
-            // Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException
+
             try
             {
                 var claims = tokenHandler.ValidateToken(token, validationParameters, out _);
