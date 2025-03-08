@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
 {
-    public class PasswordResetServiceTests
+    public class ResetPasswordServiceTests
     {
         private readonly Mock<IUsersRepository<UserBase>> _usersRepositoryMock;
         private readonly Mock<IPasswordResetTokenService> _passwordResetTokenServiceMock;
@@ -28,9 +28,9 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         private readonly Mock<IKafkaProducerService> _kafkaProducerServiceMock;
         private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock;
         private readonly Mock<LinkGenerator> _linkGeneratorMock;
-        private readonly PasswordResetService _service;
+        private readonly ResetPasswordService _service;
 
-        public PasswordResetServiceTests()
+        public ResetPasswordServiceTests()
         {
             _usersRepositoryMock = new Mock<IUsersRepository<UserBase>>();
             _passwordResetTokenServiceMock = new Mock<IPasswordResetTokenService>();
@@ -45,7 +45,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
             httpContext.Request.Scheme = "https";
             _httpContextAccessorMock.Setup(x => x.HttpContext).Returns(httpContext);
 
-            _service = new PasswordResetService(
+            _service = new ResetPasswordService(
                 _usersRepositoryMock.Object,
                 _passwordResetTokenServiceMock.Object,
                 _tokenRepositoryMock.Object,
@@ -57,7 +57,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task RequestPasswordResetAsync_UserNotFound_ReturnsFalseResult()
+        public async Task RequestResetPasswordAsync_UserNotFound_ReturnsFalseResult()
         {
             // Arrange
             string email = "nonexistent@example.com";
@@ -65,7 +65,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
                                 .ReturnsAsync((UserBase)null);
 
             // Act
-            var result = await _service.RequestPasswordResetAsync(email);
+            var result = await _service.RequestResetPasswordAsync(email);
 
             // Assert
             Assert.False(result.Success);
@@ -75,10 +75,10 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task ChangePasswordAsync_InvalidTokenVerification_ReturnsFailure()
+        public async Task ResetPasswordAsync_InvalidTokenVerification_ReturnsFailure()
         {
             // Arrange
-            var dto = new ChangePasswordDto { Token = "invalidToken", NewPassword = "newPass" };
+            var dto = new ResetPasswordDto { Token = "invalidToken", NewPassword = "newPass" };
             _passwordResetTokenServiceMock
                 .Setup(x => x.VerifyPasswordResetToken(dto.Token))
                 .Returns(new VerifyResetPasswordTokenResult
@@ -88,7 +88,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
                 });
 
             // Act
-            var result = await _service.ChangePasswordAsync(dto);
+            var result = await _service.ResetPasswordAsync(dto);
 
             // Assert
             Assert.False(result.Success);
@@ -96,11 +96,11 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task ChangePasswordAsync_UnregisteredToken_ReturnsFailure()
+        public async Task ResetPasswordAsync_UnregisteredToken_ReturnsFailure()
         {
             // Arrange
             var fakeToken = "validToken";
-            var dto = new ChangePasswordDto { Token = fakeToken, NewPassword = "newPass" };
+            var dto = new ResetPasswordDto { Token = fakeToken, NewPassword = "newPass" };
             var tokenVerificationResult = new VerifyResetPasswordTokenResult
             {
                 Success = true,
@@ -117,18 +117,18 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
                 .ReturnsAsync((PasswordResetTokenInfo)null);
 
             // Act
-            var result = await _service.ChangePasswordAsync(dto);
+            var result = await _service.ResetPasswordAsync(dto);
 
             // Assert
             Assert.False(result.Success);
         }
 
         [Fact]
-        public async Task ChangePasswordAsync_UserNotFound_ReturnsFailure()
+        public async Task ResetPasswordAsync_UserNotFound_ReturnsFailure()
         {
             // Arrange
             var fakeToken = "validToken";
-            var dto = new ChangePasswordDto { Token = fakeToken, NewPassword = "newPass" };
+            var dto = new ResetPasswordDto { Token = fakeToken, NewPassword = "newPass" };
             var tokenVerificationResult = new VerifyResetPasswordTokenResult
             {
                 Success = true,
@@ -151,19 +151,19 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
                 .ReturnsAsync((UserBase)null);
 
             // Act
-            var result = await _service.ChangePasswordAsync(dto);
+            var result = await _service.ResetPasswordAsync(dto);
 
             // Assert
             Assert.False(result.Success);
         }
 
         [Fact]
-        public async Task ChangePasswordAsync_ValidRequest_ChangesPasswordAndReturnsSuccess()
+        public async Task ResetPasswordAsync_ValidRequest_ChangesPasswordAndReturnsSuccess()
         {
             // Arrange
             var fakeToken = "validToken";
             var newPassword = "newPass";
-            var dto = new ChangePasswordDto { Token = fakeToken, NewPassword = newPassword };
+            var dto = new ResetPasswordDto { Token = fakeToken, NewPassword = newPassword };
             var tokenVerificationResult = new VerifyResetPasswordTokenResult
             {
                 Success = true,
@@ -201,7 +201,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
                 .Returns(Task.CompletedTask);
 
             // Act
-            var result = await _service.ChangePasswordAsync(dto);
+            var result = await _service.ResetPasswordAsync(dto);
 
             // Assert
             Assert.True(result.Success);

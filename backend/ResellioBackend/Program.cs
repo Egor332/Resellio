@@ -104,7 +104,7 @@ namespace ResellioBackend
             builder.Services.AddTransient<IEmailVerificationService, EmailVerificationService>();
             builder.Services.AddTransient<IRequestEmailVerificationService, RequestEmailVerificationService>();
             builder.Services.AddTransient<IPasswordResetTokenService, PasswordResetTokenService>();
-            builder.Services.AddTransient<IPasswordResetService, PasswordResetService>();
+            builder.Services.AddTransient<IResetPasswordService, ResetPasswordService>();
 
             // Repositories
             builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));

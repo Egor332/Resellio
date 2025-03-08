@@ -8,7 +8,7 @@ using ResellioBackend.UserManagementSystem.Services.Abstractions;
 
 namespace ResellioBackend.UserManagementSystem.Services.Implementations
 {
-    public class PasswordResetService : IPasswordResetService
+    public class ResetPasswordService : IResetPasswordService
     {
         private readonly IUsersRepository<UserBase> _usersRepository;
         private readonly IPasswordResetTokenService _passwordResetTokenService;
@@ -18,7 +18,7 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly LinkGenerator _linkGenerator;
 
-        public PasswordResetService(IUsersRepository<UserBase> usersRepository,  IPasswordResetTokenService passwordResetTokenService, IPasswordResetTokenRepository tokenRepository,
+        public ResetPasswordService(IUsersRepository<UserBase> usersRepository,  IPasswordResetTokenService passwordResetTokenService, IPasswordResetTokenRepository tokenRepository,
            IPasswordService passwordService, IKafkaProducerService kafkaProducerService, IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator)
         {
             _usersRepository = usersRepository;
@@ -30,7 +30,7 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
             _linkGenerator = linkGenerator;
         }
 
-        public async Task<ResultBase> RequestPasswordResetAsync(string email)
+        public async Task<ResultBase> RequestResetPasswordAsync(string email)
         {
             var user = await _usersRepository.GetByEmailAsync(email);
             if (user == null)
@@ -52,7 +52,7 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
             };
         }
 
-        public async Task<ResultBase> ChangePasswordAsync(ChangePasswordDto changePasswordDto)
+        public async Task<ResultBase> ResetPasswordAsync(ResetPasswordDto changePasswordDto)
         {
             var newPassword = changePasswordDto.NewPassword;
             var token = changePasswordDto.Token;
@@ -88,7 +88,7 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
                 };
             }
 
-            await UpdateUserPasswordAsync(user, newPassword);
+            await ResetUserPasswordAsync(user, newPassword);
 
             return new ResultBase()
             {
@@ -117,7 +117,7 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
             await _kafkaProducerService.SendMessageAsync(resetPasswordEmail);
         }
 
-        private async Task UpdateUserPasswordAsync(UserBase user, string newPassword)
+        private async Task ResetUserPasswordAsync(UserBase user, string newPassword)
         {
             (string passwordHash, string salt) = _passwordService.HashPassword(newPassword);
             user.ChangePassword(passwordHash, salt);

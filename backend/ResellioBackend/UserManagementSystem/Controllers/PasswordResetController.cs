@@ -9,11 +9,11 @@ namespace ResellioBackend.UserManagementSystem.Controllers
     [ApiController]
     public class PasswordResetController : ControllerBase
     {
-        private readonly IPasswordResetService _passwordResetService;
+        private readonly IResetPasswordService _passwordResetService;
         private readonly IPasswordResetTokenService _passwordResetTokenService;
         private readonly IConfiguration _configuration;
 
-        public PasswordResetController(IPasswordResetService passwordResetService,  IPasswordResetTokenService passwordResetTokenService, IConfiguration configuration)
+        public PasswordResetController(IResetPasswordService passwordResetService,  IPasswordResetTokenService passwordResetTokenService, IConfiguration configuration)
         {
             _passwordResetService = passwordResetService;
             _passwordResetTokenService = passwordResetTokenService;
@@ -21,9 +21,9 @@ namespace ResellioBackend.UserManagementSystem.Controllers
         }
 
         [HttpPost("request-password-reset")]
-        public async Task<IActionResult> RequestPasswordReset([FromBody]RequestPasswordResetDto dto)
+        public async Task<IActionResult> RequestResetPassword([FromBody]RequestResetPasswordDto dto)
         {
-            var result = await _passwordResetService.RequestPasswordResetAsync(dto.Email);
+            var result = await _passwordResetService.RequestResetPasswordAsync(dto.Email);
             if (result.Success)
             {
                 return Ok(new { result.Message });
@@ -51,9 +51,9 @@ namespace ResellioBackend.UserManagementSystem.Controllers
         }
 
         [HttpPost("change-password")]
-        public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordDto dto)
+        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordDto dto)
         {
-            var result = await _passwordResetService.ChangePasswordAsync(dto);
+            var result = await _passwordResetService.ResetPasswordAsync(dto);
             if (result.Success)
             {
                 return Ok(new { result.Message });
