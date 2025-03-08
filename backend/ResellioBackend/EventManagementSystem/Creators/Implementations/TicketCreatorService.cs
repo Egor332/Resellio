@@ -16,7 +16,7 @@ public class TicketCreatorService: ITicketCreatorService
         _ticketsRepository = ticketsRepository;
     }
 
-    public async Task<Result<Ticket>> CreateTicketAsync(TicketType ticketType)
+    public async Task<GeneralResult<Ticket>> CreateTicketAsync(TicketType ticketType)
     {
         Ticket newTicket = new Ticket()
         {
@@ -25,7 +25,7 @@ public class TicketCreatorService: ITicketCreatorService
         
         await _ticketsRepository.AddAsync(newTicket);
 
-        return new Result<Ticket>()
+        return new GeneralResult<Ticket>()
         {
             Success = true,
             Message = "Created successfully",

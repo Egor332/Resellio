@@ -1,6 +1,6 @@
 namespace ResellioBackend.Results;
 
-public class Result<T>: ResultBase
+public class GeneralResult<T>: ResultBase
 {
     public T Data { get; set; }
 }

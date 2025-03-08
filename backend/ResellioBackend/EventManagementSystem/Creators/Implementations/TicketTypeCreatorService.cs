@@ -18,7 +18,7 @@ public class TicketTypeCreatorService: ITicketTypeCreatorService
         _ticketCreatorService = ticketCreatorService;
     }
 
-    public async Task<Result<TicketType>> CreateTicketTypeAsync(TicketTypeDto ticketTypeDto, Event createdEvent)
+    public async Task<GeneralResult<TicketType>> CreateTicketTypeAsync(TicketTypeDto ticketTypeDto, Event createdEvent)
     {
         TicketType newTicketType = new TicketType()
         {
@@ -37,7 +37,7 @@ public class TicketTypeCreatorService: ITicketTypeCreatorService
             if (result.Success)
                 newTicketType.Tickets.Add(result.Data);
             else
-                return new Result<TicketType>()
+                return new GeneralResult<TicketType>()
                 {
                     Success = false,
                     Message = result.Message
@@ -47,7 +47,7 @@ public class TicketTypeCreatorService: ITicketTypeCreatorService
 
         await _ticketTypesRepository.AddAsync(newTicketType);
 
-        return new Result<TicketType>()
+        return new GeneralResult<TicketType>()
         {
             Success = true,
             Message = "Created successfully",

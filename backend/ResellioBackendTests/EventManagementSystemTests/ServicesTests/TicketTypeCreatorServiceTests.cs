@@ -41,7 +41,7 @@ public class TicketTypeCreatorServiceTests
         // Simulation setup: each call to CreateTicketAsync returns success with a new ticket.
         _ticketCreatorServiceMock
             .Setup(service => service.CreateTicketAsync(It.IsAny<TicketType>()))
-            .ReturnsAsync(() => new Result<Ticket>
+            .ReturnsAsync(() => new GeneralResult<Ticket>
             {
                 Success = true,
                 Data = new Ticket()
@@ -85,13 +85,13 @@ public class TicketTypeCreatorServiceTests
                 // Simulate that the second ticket creation fails
                 if (callCount == 2)
                 {
-                    return new Result<Ticket>
+                    return new GeneralResult<Ticket>
                     {
                         Success = false,
-                        Message = "Ticket creation failed"
+                        Message = "Failed to create all tickets"
                     };
                 }
-                return new Result<Ticket>
+                return new GeneralResult<Ticket>
                 {
                     Success = true,
                     Data = new Ticket()

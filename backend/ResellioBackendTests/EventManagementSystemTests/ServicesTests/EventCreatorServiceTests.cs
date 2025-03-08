@@ -73,10 +73,10 @@ public class EventCreatorServiceTests
         // Creating ticket types simulation
         _ticketTypeCreatorServiceMock
             .Setup(service => service.CreateTicketTypeAsync(ticketTypeDto1, It.IsAny<Event>()))
-            .ReturnsAsync(new Result<TicketType>(){Success = true, Message = "Created ticket successfully", Data = new TicketType()});
+            .ReturnsAsync(new GeneralResult<TicketType>(){Success = true, Message = "Created ticket successfully", Data = new TicketType()});
         _ticketTypeCreatorServiceMock
             .Setup(service => service.CreateTicketTypeAsync(ticketTypeDto2, It.IsAny<Event>()))
-            .ReturnsAsync(new Result<TicketType>(){Success = true, Message = "Created ticket successfully", Data = new TicketType()});
+            .ReturnsAsync(new GeneralResult<TicketType>(){Success = true, Message = "Created ticket successfully", Data = new TicketType()});
 
         // Act
         var result = await _eventCreatorService.CreateEventAsync(eventDto, organiserId);
