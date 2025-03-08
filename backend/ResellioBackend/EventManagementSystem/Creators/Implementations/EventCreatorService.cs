@@ -44,14 +44,6 @@ public class EventCreatorService: IEventCreatorService
             TicketTypes = new List<TicketType>()
         };
         
-        // Create ticket types in parallel instead of a sequential foreach loop
-        // var ticketTypeTasks = eventDto.TicketTypes
-        //     .Select(ticketTypeDto => _ticketTypeCreatorService.CreateTicketTypeAsync(ticketTypeDto, newEvent))
-        //     .ToList();
-        //
-        // var ticketTypes = await Task.WhenAll(ticketTypeTasks);
-        // newEvent.TicketTypes.AddRange(ticketTypes);
-        
         // for now let's keep it sequential as it's easier to understand
         foreach (TicketTypeDto ticketTypeDto in eventDto.TicketTypeDtos)
         {
