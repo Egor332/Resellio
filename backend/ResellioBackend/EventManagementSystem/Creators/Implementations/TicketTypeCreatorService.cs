@@ -31,7 +31,6 @@ public class TicketTypeCreatorService: ITicketTypeCreatorService
             Tickets = new List<Ticket>()
         };
 
-        // TODO: maybe parallelize this
         for (int i = 0; i < ticketTypeDto.MaxCount; i++)
         {
             var result = await _ticketCreatorService.CreateTicketAsync(newTicketType);
@@ -41,7 +40,7 @@ public class TicketTypeCreatorService: ITicketTypeCreatorService
                 return new Result<TicketType>()
                 {
                     Success = false,
-                    Message = "Failed to create all tickets"
+                    Message = result.Message
                     // TODO: right now failure creating one ticket fails the whole event
                 };
         }
