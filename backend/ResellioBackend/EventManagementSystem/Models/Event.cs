@@ -13,6 +13,9 @@ public class Event
     public int EventId { get; set; }
     
     [Required] 
+    public int OrganiserId { get; set; }
+    
+    [Required] 
     public Organiser Organiser { get; set; }
     
     [Required]
