@@ -74,39 +74,6 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
             _kafkaProducerServiceMock.Verify(x => x.SendMessageAsync(It.IsAny<EmailForSendGrid>()), Times.Never);
         }
 
-        /*[Fact]
-        public async Task RequestPasswordResetAsync_UserFound_SendsEmailAndReturnsTrueResult()
-        {
-            // Arrange
-            string email = "user@example.com";
-            var user = new Customer { UserId = 1, Email = email };
-            _usersRepositoryMock.Setup(x => x.GetByEmailAsync(email))
-                                .ReturnsAsync(user);
-
-            var fakeToken = "fakeToken";
-            _passwordResetTokenServiceMock.Setup(x => x.CreateTokenWithDatabaseRecordAsync(user.UserId))
-                                          .ReturnsAsync(fakeToken);
-
-            // Setup LinkGenerator to return a confirmation link
-            string resetLink = "https://example.com/passwordreset";
-
-
-            // Act
-            var result = await _service.RequestPasswordResetAsync(email);
-
-            // Assert
-            Assert.True(result.Success);
-
-            // Verify that SendMessageAsync was called with an email that contains the confirmation link
-            _kafkaProducerServiceMock.Verify(x => x.SendMessageAsync(
-                It.Is<EmailForSendGrid>(e =>
-                    e.Email == email &&
-                    e.Subject == "Resellio password reset" &&
-                    e.HtmlContent.Contains(resetLink)
-                )),
-                Times.Once);
-        }*/
-
         [Fact]
         public async Task ChangePasswordAsync_InvalidTokenVerification_ReturnsFailure()
         {
