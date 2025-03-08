@@ -43,7 +43,6 @@ public class EventCreatorServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Equal("Organiser not found", result.Message);
         // assure that AddAsync was never called on the repository during test execution
         _eventRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Event>()), Times.Never);
     }
@@ -73,17 +72,16 @@ public class EventCreatorServiceTests
         // Creating ticket types simulation
         _ticketTypeCreatorServiceMock
             .Setup(service => service.CreateTicketTypeAsync(ticketTypeDto1, It.IsAny<Event>()))
-            .ReturnsAsync(new GeneralResult<TicketType>(){Success = true, Message = "Created ticket successfully", Data = new TicketType()});
+            .ReturnsAsync(new GeneralResult<TicketType>(){Success = true, Data = new TicketType()});
         _ticketTypeCreatorServiceMock
             .Setup(service => service.CreateTicketTypeAsync(ticketTypeDto2, It.IsAny<Event>()))
-            .ReturnsAsync(new GeneralResult<TicketType>(){Success = true, Message = "Created ticket successfully", Data = new TicketType()});
+            .ReturnsAsync(new GeneralResult<TicketType>(){Success = true, Data = new TicketType()});
 
         // Act
         var result = await _eventCreatorService.CreateEventAsync(eventDto, organiserId);
 
         // Assert
         Assert.True(result.Success);
-        Assert.Equal("Created successfully", result.Message);
 
         // Verification of method calls 
         _userRepositoryMock.Verify(repo => repo.GetByIdAsync(organiserId), Times.Once);

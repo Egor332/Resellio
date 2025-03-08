@@ -52,7 +52,6 @@ public class TicketTypeCreatorServiceTests
 
         // Assert
         Assert.True(result.Success);
-        Assert.Equal("Created successfully", result.Message);
         Assert.NotNull(result.Data);
         Assert.Equal(ticketTypeDto.MaxCount, result.Data.Tickets.Count);
 
@@ -88,7 +87,6 @@ public class TicketTypeCreatorServiceTests
                     return new GeneralResult<Ticket>
                     {
                         Success = false,
-                        Message = "Failed to create all tickets"
                     };
                 }
                 return new GeneralResult<Ticket>
@@ -103,7 +101,6 @@ public class TicketTypeCreatorServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Equal("Failed to create all tickets", result.Message);
         // Verify that the repository was never called as nothing should be created
         _ticketTypesRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<TicketType>()), Times.Never);
     }

@@ -35,7 +35,6 @@ public class TicketCreatorServiceTests
 
         // Assert
         Assert.True(result.Success);
-        Assert.Equal("Created successfully", result.Message);
         Assert.NotNull(result.Data);
         Assert.Equal(ticketType, result.Data.TicketType);
         _ticketsRepositoryMock.Verify(repo => repo.AddAsync(It.Is<Ticket>(t => t.TicketType == ticketType)), Times.Once);
