@@ -6,7 +6,6 @@ using ResellioBackend.EventManagementSystem.Creators.Implementations;
 using ResellioBackend.EventManagementSystem.Models;
 using ResellioBackend.EventManagementSystem.Models.Base;
 using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
-using ResellioBackend.EventManagementSystem.Results;
 
 namespace ResellioBackendTests.EventManagementSystemTests.ServicesTests;
 

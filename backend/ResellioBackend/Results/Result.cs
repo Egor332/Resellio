@@ -1,4 +1,4 @@
-namespace ResellioBackend.EventManagementSystem.Results;
+namespace ResellioBackend.Results;
 
 public class Result<T>: ResultBase
 {

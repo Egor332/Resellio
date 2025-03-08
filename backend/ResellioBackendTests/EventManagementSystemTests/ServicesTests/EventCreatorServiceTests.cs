@@ -4,7 +4,7 @@ using ResellioBackend.EventManagementSystem.Creators.Implementations;
 using ResellioBackend.EventManagementSystem.DTOs;
 using ResellioBackend.EventManagementSystem.Models;
 using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
-using ResellioBackend.EventManagementSystem.Results;
+using ResellioBackend.Results;
 using ResellioBackend.UserManagementSystem.Models.Base;
 using ResellioBackend.UserManagementSystem.Models.Users;
 using ResellioBackend.UserManagementSystem.Repositories.Abstractions;
