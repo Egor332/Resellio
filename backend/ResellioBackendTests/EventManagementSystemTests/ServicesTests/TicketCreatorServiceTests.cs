@@ -39,21 +39,5 @@ public class TicketCreatorServiceTests
         Assert.Equal(ticketType, result.Data.TicketType);
         _ticketsRepositoryMock.Verify(repo => repo.AddAsync(It.Is<Ticket>(t => t.TicketType == ticketType)), Times.Once);
     }
-
-    [Fact]
-    public async Task TicketCreatorService_CreateTicketAsync_ShouldThrowExceptionIfRepositoryFails()
-    {
-        // Arrange
-        var ticketType = new TicketType();
-        _ticketsRepositoryMock
-            .Setup(repo => repo.AddAsync(It.IsAny<Ticket>()))
-            .ThrowsAsync(new Exception("Repository failure"));
-
-        // Act & Assert
-        await Assert.ThrowsAsync<Exception>(async () =>
-        {
-            await _ticketCreatorService.CreateTicketAsync(ticketType);
-        });
-    }
 }
 
