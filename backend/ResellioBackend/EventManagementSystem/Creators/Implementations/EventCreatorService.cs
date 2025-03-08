@@ -54,7 +54,7 @@ public class EventCreatorService: IEventCreatorService
                 return new ResultBase()
                 {
                     Success = false,
-                    Message = "Failed to create ticket type"
+                    Message = result.Message
                 };
         }
         
