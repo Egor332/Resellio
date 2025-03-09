@@ -22,7 +22,8 @@ namespace NotificationService.Consumers
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
             _consumer = new ConsumerBuilder<Ignore, string>(config).Build();
-            _consumer.Subscribe("email-notifications");
+            var topic = configuration["Kafka:Topic"];
+            _consumer.Subscribe(topic);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

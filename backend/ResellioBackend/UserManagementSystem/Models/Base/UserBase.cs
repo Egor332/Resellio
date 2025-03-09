@@ -56,6 +56,12 @@ namespace ResellioBackend.UserManagementSystem.Models.Base
             }
         }
 
+        public void ChangePassword(string newPasswordHash, string newSalt)
+        {
+            PasswordHash = newPasswordHash;
+            Salt = newSalt;
+        }
+
         protected List<Claim> GetBaseClaims()
         {
             List<Claim> claims = new List<Claim>();

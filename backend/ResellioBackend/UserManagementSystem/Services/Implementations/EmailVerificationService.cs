@@ -42,7 +42,7 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
             );
             var htmlContent = $"Verify your email by clicking this link: {confirmationLink}";
 
-            var verificationEmail = new VerificationEmail()
+            var verificationEmail = new EmailForSendGrid()
             {
                 Email = userEmail,
                 Subject = subject,

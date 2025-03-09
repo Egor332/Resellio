@@ -17,7 +17,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public void Hmacsha256PasswordService_GetHashPassword_ShouldReturnNonEmptyHashAndSlat()
+        public void GetHashPassword_ShouldReturnNonEmptyHashAndSlat()
         {
             // Arrange
             string password = "password123";
@@ -31,7 +31,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public void Hmacsha256PasswordService_VerifyPassword_ShouldReturnTrueForCorrectPassword()
+        public void VerifyPassword_ShouldReturnTrueForCorrectPassword()
         {
             // Arrange
             string password = "password123";
@@ -45,7 +45,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public void Hmacsha256PasswordService_VerifyPassword_ShouldReturnFlaseForCorrectPassword()
+        public void VerifyPassword_ShouldReturnFalseForCorrectPassword()
         {
             // Arrange
             string password = "password123";
@@ -60,7 +60,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public void Hmacsha256PasswordService_HashPassword_ShouldGenerateDifferentHashesForSamePassword()
+        public void HashPassword_ShouldGenerateDifferentHashesForSamePassword()
         {
             // Arrange
             string password = "password123";

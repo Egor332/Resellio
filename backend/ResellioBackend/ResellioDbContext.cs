@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using ResellioBackend.EventManagementSystem.Models.Base;
 using ResellioBackend.EventManagementSystem.Models;
 using ResellioBackend.UserManagementSystem.Models.Base;
+using ResellioBackend.UserManagementSystem.Models.Tokens;
 using ResellioBackend.UserManagementSystem.Models.Users;
 
 namespace ResellioBackend
@@ -16,10 +17,11 @@ namespace ResellioBackend
         public DbSet<Organiser> Organisers { get; set; }
         public DbSet<Administrator> Administrators { get; set; }
 
+        public DbSet<PasswordResetTokenInfo> PasswordResetTokens { get; set; }
+
         public DbSet<Event> Events { get; set; }
         public DbSet<TicketType> TicketTypes { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,6 +50,13 @@ namespace ResellioBackend
             modelBuilder.Entity<UserBase>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
+
+            // Configure PasswordResetTokens table with Users
+            modelBuilder.Entity<PasswordResetTokenInfo>()
+                .HasOne(prt => prt.Owner)
+                .WithMany()
+                .HasForeignKey(prt => prt.OwnerId) 
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

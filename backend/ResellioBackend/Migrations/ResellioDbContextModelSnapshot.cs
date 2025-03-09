@@ -166,8 +166,34 @@ namespace ResellioBackend.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Tokens.PasswordResetTokenInfo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("PasswordResetTokens");
+                });
+
             modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Users.Administrator", b =>
                 {
+
+            modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Users.Administrator", b =>
+                {
+
                     b.HasBaseType("ResellioBackend.UserManagementSystem.Models.Base.UserBase");
 
                     b.HasDiscriminator().HasValue("Administrator");
@@ -195,6 +221,13 @@ namespace ResellioBackend.Migrations
                     b.HasDiscriminator().HasValue("Organiser");
                 });
 
+
+            modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Tokens.PasswordResetTokenInfo", b =>
+                {
+                    b.HasOne("ResellioBackend.UserManagementSystem.Models.Base.UserBase", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+
             modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.Base.Ticket", b =>
                 {
                     b.HasOne("ResellioBackend.UserManagementSystem.Models.Users.Customer", "Owner")
@@ -204,6 +237,7 @@ namespace ResellioBackend.Migrations
                     b.HasOne("ResellioBackend.EventManagementSystem.Models.TicketType", "TicketType")
                         .WithMany("Tickets")
                         .HasForeignKey("TicketTypeId")
+
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -242,6 +276,7 @@ namespace ResellioBackend.Migrations
             modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.TicketType", b =>
                 {
                     b.Navigation("Tickets");
+
                 });
 #pragma warning restore 612, 618
         }

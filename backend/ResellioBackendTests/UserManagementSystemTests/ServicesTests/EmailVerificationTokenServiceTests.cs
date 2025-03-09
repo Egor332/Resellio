@@ -38,7 +38,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public void EmailVerificationTokenService_GetEmailVerificationToken_ShouldGenerateToken_WithCorrectClaims()
+        public void GetEmailVerificationToken_ShouldGenerateToken_WithCorrectClaims()
         {
             // Arrange
             var expectedToken = "generated-token";
@@ -58,7 +58,7 @@ namespace ResellioBackendTests.UserManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public void EmailVerificationTokenService_ValidateEmailVerificationToken_ShouldReturnFailure_WhenTokenIsInvalid()
+        public void ValidateEmailVerificationToken_ShouldReturnFailure_WhenTokenIsInvalid()
         {
             // Arrange
             var invalidToken = "invalid-token";
