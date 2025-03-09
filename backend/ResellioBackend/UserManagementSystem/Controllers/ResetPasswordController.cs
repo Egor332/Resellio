@@ -7,13 +7,13 @@ namespace ResellioBackend.UserManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PasswordResetController : ControllerBase
+    public class ResetPasswordController : ControllerBase
     {
         private readonly IResetPasswordService _passwordResetService;
         private readonly IPasswordResetTokenService _passwordResetTokenService;
         private readonly IConfiguration _configuration;
 
-        public PasswordResetController(IResetPasswordService passwordResetService,  IPasswordResetTokenService passwordResetTokenService, IConfiguration configuration)
+        public ResetPasswordController(IResetPasswordService passwordResetService,  IPasswordResetTokenService passwordResetTokenService, IConfiguration configuration)
         {
             _passwordResetService = passwordResetService;
             _passwordResetTokenService = passwordResetTokenService;
@@ -50,7 +50,7 @@ namespace ResellioBackend.UserManagementSystem.Controllers
             }
         }
 
-        [HttpPost("change-password")]
+        [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordDto dto)
         {
             var result = await _passwordResetService.ResetPasswordAsync(dto);

@@ -102,7 +102,7 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
             var resetLink = _linkGenerator.GetUriByAction(
                 _httpContextAccessor.HttpContext,
                 action: "RedirectToForm",
-                controller: "PasswordReset",
+                controller: "ResetPassword",
                 values: new { token },
                 scheme: _httpContextAccessor.HttpContext.Request.Scheme
             );
