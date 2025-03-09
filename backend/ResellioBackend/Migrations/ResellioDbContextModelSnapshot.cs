@@ -190,10 +190,6 @@ namespace ResellioBackend.Migrations
 
             modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Users.Administrator", b =>
                 {
-
-            modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Users.Administrator", b =>
-                {
-
                     b.HasBaseType("ResellioBackend.UserManagementSystem.Models.Base.UserBase");
 
                     b.HasDiscriminator().HasValue("Administrator");
@@ -221,13 +217,6 @@ namespace ResellioBackend.Migrations
                     b.HasDiscriminator().HasValue("Organiser");
                 });
 
-
-            modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Tokens.PasswordResetTokenInfo", b =>
-                {
-                    b.HasOne("ResellioBackend.UserManagementSystem.Models.Base.UserBase", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-
             modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.Base.Ticket", b =>
                 {
                     b.HasOne("ResellioBackend.UserManagementSystem.Models.Users.Customer", "Owner")
@@ -237,7 +226,6 @@ namespace ResellioBackend.Migrations
                     b.HasOne("ResellioBackend.EventManagementSystem.Models.TicketType", "TicketType")
                         .WithMany("Tickets")
                         .HasForeignKey("TicketTypeId")
-
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -268,6 +256,17 @@ namespace ResellioBackend.Migrations
                     b.Navigation("Event");
                 });
 
+            modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Tokens.PasswordResetTokenInfo", b =>
+                {
+                    b.HasOne("ResellioBackend.UserManagementSystem.Models.Base.UserBase", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.Event", b =>
                 {
                     b.Navigation("TicketTypes");
@@ -276,7 +275,6 @@ namespace ResellioBackend.Migrations
             modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.TicketType", b =>
                 {
                     b.Navigation("Tickets");
-
                 });
 #pragma warning restore 612, 618
         }

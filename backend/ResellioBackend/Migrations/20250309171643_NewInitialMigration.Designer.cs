@@ -12,8 +12,8 @@ using ResellioBackend;
 namespace ResellioBackend.Migrations
 {
     [DbContext(typeof(ResellioDbContext))]
-    [Migration("20250309130026_EventCluster02Added")]
-    partial class EventCluster02Added
+    [Migration("20250309171643_NewInitialMigration")]
+    partial class NewInitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -169,6 +169,28 @@ namespace ResellioBackend.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Tokens.PasswordResetTokenInfo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("PasswordResetTokens");
+                });
+
             modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Users.Administrator", b =>
                 {
                     b.HasBaseType("ResellioBackend.UserManagementSystem.Models.Base.UserBase");
@@ -235,6 +257,17 @@ namespace ResellioBackend.Migrations
                         .IsRequired();
 
                     b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Tokens.PasswordResetTokenInfo", b =>
+                {
+                    b.HasOne("ResellioBackend.UserManagementSystem.Models.Base.UserBase", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.Event", b =>
