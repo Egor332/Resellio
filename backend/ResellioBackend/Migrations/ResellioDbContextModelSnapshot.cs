@@ -22,99 +22,7 @@ namespace ResellioBackend.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.Base.Ticket", b =>
-                {
-                    b.Property<int>("TicketId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketId"));
-
-                    b.Property<int?>("OwnerUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TicketTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("TicketId");
-
-                    b.HasIndex("OwnerUserId");
-
-                    b.HasIndex("TicketTypeId");
-
-                    b.ToTable("Tickets");
-                });
-
-            modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.Event", b =>
-                {
-                    b.Property<int>("EventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventId"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("End")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("OrganiserUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Start")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("EventId");
-
-                    b.HasIndex("OrganiserUserId");
-
-                    b.ToTable("Events");
-                });
-
-            modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.TicketType", b =>
-                {
-                    b.Property<int>("TypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TypeId"));
-
-                    b.Property<DateTime>("AvailableFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MaxCount")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("TypeId");
-
-                    b.HasIndex("EventId");
-
-                    b.ToTable("TicketTypes");
-                });
-
-            modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Base.UserBase", b =>
+            modelBuilder.Entity("ResellioBackend.Models.Base.UserBase", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -168,23 +76,23 @@ namespace ResellioBackend.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Users.Administrator", b =>
+            modelBuilder.Entity("ResellioBackend.Models.Users.Administrator", b =>
                 {
-                    b.HasBaseType("ResellioBackend.UserManagementSystem.Models.Base.UserBase");
+                    b.HasBaseType("ResellioBackend.Models.Base.UserBase");
 
                     b.HasDiscriminator().HasValue("Administrator");
                 });
 
-            modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Users.Customer", b =>
+            modelBuilder.Entity("ResellioBackend.Models.Users.Customer", b =>
                 {
-                    b.HasBaseType("ResellioBackend.UserManagementSystem.Models.Base.UserBase");
+                    b.HasBaseType("ResellioBackend.Models.Base.UserBase");
 
                     b.HasDiscriminator().HasValue("Customer");
                 });
 
-            modelBuilder.Entity("ResellioBackend.UserManagementSystem.Models.Users.Organiser", b =>
+            modelBuilder.Entity("ResellioBackend.Models.Users.Organiser", b =>
                 {
-                    b.HasBaseType("ResellioBackend.UserManagementSystem.Models.Base.UserBase");
+                    b.HasBaseType("ResellioBackend.Models.Base.UserBase");
 
                     b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
@@ -195,55 +103,6 @@ namespace ResellioBackend.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasDiscriminator().HasValue("Organiser");
-                });
-
-            modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.Base.Ticket", b =>
-                {
-                    b.HasOne("ResellioBackend.UserManagementSystem.Models.Users.Customer", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerUserId");
-
-                    b.HasOne("ResellioBackend.EventManagementSystem.Models.TicketType", "TicketType")
-                        .WithMany("Tickets")
-                        .HasForeignKey("TicketTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-
-                    b.Navigation("TicketType");
-                });
-
-            modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.Event", b =>
-                {
-                    b.HasOne("ResellioBackend.UserManagementSystem.Models.Users.Organiser", "Organiser")
-                        .WithMany()
-                        .HasForeignKey("OrganiserUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Organiser");
-                });
-
-            modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.TicketType", b =>
-                {
-                    b.HasOne("ResellioBackend.EventManagementSystem.Models.Event", "Event")
-                        .WithMany("TicketTypes")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-                });
-
-            modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.Event", b =>
-                {
-                    b.Navigation("TicketTypes");
-                });
-
-            modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.TicketType", b =>
-                {
-                    b.Navigation("Tickets");
                 });
 #pragma warning restore 612, 618
         }
