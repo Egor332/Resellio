@@ -14,6 +14,10 @@ using ResellioBackend.UserManagementSystem.Statics;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using ResellioBackend.EventManagementSystem.Creators.Abstractions;
+using ResellioBackend.EventManagementSystem.Creators.Implementations;
+using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
+using ResellioBackend.EventManagementSystem.Repositories.Implementations;
 
 namespace ResellioBackend
 {
@@ -95,10 +99,17 @@ namespace ResellioBackend
             builder.Services.AddTransient<ITokenGenerator, JwtGenerator>();
             builder.Services.AddTransient<IRegistrationService, RegistrationService>();
             builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddTransient<IEventCreatorService, EventCreatorService>();
+            builder.Services.AddTransient<ITicketTypeCreatorService, TicketTypeCreatorService>();
+            builder.Services.AddTransient<ITicketCreatorService, TicketCreatorService>();
 
             // Repositories
             builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));
-
+            builder.Services.AddScoped<IEventsRepository, EventsRepository>();
+            builder.Services.AddScoped<ITicketTypesRepository, TicketTypesRepository>();
+            builder.Services.AddScoped<ITicketsRepository, TicketsRepository>();
+            
+            
             // Factory
             builder.Services.AddTransient<IUserFactory, UserFactory>();
 

@@ -4,12 +4,12 @@ using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
 
 namespace ResellioBackend.EventManagementSystem.Repositories.Implementations;
 
-public class TicketRepository: ITicketsRepository
+public class TicketsRepository: ITicketsRepository
 {
     private readonly ResellioDbContext _context;
     private readonly DbSet<Ticket> _dbSet;
 
-    public TicketRepository(ResellioDbContext context)
+    public TicketsRepository(ResellioDbContext context)
     {
         _context = context;
         _dbSet = context.Set<Ticket>();
