@@ -24,13 +24,11 @@ namespace ResellioBackend.Migrations
 
             modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.Base.Ticket", b =>
                 {
-                    b.Property<int>("TicketId")
+                    b.Property<Guid>("TicketId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketId"));
-
-                    b.Property<int?>("OwnerUserId")
+                    b.Property<int?>("OwnerId")
                         .HasColumnType("int");
 
                     b.Property<int>("TicketTypeId")
@@ -38,7 +36,7 @@ namespace ResellioBackend.Migrations
 
                     b.HasKey("TicketId");
 
-                    b.HasIndex("OwnerUserId");
+                    b.HasIndex("OwnerId");
 
                     b.HasIndex("TicketTypeId");
 
@@ -66,7 +64,7 @@ namespace ResellioBackend.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("OrganiserUserId")
+                    b.Property<int>("OrganiserId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Start")
@@ -74,7 +72,7 @@ namespace ResellioBackend.Migrations
 
                     b.HasKey("EventId");
 
-                    b.HasIndex("OrganiserUserId");
+                    b.HasIndex("OrganiserId");
 
                     b.ToTable("Events");
                 });
@@ -201,7 +199,7 @@ namespace ResellioBackend.Migrations
                 {
                     b.HasOne("ResellioBackend.UserManagementSystem.Models.Users.Customer", "Owner")
                         .WithMany()
-                        .HasForeignKey("OwnerUserId");
+                        .HasForeignKey("OwnerId");
 
                     b.HasOne("ResellioBackend.EventManagementSystem.Models.TicketType", "TicketType")
                         .WithMany("Tickets")
@@ -218,7 +216,7 @@ namespace ResellioBackend.Migrations
                 {
                     b.HasOne("ResellioBackend.UserManagementSystem.Models.Users.Organiser", "Organiser")
                         .WithMany()
-                        .HasForeignKey("OrganiserUserId")
+                        .HasForeignKey("OrganiserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
