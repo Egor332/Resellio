@@ -1,10 +1,12 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ResellioBackend.EventManagementSystem.Creators.Abstractions;
 using ResellioBackend.EventManagementSystem.DTOs;
 
 namespace ResellioBackend.EventManagementSystem.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class EventsController : ControllerBase
@@ -16,6 +18,7 @@ namespace ResellioBackend.EventManagementSystem.Controllers
             _eventCreatorService = eventCreatorService;
         }
 
+        [Authorize(Policy = "OrganiserPolicy")]
         [HttpPost("create")]
         public async Task<IActionResult> CreateEventAsync([FromBody] EventDto eventDto)
         {
