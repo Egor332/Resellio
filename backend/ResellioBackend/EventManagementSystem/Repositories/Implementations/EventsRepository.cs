@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using ResellioBackend.EventManagementSystem.Models;
+using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
 
 namespace ResellioBackend.EventManagementSystem.Repositories.Implementations;
 
-public class EventsRepository
+public class EventsRepository : IEventsRepository
 {
     private readonly ResellioDbContext _context;
     private readonly DbSet<Event> _dbSet;
