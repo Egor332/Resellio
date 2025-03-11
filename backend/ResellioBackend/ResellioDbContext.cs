@@ -29,6 +29,13 @@ namespace ResellioBackend
             .HasValue<Organiser>("Organiser")
             .HasValue<Administrator>("Administrator");
             
+            // Configure Organiser – Event Relationship
+            modelBuilder.Entity<Event>()
+                .HasOne(e => e.Organiser)
+                .WithMany() 
+                .HasForeignKey(e => e.OrganiserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // Configure Event – TicketType Relationship
             modelBuilder.Entity<TicketType>()
                 .HasOne(t => t.Event)
@@ -42,7 +49,6 @@ namespace ResellioBackend
                 .WithMany(tt => tt.Tickets)
                 .HasForeignKey(t => t.TicketTypeId)
                 .OnDelete(DeleteBehavior.Cascade);
-            
 
             // Add Index on Login Column
             modelBuilder.Entity<UserBase>()
