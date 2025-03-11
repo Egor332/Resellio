@@ -45,8 +45,6 @@ public class TicketTypeCreatorService: ITicketTypeCreatorService
                 };
         }
 
-        await _ticketTypesRepository.AddAsync(newTicketType);
-
         return new GeneralResult<TicketType>()
         {
             Success = true,

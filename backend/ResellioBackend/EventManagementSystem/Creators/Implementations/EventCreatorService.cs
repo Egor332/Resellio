@@ -33,37 +33,47 @@ public class EventCreatorService: IEventCreatorService
                 Message = "Organiser not found"
             };
         }
-        
-        var newEvent = new Event
+
+        try
         {
-            Organiser = organiser,
-            Name = eventDto.Name,
-            Description = eventDto.Description,
-            Start = eventDto.Start,
-            End = eventDto.End,
-            TicketTypes = new List<TicketType>()
-        };
-        
-        // for now let's keep it sequential as it's easier to understand
-        foreach (TicketTypeDto ticketTypeDto in eventDto.TicketTypeDtos)
-        {
-            var result = await _ticketTypeCreatorService.CreateTicketTypeAsync(ticketTypeDto, newEvent);
-            if (result.Success)
-                newEvent.TicketTypes.Add(result.Data);
-            else
-                return new ResultBase()
-                {
-                    Success = false,
-                    Message = result.Message
-                };
+            var newEvent = new Event
+            {
+                Organiser = organiser,
+                Name = eventDto.Name,
+                Description = eventDto.Description,
+                Start = eventDto.Start,
+                End = eventDto.End,
+                TicketTypes = new List<TicketType>()
+            };
+
+            foreach (TicketTypeDto ticketTypeDto in eventDto.TicketTypeDtos)
+            {
+                var result = await _ticketTypeCreatorService.CreateTicketTypeAsync(ticketTypeDto, newEvent);
+                if (result.Success)
+                    newEvent.TicketTypes.Add(result.Data); // this will also make EF add the TicketTypes to the database
+                else
+                    return new ResultBase()
+                    {
+                        Success = false,
+                        Message = result.Message
+                    };
+            }
+
+            await _eventRepository.AddAsync(newEvent);
+
+            return new ResultBase()
+            {
+                Success = true,
+                Message = "Created successfully"
+            };
         }
-        
-        await _eventRepository.AddAsync(newEvent);
-        
-        return new ResultBase()
+        catch (Exception ex)
         {
-            Success = true,
-            Message = "Created successfully"
-        };
+            return new ResultBase()
+            {
+                Success = false,
+                Message = $"Error creating event: {ex.Message}"
+            };
+        }
     }
 }
