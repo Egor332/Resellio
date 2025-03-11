@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ResellioBackend.Kafka;
+using ResellioBackend.Redis;
 using ResellioBackend.UserManagementSystem.Factories.Abstractions;
 using ResellioBackend.UserManagementSystem.Factories.Implementations;
 using ResellioBackend.UserManagementSystem.Repositories.Abstractions;
@@ -11,6 +12,7 @@ using ResellioBackend.UserManagementSystem.Repositories.Implementations;
 using ResellioBackend.UserManagementSystem.Services.Abstractions;
 using ResellioBackend.UserManagementSystem.Services.Implementations;
 using ResellioBackend.UserManagementSystem.Statics;
+using StackExchange.Redis;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -39,6 +41,14 @@ namespace ResellioBackend
 
             // Kafka
             builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
+
+            // Redis
+            builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+            {
+                var redisConnectionString = configuration["Redis:ConnectionString"];
+                return ConnectionMultiplexer.Connect(redisConnectionString);
+            });
+            builder.Services.AddScoped<IRedisClient, RedisClient>();
 
             // Authentication and Authorization
             builder.Services.AddAuthentication(options =>
