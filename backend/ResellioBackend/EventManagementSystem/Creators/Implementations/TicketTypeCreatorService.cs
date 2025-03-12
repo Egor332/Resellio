@@ -41,11 +41,8 @@ public class TicketTypeCreatorService: ITicketTypeCreatorService
                 {
                     Success = false,
                     Message = result.Message
-                    // TODO: right now failure creating one ticket fails the whole event
                 };
         }
-
-        await _ticketTypesRepository.AddAsync(newTicketType);
 
         return new GeneralResult<TicketType>()
         {

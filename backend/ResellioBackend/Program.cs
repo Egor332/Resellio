@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ResellioBackend.Kafka;
-using ResellioBackend.Redis;
 using ResellioBackend.UserManagementSystem.Factories.Abstractions;
 using ResellioBackend.UserManagementSystem.Factories.Implementations;
 using ResellioBackend.UserManagementSystem.Repositories.Abstractions;
@@ -12,10 +11,13 @@ using ResellioBackend.UserManagementSystem.Repositories.Implementations;
 using ResellioBackend.UserManagementSystem.Services.Abstractions;
 using ResellioBackend.UserManagementSystem.Services.Implementations;
 using ResellioBackend.UserManagementSystem.Statics;
-using StackExchange.Redis;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using ResellioBackend.EventManagementSystem.Creators.Abstractions;
+using ResellioBackend.EventManagementSystem.Creators.Implementations;
+using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
+using ResellioBackend.EventManagementSystem.Repositories.Implementations;
 
 namespace ResellioBackend
 {
@@ -35,20 +37,8 @@ namespace ResellioBackend
             var connectionString = configuration.GetConnectionString("DbConnectionString");
             builder.Services.AddDbContext<ResellioDbContext>(options => options.UseSqlServer(connectionString));
 
-            // .NET services
-            builder.Services.AddHttpContextAccessor();
-            // builder.Services.AddTransient<LinkGenerator>();
-
             // Kafka
             builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
-
-            // Redis
-            builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-            {
-                var redisConnectionString = configuration["Redis:ConnectionString"];
-                return ConnectionMultiplexer.Connect(redisConnectionString);
-            });
-            builder.Services.AddScoped<IRedisClient, RedisClient>();
 
             // Authentication and Authorization
             builder.Services.AddAuthentication(options =>
@@ -109,17 +99,17 @@ namespace ResellioBackend
             builder.Services.AddTransient<ITokenGenerator, JwtGenerator>();
             builder.Services.AddTransient<IRegistrationService, RegistrationService>();
             builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
-            builder.Services.AddTransient<IEmailVerificationTokenService, EmailVerificationTokenService>();
-            builder.Services.AddTransient<IConfirmEmailService, ConfirmEmailService>();
-            builder.Services.AddTransient<IEmailVerificationService, EmailVerificationService>();
-            builder.Services.AddTransient<IRequestEmailVerificationService, RequestEmailVerificationService>();
-            builder.Services.AddTransient<IPasswordResetTokenService, PasswordResetTokenService>();
-            builder.Services.AddTransient<IResetPasswordService, ResetPasswordService>();
+            builder.Services.AddTransient<IEventCreatorService, EventCreatorService>();
+            builder.Services.AddTransient<ITicketTypeCreatorService, TicketTypeCreatorService>();
+            builder.Services.AddTransient<ITicketCreatorService, TicketCreatorService>();
 
             // Repositories
             builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));
-            builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
-
+            builder.Services.AddScoped<IEventsRepository, EventsRepository>();
+            builder.Services.AddScoped<ITicketTypesRepository, TicketTypesRepository>();
+            builder.Services.AddScoped<ITicketsRepository, TicketsRepository>();
+            
+            
             // Factory
             builder.Services.AddTransient<IUserFactory, UserFactory>();
 

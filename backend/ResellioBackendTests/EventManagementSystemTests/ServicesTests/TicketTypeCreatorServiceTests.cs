@@ -24,7 +24,7 @@ public class TicketTypeCreatorServiceTests
     }
 
     [Fact]
-    public async Task TicketTypeCreatorService_CreateTicketTypeAsync_ShouldReturnSuccessAndAddTicketType_WhenAllTicketsCreatedSuccessfully()
+    public async Task TicketTypeCreatorService_CreateTicketTypeAsync_ShouldReturnSuccessAndTicketType_WhenAllTicketsCreatedSuccessfully()
     {
         // Arrange
         var ticketTypeDto = new TicketTypeDto
@@ -57,7 +57,6 @@ public class TicketTypeCreatorServiceTests
 
         // Method calls verification
         _ticketCreatorServiceMock.Verify(service => service.CreateTicketAsync(It.IsAny<TicketType>()), Times.Exactly(ticketTypeDto.MaxCount));
-        _ticketTypesRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<TicketType>()), Times.Once);
     }
 
     [Fact]
