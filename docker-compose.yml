@@ -1,0 +1,76 @@
+version: "3.8"
+
+services:
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports: 
+      - "5173:5173"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend/ResellioBackend
+      dockerfile: Dockerfile
+    environment:
+      - ConnectionStrings__DbConnectionString=Server=mssql;Database=ResellioDb;User Id=SA;Password=Pass@word;TrustServerCertificate=true;Encrypt=false
+      - Redis__ConnectionString=redis:6379
+      - Kafka__BootstrapServers=kafka:9092
+    ports:
+      - "80:80"
+    depends_on:
+      - mssql
+      - redis
+      - kafka
+
+  notificationservise:
+    build:
+      context: ./backend/NotificationService
+      dockerfile: Dockerfile
+    environment:
+      - Kafka__BootstrapServers=kafka:9092
+    ports:
+      - "81:81"
+    depends_on:
+      - kafka
+    
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - MSSQL_SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+  
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ZOOKEEPER_TICK_TIME=2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+
+volumes:
+  mssql_data:
