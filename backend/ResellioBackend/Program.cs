@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ResellioBackend.Kafka;
-using ResellioBackend.Redis;
+using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstractions;
+using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Implementations;
 using ResellioBackend.UserManagementSystem.Factories.Abstractions;
 using ResellioBackend.UserManagementSystem.Factories.Implementations;
 using ResellioBackend.UserManagementSystem.Repositories.Abstractions;
@@ -48,7 +49,7 @@ namespace ResellioBackend
                 var redisConnectionString = configuration["Redis:ConnectionString"];
                 return ConnectionMultiplexer.Connect(redisConnectionString);
             });
-            builder.Services.AddScoped<IRedisClient, RedisClient>();
+            builder.Services.AddScoped<ICartRedisRepository, CartRedisRepository>();
 
             // Authentication and Authorization
             builder.Services.AddAuthentication(options =>

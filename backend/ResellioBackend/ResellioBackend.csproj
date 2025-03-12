@@ -33,6 +33,8 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="ShoppingCartManagementSystem\RedisServices\Abstractions\" />
+    <Folder Include="ShoppingCartManagementSystem\RedisServices\Implementations\" />
   </ItemGroup>
 
 </Project>
