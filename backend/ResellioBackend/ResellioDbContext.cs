@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using ResellioBackend.EventManagementSystem.Models.Base;
 using ResellioBackend.EventManagementSystem.Models;
+using ResellioBackend.EventManagementSystem.Models.Base;
 using ResellioBackend.UserManagementSystem.Models.Base;
 using ResellioBackend.UserManagementSystem.Models.Tokens;
 using ResellioBackend.UserManagementSystem.Models.Users;
@@ -16,12 +15,12 @@ namespace ResellioBackend
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Organiser> Organisers { get; set; }
         public DbSet<Administrator> Administrators { get; set; }
-
-        public DbSet<PasswordResetTokenInfo> PasswordResetTokens { get; set; }
-
         public DbSet<Event> Events { get; set; }
         public DbSet<TicketType> TicketTypes { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+
+        public DbSet<PasswordResetTokenInfo> PasswordResetTokens { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
