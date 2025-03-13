@@ -47,5 +47,10 @@ namespace ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Impleme
             var tickets = await _redisDb.SetMembersAsync($"cart:{userId}");
             return Array.ConvertAll(tickets, t => Guid.Parse((string)t));
         }
+
+        public async Task<long> GetCartLengthAsync(int userId)
+        {
+            return await _redisDb.SetLengthAsync($"cart:{userId}");
+        }
     }
 }

@@ -26,5 +26,10 @@ namespace ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Impleme
         {
             await _redisDb.KeyDeleteAsync($"ticket:{id}");
         }
+
+        public async Task<TimeSpan?> GetExpirationTimeAsync(Guid id)
+        {
+            return await _redisDb.KeyTimeToLiveAsync($"ticket:{id}");
+        }
     }
 }
