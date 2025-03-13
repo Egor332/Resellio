@@ -50,6 +50,7 @@ namespace ResellioBackend
                 return ConnectionMultiplexer.Connect(redisConnectionString);
             });
             builder.Services.AddScoped<ICartRedisRepository, CartRedisRepository>();
+            builder.Services.AddScoped<ITicketRedisRepository, TicketRedisRepository>();
 
             // Authentication and Authorization
             builder.Services.AddAuthentication(options =>
