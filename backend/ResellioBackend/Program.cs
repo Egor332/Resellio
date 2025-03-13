@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ResellioBackend.Kafka;
+using ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Abstractions;
+using ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implementations;
 using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstractions;
 using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Implementations;
 using ResellioBackend.UserManagementSystem.Factories.Abstractions;
@@ -117,6 +119,9 @@ namespace ResellioBackend
             builder.Services.AddTransient<IRequestEmailVerificationService, RequestEmailVerificationService>();
             builder.Services.AddTransient<IPasswordResetTokenService, PasswordResetTokenService>();
             builder.Services.AddTransient<IResetPasswordService, ResetPasswordService>();
+
+            // Database services
+            builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();
 
             // Repositories
             builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));
