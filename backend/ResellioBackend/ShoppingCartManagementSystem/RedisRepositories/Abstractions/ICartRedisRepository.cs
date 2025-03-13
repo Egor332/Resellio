@@ -17,6 +17,7 @@ namespace ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstrac
         public Task DeleteCartAsync(int userId);
 
         public Task<IEnumerable<Guid>> GetAllTicketsAsync(int userId);
+
         public Task<long> GetCartLengthAsync(int userId);
     }
 }
