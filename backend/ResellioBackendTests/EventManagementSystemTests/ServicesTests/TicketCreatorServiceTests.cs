@@ -21,7 +21,7 @@ public class TicketCreatorServiceTests
     }
 
     [Fact]
-    public async Task TicketCreatorService_CreateTicketAsync_ShouldReturnSuccessAndCallAddAsync()
+    public async Task TicketCreatorService_CreateTicketAsync_ShouldReturnSuccessAndReturnTicket()
     {
         // Arrange
         var ticketType = new TicketType();
@@ -37,7 +37,6 @@ public class TicketCreatorServiceTests
         Assert.True(result.Success);
         Assert.NotNull(result.Data);
         Assert.Equal(ticketType, result.Data.TicketType);
-        _ticketsRepositoryMock.Verify(repo => repo.AddAsync(It.Is<Ticket>(t => t.TicketType == ticketType)), Times.Once);
     }
 }
 

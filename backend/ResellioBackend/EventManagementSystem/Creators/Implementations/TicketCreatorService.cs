@@ -22,8 +22,6 @@ public class TicketCreatorService: ITicketCreatorService
         {
             TicketType = ticketType
         };
-        
-        await _ticketsRepository.AddAsync(newTicket);
 
         return new GeneralResult<Ticket>()
         {

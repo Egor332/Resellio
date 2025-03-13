@@ -24,7 +24,7 @@ namespace ResellioBackend.Migrations
 
             modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.Base.Ticket", b =>
                 {
-                    b.Property<Guid>("TicketId")int>
+                    b.Property<Guid>("TicketId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
