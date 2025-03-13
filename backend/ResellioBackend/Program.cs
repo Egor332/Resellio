@@ -8,6 +8,8 @@ using ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Abstractions
 using ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implementations;
 using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstractions;
 using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Implementations;
+using ResellioBackend.ShoppingCartManagementSystem.Services.Abstractions;
+using ResellioBackend.ShoppingCartManagementSystem.Services.Implementations;
 using ResellioBackend.UserManagementSystem.Factories.Abstractions;
 using ResellioBackend.UserManagementSystem.Factories.Implementations;
 using ResellioBackend.UserManagementSystem.Repositories.Abstractions;
@@ -119,6 +121,7 @@ namespace ResellioBackend
             builder.Services.AddTransient<IRequestEmailVerificationService, RequestEmailVerificationService>();
             builder.Services.AddTransient<IPasswordResetTokenService, PasswordResetTokenService>();
             builder.Services.AddTransient<IResetPasswordService, ResetPasswordService>();
+            builder.Services.AddScoped<ITicketLockerService, TicketLockerService>();
 
             // Database services
             builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();

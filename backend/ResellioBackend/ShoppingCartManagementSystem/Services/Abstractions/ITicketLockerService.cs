@@ -2,7 +2,7 @@
 
 namespace ResellioBackend.ShoppingCartManagementSystem.Services.Abstractions
 {
-    public interface ITicketLocker
+    public interface ITicketLockerService
     {
         public Task<ResultBase> LockTicket(int userId, Guid ticketId);
     }

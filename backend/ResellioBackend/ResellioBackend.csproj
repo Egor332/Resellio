@@ -33,7 +33,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="ShoppingCartManagementSystem\Services\Implementations\" />
   </ItemGroup>
 
 </Project>
