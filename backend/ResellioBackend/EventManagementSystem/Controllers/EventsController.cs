@@ -19,7 +19,7 @@ namespace ResellioBackend.EventManagementSystem.Controllers
             _eventCreatorService = eventCreatorService;
         }
 
-        [Authorize(Policy = "OrganiserPolicy")]
+        [Authorize(Policy = AuthorizationPolicies.OrganiserPolicy)]
         [HttpPost("create")]
         public async Task<IActionResult> CreateEventAsync([FromBody] EventDto eventDto)
         {
