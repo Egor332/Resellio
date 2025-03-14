@@ -44,7 +44,7 @@ namespace ResellioBackend
 
             // DbContext
             var connectionString = configuration.GetConnectionString("DbConnectionString");
-            builder.Services.AddDbContext<ResellioDbContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<ResellioDbContext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
 
             // .NET services
             builder.Services.AddHttpContextAccessor();
