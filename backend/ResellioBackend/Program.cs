@@ -23,6 +23,10 @@ using StackExchange.Redis;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using ResellioBackend.EventManagementSystem.Creators.Abstractions;
+using ResellioBackend.EventManagementSystem.Creators.Implementations;
+using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
+using ResellioBackend.EventManagementSystem.Repositories.Implementations;
 
 namespace ResellioBackend
 {
@@ -124,6 +128,9 @@ namespace ResellioBackend
             builder.Services.AddTransient<IRequestEmailVerificationService, RequestEmailVerificationService>();
             builder.Services.AddTransient<IPasswordResetTokenService, PasswordResetTokenService>();
             builder.Services.AddTransient<IResetPasswordService, ResetPasswordService>();
+            builder.Services.AddTransient<IEventCreatorService, EventCreatorService>();
+            builder.Services.AddTransient<ITicketTypeCreatorService, TicketTypeCreatorService>();
+            builder.Services.AddTransient<ITicketCreatorService, TicketCreatorService>();
             builder.Services.AddScoped<ITicketLockerService, TicketLockerService>();
 
             // Database services
@@ -133,6 +140,11 @@ namespace ResellioBackend
             builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));
             builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
 
+            builder.Services.AddScoped<IEventsRepository, EventsRepository>();
+            builder.Services.AddScoped<ITicketTypesRepository, TicketTypesRepository>();
+            builder.Services.AddScoped<ITicketsRepository, TicketsRepository>();
+            
+            
             // Factory
             builder.Services.AddTransient<IUserFactory, UserFactory>();
 

@@ -12,8 +12,8 @@ using ResellioBackend;
 namespace ResellioBackend.Migrations
 {
     [DbContext(typeof(ResellioDbContext))]
-    [Migration("20250309171643_NewInitialMigration")]
-    partial class NewInitialMigration
+    [Migration("20250314144118_NewInitialMigration2")]
+    partial class NewInitialMigration2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -242,7 +242,7 @@ namespace ResellioBackend.Migrations
                     b.HasOne("ResellioBackend.UserManagementSystem.Models.Users.Organiser", "Organiser")
                         .WithMany()
                         .HasForeignKey("OrganiserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Organiser");
