@@ -19,6 +19,7 @@ namespace ResellioBackend.ShoppingCartManagementSystem.Services.Implementations
         public Task<ResultBase> LockTicket(int userId, Guid ticketId)
         {
             var lockResult = _redisService.InstantTicketLockAsync(ticketId);
+            throw new NotImplementedException();
         }
     }
 }

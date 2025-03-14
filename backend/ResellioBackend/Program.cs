@@ -8,6 +8,8 @@ using ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Abstractions
 using ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implementations;
 using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstractions;
 using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Implementations;
+using ResellioBackend.ShoppingCartManagementSystem.RedisServices.Abstractions;
+using ResellioBackend.ShoppingCartManagementSystem.RedisServices.Implementations;
 using ResellioBackend.ShoppingCartManagementSystem.Services.Abstractions;
 using ResellioBackend.ShoppingCartManagementSystem.Services.Implementations;
 using ResellioBackend.UserManagementSystem.Factories.Abstractions;
@@ -55,6 +57,7 @@ namespace ResellioBackend
             });
             builder.Services.AddScoped<ICartRedisRepository, CartRedisRepository>();
             builder.Services.AddScoped<ITicketRedisRepository, TicketRedisRepository>();
+            builder.Services.AddScoped<IRedisService, RedisService>();
 
             // Authentication and Authorization
             builder.Services.AddAuthentication(options =>
