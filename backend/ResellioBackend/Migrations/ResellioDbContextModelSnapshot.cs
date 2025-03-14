@@ -239,7 +239,7 @@ namespace ResellioBackend.Migrations
                     b.HasOne("ResellioBackend.UserManagementSystem.Models.Users.Organiser", "Organiser")
                         .WithMany()
                         .HasForeignKey("OrganiserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Organiser");
