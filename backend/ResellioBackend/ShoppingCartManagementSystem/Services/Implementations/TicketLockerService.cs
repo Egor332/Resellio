@@ -20,7 +20,7 @@ namespace ResellioBackend.ShoppingCartManagementSystem.Services.Implementations
 
         public async Task<TicketLockResult> LockTicketAsync(int userId, Guid ticketId)
         {            
-            var isLockSuccess = await _redisService.InstantTicketLockAsync(ticketId, TimeSpan.FromMinutes(_defaultLockMinutes));
+            var isLockSuccess = await _redisService.InstantTicketLockAsync(ticketId, TimeSpan.FromMinutes(_defaultLockMinutes), userId);
             if (!isLockSuccess)
             {
                 return new TicketLockResult()
@@ -36,7 +36,7 @@ namespace ResellioBackend.ShoppingCartManagementSystem.Services.Implementations
             if (!databaseLockResult.Success)
             {
                 await _redisService.DeleteFromCartAsync(ticketId, userId);
-                await _redisService.UnlockTicketAsync(ticketId);
+                await _redisService.UnlockTicketAsync(ticketId, userId);
                 return new TicketLockResult()
                 {
                     Success = false,
@@ -51,6 +51,11 @@ namespace ResellioBackend.ShoppingCartManagementSystem.Services.Implementations
                 TicketId = ticketId,
                 ExpirationTime = cartExpirationTime
             };
+        }
+
+        public Task<ResultBase> UnlockTicketAsync(int userId, Guid ticketId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

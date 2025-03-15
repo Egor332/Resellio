@@ -33,7 +33,7 @@ namespace ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implemen
                     };
                 }
 
-                if ((ticket.LastLock != null) && (ticket.LastLock > DateTime.UtcNow))
+                if (((ticket.LastLock != null) && (ticket.LastLock > DateTime.UtcNow)) || (ticket.TicketState == TicketStates.Soled))
                 {
                     return new ResultBase
                     {

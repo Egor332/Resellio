@@ -61,6 +61,22 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
         }
 
         [Fact]
+        public async Task LockTicketInDbAsync_TicketAlreadySold_ReturnsFailure()
+        {
+            // Arrange
+            var ticketId = Guid.NewGuid();
+            var ticket = new Ticket { LastLock = null, TicketState = TicketStates.Soled };
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+                                  .ReturnsAsync(ticket);
+
+            // Act
+            var result = await _ticketStatusService.LockTicketInDbAsync(ticketId, DateTime.UtcNow.AddMinutes(10));
+
+            // Assert
+            Assert.False(result.Success);
+        }
+
+        [Fact]
         public async Task LockTicketInDbAsync_TicketCanBeLocked_ReturnsSuccess()
         {
             // Arrange

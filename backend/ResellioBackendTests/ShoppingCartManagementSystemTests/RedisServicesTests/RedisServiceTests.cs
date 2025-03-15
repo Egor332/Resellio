@@ -29,6 +29,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.RedisServicesTe
             var ticketId = Guid.NewGuid();
             var userId = 1;
             var expirationTime = TimeSpan.FromMinutes(10);
+            var timeOfExpiration = DateTime.UtcNow + expirationTime;
 
             _mockCartRepository.Setup(repo => repo.CheckCartForExistenceAsync(userId)).ReturnsAsync(true);
             _mockCartRepository.Setup(repo => repo.GetExpirationTimeAsync(userId)).ReturnsAsync(expirationTime);
@@ -92,6 +93,39 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.RedisServicesTe
             // Assert
             _mockCartRepository.Verify(repo => repo.DeleteTicketAsync(userId, ticketId), Times.Once);
             _mockCartRepository.Verify(repo => repo.DeleteCartAsync(userId), Times.Never);
+        }
+
+        [Fact]
+        public async Task UnlockTicketAsync_WhenLockedByAnotherUser_EndsWithFailure()
+        {
+            // Arrange
+            var ticketId = Guid.NewGuid();
+            var lockerId = 1;
+            var userId = 2;
+
+            _mockTicketRepository.Setup(repo => repo.GetUserIdAsync(ticketId)).ReturnsAsync(lockerId);
+
+            // Act
+            var result = await _redisService.UnlockTicketAsync(ticketId, userId);
+
+            // Assert
+            Assert.False(result.Success);
+        }
+
+        [Fact]
+        public async Task UnlockTicketAsync_WhenLockedByCurrentUser_EndsWithSuccess()
+        {
+            // Arrange
+            var ticketId = Guid.NewGuid();
+            var userId = 2;
+
+            _mockTicketRepository.Setup(repo => repo.GetUserIdAsync(ticketId)).ReturnsAsync(userId);
+
+            // Act
+            var result = await _redisService.UnlockTicketAsync(ticketId, userId);
+
+            // Assert
+            Assert.True(result.Success);
         }
     }
 }

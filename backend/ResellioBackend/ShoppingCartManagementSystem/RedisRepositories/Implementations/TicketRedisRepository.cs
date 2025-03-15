@@ -12,9 +12,9 @@ namespace ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Impleme
             _redisDb = connectionMultiplexer.GetDatabase();
         }
 
-        public async Task<bool> LockTicketAsync(Guid id, TimeSpan timeSpan)
+        public async Task<bool> LockTicketAsync(Guid id, TimeSpan timeSpan, int userId)
         {
-            return await _redisDb.StringSetAsync($"ticket:{id}", "", timeSpan, When.NotExists);
+            return await _redisDb.StringSetAsync($"ticket:{id}", userId.ToString(), timeSpan, When.NotExists);
         }
 
         public async Task SetExpirationTimeAsync(Guid id, TimeSpan timeSpan)
@@ -30,6 +30,20 @@ namespace ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Impleme
         public async Task<TimeSpan?> GetExpirationTimeAsync(Guid id)
         {
             return await _redisDb.KeyTimeToLiveAsync($"ticket:{id}");
+        }
+
+        public async Task<int?> GetUserIdAsync(Guid id)
+        {
+            var userId = await _redisDb.StringGetAsync($"ticket:{id}");
+            if (userId.HasValue)
+            {
+                int parsedUserId;
+                if (int.TryParse(userId, out  parsedUserId))
+                {
+                    return parsedUserId;
+                }
+            }
+            return null;
         }
     }
 }

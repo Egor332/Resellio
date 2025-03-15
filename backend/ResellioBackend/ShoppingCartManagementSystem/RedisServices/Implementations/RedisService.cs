@@ -1,4 +1,5 @@
-﻿using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstractions;
+﻿using ResellioBackend.Results;
+using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstractions;
 using ResellioBackend.ShoppingCartManagementSystem.RedisServices.Abstractions;
 
 namespace ResellioBackend.ShoppingCartManagementSystem.RedisServices.Implementations
@@ -7,7 +8,6 @@ namespace ResellioBackend.ShoppingCartManagementSystem.RedisServices.Implementat
     {
         private readonly ITicketRedisRepository _ticketRepository;
         private readonly ICartRedisRepository _cartRepository;
-        private const double _baseLockTimeInMinutes = 10;
 
         public RedisService(ITicketRedisRepository ticketRepository, ICartRedisRepository cartRepository)
         {
@@ -46,14 +46,27 @@ namespace ResellioBackend.ShoppingCartManagementSystem.RedisServices.Implementat
             }
         }
 
-        public async Task<bool> InstantTicketLockAsync(Guid ticketId, TimeSpan lockTime)
+        public async Task<bool> InstantTicketLockAsync(Guid ticketId, TimeSpan lockTime, int userId)
         {
-            return await _ticketRepository.LockTicketAsync(ticketId, lockTime);
+            return await _ticketRepository.LockTicketAsync(ticketId, lockTime, userId);
         }
 
-        public async Task UnlockTicketAsync(Guid ticketId)
+        public async Task<ResultBase> UnlockTicketAsync(Guid ticketId, int userId)
         {
+            var previousLockerId = await _ticketRepository.GetUserIdAsync(ticketId);
+            if ((previousLockerId != null) && (userId != previousLockerId))
+            {
+                return new ResultBase
+                {
+                    Success = false,
+                    Message = "This user can't unlock this ticket"
+                };
+            }
             await _ticketRepository.UnlockTicketAsync(ticketId);
+            return new ResultBase
+            {
+                Success = true,
+            };
         }
     }
 }
