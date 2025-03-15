@@ -15,20 +15,24 @@ namespace ResellioBackend.ShoppingCartManagementSystem.RedisServices.Implementat
             _cartRepository = cartRepository;
         }
 
-        public async Task AddToCartAsync(Guid ticketId, int userId)
+        public async Task<DateTime> AddToCartAsync(Guid ticketId, int userId)
         {
             var isCartExist = await _cartRepository.CheckCartForExistenceAsync(userId);
             if (isCartExist)
             {
                 await _cartRepository.AddTicketToCartAsync(userId, ticketId);
                 var cartTimeToLive = await _cartRepository.GetExpirationTimeAsync(userId);
+                var cartExpirationTime = DateTime.UtcNow + cartTimeToLive;
                 await _ticketRepository.SetExpirationTimeAsync(ticketId, cartTimeToLive.Value);
+                return cartExpirationTime.Value;
             }
             else
             {
                 await _cartRepository.AddTicketToCartAsync(userId, ticketId);
                 var ticketTimeToLive = await _ticketRepository.GetExpirationTimeAsync(ticketId);
+                var cartExpirationTime = DateTime.UtcNow + ticketTimeToLive;
                 await _cartRepository.SetExpirationTimeAsync(userId, ticketTimeToLive.Value);
+                return cartExpirationTime.Value;
             }
         }
 
@@ -42,9 +46,9 @@ namespace ResellioBackend.ShoppingCartManagementSystem.RedisServices.Implementat
             }
         }
 
-        public async Task<bool> InstantTicketLockAsync(Guid ticketId)
+        public async Task<bool> InstantTicketLockAsync(Guid ticketId, TimeSpan lockTime)
         {
-            return await _ticketRepository.LockTicketAsync(ticketId, TimeSpan.FromMinutes(_baseLockTimeInMinutes));
+            return await _ticketRepository.LockTicketAsync(ticketId, lockTime);
         }
 
         public async Task UnlockTicketAsync(Guid ticketId)
