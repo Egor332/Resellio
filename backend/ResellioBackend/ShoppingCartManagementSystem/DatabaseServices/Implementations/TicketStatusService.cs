@@ -3,23 +3,24 @@ using ResellioBackend.Results;
 using ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Abstractions;
 using ResellioBackend.EventManagementSystem.Enums;
 using System.Transactions;
+using ResellioBackend.TransactionManager;
 
 namespace ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implementations
 {
     public class TicketStatusService : ITicketStatusService
     {
         private readonly ITicketsRepository _ticketsRepository;
-        private readonly ResellioDbContext _context;
+        private readonly IDatabaseTransactionManager _transactionManager;
 
-        public TicketStatusService(ITicketsRepository ticketsRepository, ResellioDbContext context)
+        public TicketStatusService(ITicketsRepository ticketsRepository, IDatabaseTransactionManager transactionManager)
         {
             _ticketsRepository = ticketsRepository;
-            _context = context;
+            _transactionManager = transactionManager;
         }
 
         public async Task<ResultBase> LockTicketInDbAsync(Guid ticketId, DateTime newLockTime)
         {
-            using var transaction = await _context.Database.BeginTransactionAsync();
+            using var transaction = await _transactionManager.BeginTransactionAsync();
             try
             {
                 var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLock(ticketId);
@@ -45,7 +46,7 @@ namespace ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implemen
                 ticket.LastLock = newLockTime;
                 await _ticketsRepository.UpdateAsync(ticket);
 
-                await transaction.CommitAsync();
+                await _transactionManager.CommitTransactionAsync(transaction);
                 return new ResultBase
                 {
                     Success = true,
@@ -53,7 +54,7 @@ namespace ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implemen
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
+                await _transactionManager.RollbackTransactionAsync(transaction);
                 return new ResultBase
                 {
                     Success = false,
@@ -64,7 +65,7 @@ namespace ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implemen
 
         public async Task<ResultBase> UnlockTicketInDbAsync(Guid ticketId)
         {
-            using var transaction = await _context.Database.BeginTransactionAsync();
+            using var transaction = await _transactionManager.BeginTransactionAsync();
             try
             {
                 var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLock(ticketId);
@@ -81,7 +82,7 @@ namespace ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implemen
                 ticket.LastLock = null;
                 await _ticketsRepository.UpdateAsync(ticket);
 
-                await transaction.CommitAsync();
+                await _transactionManager.CommitTransactionAsync(transaction);
                 return new ResultBase
                 {
                     Success = true,
@@ -89,7 +90,7 @@ namespace ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implemen
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
+                await _transactionManager.RollbackTransactionAsync(transaction);
                 return new ResultBase
                 {
                     Success = false,

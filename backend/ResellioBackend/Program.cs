@@ -27,6 +27,7 @@ using ResellioBackend.EventManagementSystem.Creators.Abstractions;
 using ResellioBackend.EventManagementSystem.Creators.Implementations;
 using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
 using ResellioBackend.EventManagementSystem.Repositories.Implementations;
+using ResellioBackend.TransactionManager;
 
 namespace ResellioBackend
 {
@@ -45,6 +46,9 @@ namespace ResellioBackend
             // DbContext
             var connectionString = configuration.GetConnectionString("DbConnectionString");
             builder.Services.AddDbContext<ResellioDbContext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
+
+            // Transaction manager
+            builder.Services.AddScoped<IDatabaseTransactionManager, DatabaseTransactionManager>();
 
             // .NET services
             builder.Services.AddHttpContextAccessor();
