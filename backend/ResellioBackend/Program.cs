@@ -136,6 +136,7 @@ namespace ResellioBackend
             builder.Services.AddTransient<ITicketTypeCreatorService, TicketTypeCreatorService>();
             builder.Services.AddTransient<ITicketCreatorService, TicketCreatorService>();
             builder.Services.AddScoped<ITicketLockerService, TicketLockerService>();
+            builder.Services.AddScoped<ITicketUnlockerService, TicketUnlockerService>();
 
             // Database services
             builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();

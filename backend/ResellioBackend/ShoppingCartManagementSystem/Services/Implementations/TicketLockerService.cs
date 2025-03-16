@@ -52,10 +52,5 @@ namespace ResellioBackend.ShoppingCartManagementSystem.Services.Implementations
                 ExpirationTime = cartExpirationTime
             };
         }
-
-        public Task<ResultBase> UnlockTicketAsync(int userId, Guid ticketId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

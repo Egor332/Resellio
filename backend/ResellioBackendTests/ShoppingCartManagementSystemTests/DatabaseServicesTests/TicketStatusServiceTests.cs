@@ -99,12 +99,9 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
         public async Task UnlockTicketInDbAsync_TicketDoesNotExist_ReturnsFailure()
         {
             // Arrange
-            var ticketId = Guid.NewGuid();
-            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
-                                  .ReturnsAsync((Ticket)null);
 
             // Act
-            var result = await _ticketStatusService.UnlockTicketInDbAsync(ticketId);
+            var result = await _ticketStatusService.UnlockTicketInDbAsync(null);
 
             // Assert
             Assert.False(result.Success);
@@ -116,12 +113,10 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
             // Arrange
             var ticketId = Guid.NewGuid();
             var ticket = new Ticket { TicketState = TicketStates.Reserved, LastLock = DateTime.UtcNow };
-            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
-                                  .ReturnsAsync(ticket);
             _mockTicketsRepository.Setup(repo => repo.UpdateAsync(ticket)).Returns(Task.CompletedTask);
 
             // Act
-            var result = await _ticketStatusService.UnlockTicketInDbAsync(ticketId);
+            var result = await _ticketStatusService.UnlockTicketInDbAsync(ticket);
 
             // Assert
             Assert.True(result.Success);
