@@ -1,6 +1,6 @@
 ﻿namespace ResellioBackend.ShoppingCartManagementSystem.DTOs
 {
-    public class LockTicketDto
+    public class TicketDto
     {
         public Guid TicketId { get; set; }
     }

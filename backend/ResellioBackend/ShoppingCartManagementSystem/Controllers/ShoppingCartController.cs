@@ -22,15 +22,36 @@ namespace ResellioBackend.ShoppingCartManagementSystem.Controllers
 
         [Authorize(Policy = AuthorizationPolicies.CustomerPolicy)]
         [HttpPost("LockTicket")]
-        public async Task<IActionResult> LockTicket([FromBody]LockTicketDto dto)
+        public async Task<IActionResult> LockTicket([FromBody]TicketDto dto)
         {
-            var userIdString = User.FindFirst(BearerTokenClaimsNames.Id).ToString();
+            var userIdString = User.FindFirst(BearerTokenClaimsNames.Id);
             if (userIdString == null)
             {
                 return Unauthorized();
             }
-            var userId = int.Parse(userIdString);
+            var userId = int.Parse(userIdString.Value);
             var result = await _ticketLockerService.LockTicketAsync(userId, dto.TicketId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result.Message);
+            }
+        }
+
+        [Authorize(Policy = AuthorizationPolicies.CustomerPolicy)]
+        [HttpPost("UnlockTicket")]
+        public async Task<IActionResult> UnlockTicket([FromBody] TicketDto dto)
+        {
+            var userIdString = User.FindFirst(BearerTokenClaimsNames.Id);
+            if (userIdString == null)
+            {
+                return Unauthorized();
+            }
+            var userId = int.Parse(userIdString.Value);
+            var result = await _ticketUnlockerService.UnlockTicketAsync(userId, dto.TicketId);
             if (result.Success)
             {
                 return Ok(result);
