@@ -1,6 +1,9 @@
 # .env files
 .env
 
+# appsettings.Development.json files
+appsettings.Development.json
+
 # Created by https://www.toptal.com/developers/gitignore/api/rider,visualstudio,csharp,react
 # Edit at https://www.toptal.com/developers/gitignore?templates=rider,visualstudio,csharp,react
 
@@ -422,6 +425,7 @@ sketch
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
+.idea/
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
@@ -678,3 +682,5 @@ fabric.properties
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/rider,visualstudio,csharp,react
+/backend/ResellioBackend/appsettings.Development.json
+backend/ResellioBackend/.idea/.idea.ResellioBackend/.idea/workspace.xml
