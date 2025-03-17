@@ -1,4 +1,6 @@
-using System;using System.ComponentModel.DataAnnotations;
+using System;
+using System.ComponentModel.DataAnnotations;
+using ResellioBackend.EventManagementSystem.Enums;
 using ResellioBackend.UserManagementSystem.Models.Users;
 
 namespace ResellioBackend.EventManagementSystem.Models.Base
@@ -14,6 +16,11 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
         public int TicketTypeId { get; set; }
         [Required]
         public TicketType TicketType { get; set; }
+
+        [Required]
+        public TicketStates TicketState { get; set; }
+
+        public DateTime? LastLock { get; set; }
 
         public int? OwnerId { get; set; }
         

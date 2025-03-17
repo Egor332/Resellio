@@ -20,4 +20,21 @@ public class TicketsRepository: ITicketsRepository
         await _dbSet.AddAsync(ticket);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<Ticket?> GetTicketByIdAsync(Guid ticketId)
+    {
+        return await _dbSet.FirstOrDefaultAsync(t => t.TicketId == ticketId);
+    }
+
+    public async Task UpdateAsync(Ticket ticket)
+    {
+        _dbSet.Update(ticket);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<Ticket?> GetTicketByIdWithExclusiveRowLock(Guid ticketId)
+    {
+        return await _dbSet.FromSqlRaw("SELECT * FROM Tickets WITH (XLOCK, ROWLOCK) WHERE TicketId = @p0", ticketId)
+        .FirstOrDefaultAsync();
+    }
 }
