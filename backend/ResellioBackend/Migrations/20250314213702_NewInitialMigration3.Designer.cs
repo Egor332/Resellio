@@ -12,8 +12,8 @@ using ResellioBackend;
 namespace ResellioBackend.Migrations
 {
     [DbContext(typeof(ResellioDbContext))]
-    [Migration("20250314144118_NewInitialMigration2")]
-    partial class NewInitialMigration2
+    [Migration("20250314213702_NewInitialMigration3")]
+    partial class NewInitialMigration3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,7 +31,13 @@ namespace ResellioBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("LastLock")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("OwnerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TicketState")
                         .HasColumnType("int");
 
                     b.Property<int>("TicketTypeId")

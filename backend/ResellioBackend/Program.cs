@@ -4,7 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ResellioBackend.Kafka;
-using ResellioBackend.Redis;
+using ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Abstractions;
+using ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implementations;
+using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstractions;
+using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Implementations;
+using ResellioBackend.ShoppingCartManagementSystem.RedisServices.Abstractions;
+using ResellioBackend.ShoppingCartManagementSystem.RedisServices.Implementations;
+using ResellioBackend.ShoppingCartManagementSystem.Services.Abstractions;
+using ResellioBackend.ShoppingCartManagementSystem.Services.Implementations;
 using ResellioBackend.UserManagementSystem.Factories.Abstractions;
 using ResellioBackend.UserManagementSystem.Factories.Implementations;
 using ResellioBackend.UserManagementSystem.Repositories.Abstractions;
@@ -20,6 +27,7 @@ using ResellioBackend.EventManagementSystem.Creators.Abstractions;
 using ResellioBackend.EventManagementSystem.Creators.Implementations;
 using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
 using ResellioBackend.EventManagementSystem.Repositories.Implementations;
+using ResellioBackend.TransactionManager;
 
 namespace ResellioBackend
 {
@@ -37,7 +45,10 @@ namespace ResellioBackend
 
             // DbContext
             var connectionString = configuration.GetConnectionString("DbConnectionString");
-            builder.Services.AddDbContext<ResellioDbContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<ResellioDbContext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
+
+            // Transaction manager
+            builder.Services.AddScoped<IDatabaseTransactionManager, DatabaseTransactionManager>();
 
             // .NET services
             builder.Services.AddHttpContextAccessor();
@@ -52,7 +63,9 @@ namespace ResellioBackend
                 var redisConnectionString = configuration["Redis:ConnectionString"];
                 return ConnectionMultiplexer.Connect(redisConnectionString);
             });
-            builder.Services.AddScoped<IRedisClient, RedisClient>();
+            builder.Services.AddScoped<ICartRedisRepository, CartRedisRepository>();
+            builder.Services.AddScoped<ITicketRedisRepository, TicketRedisRepository>();
+            builder.Services.AddScoped<IRedisService, RedisService>();
 
             // Authentication and Authorization
             builder.Services.AddAuthentication(options =>
@@ -122,6 +135,11 @@ namespace ResellioBackend
             builder.Services.AddTransient<IEventCreatorService, EventCreatorService>();
             builder.Services.AddTransient<ITicketTypeCreatorService, TicketTypeCreatorService>();
             builder.Services.AddTransient<ITicketCreatorService, TicketCreatorService>();
+            builder.Services.AddScoped<ITicketLockerService, TicketLockerService>();
+            builder.Services.AddScoped<ITicketUnlockerService, TicketUnlockerService>();
+
+            // Database services
+            builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();
 
             // Repositories
             builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));

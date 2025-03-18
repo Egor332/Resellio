@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ResellioBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class NewInitialMigration2 : Migration
+    public partial class NewInitialMigration3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -106,6 +106,8 @@ namespace ResellioBackend.Migrations
                 {
                     TicketId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TicketTypeId = table.Column<int>(type: "int", nullable: false),
+                    TicketState = table.Column<int>(type: "int", nullable: false),
+                    LastLock = table.Column<DateTime>(type: "datetime2", nullable: true),
                     OwnerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

@@ -28,7 +28,13 @@ namespace ResellioBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("LastLock")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("OwnerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TicketState")
                         .HasColumnType("int");
 
                     b.Property<int>("TicketTypeId")

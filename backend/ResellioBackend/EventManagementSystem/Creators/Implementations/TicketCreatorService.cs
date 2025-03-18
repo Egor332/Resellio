@@ -20,14 +20,16 @@ public class TicketCreatorService: ITicketCreatorService
     {
         Ticket newTicket = new Ticket()
         {
-            TicketType = ticketType
+            TicketType = ticketType,
+            TicketState = Enums.TicketStates.Available,
+            LastLock = null,
         };
 
         return new GeneralResult<Ticket>()
         {
             Success = true,
             Message = "Created successfully",
-            Data = newTicket
+            Data = newTicket            
         };
     }
 }
