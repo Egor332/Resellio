@@ -1,8 +1,12 @@
 import { Router } from "./routing/Router";
+import {AuthProvider} from "./context/AuthContext.tsx";
 
 function App() {
     return (
-        <Router />
+        <AuthProvider>
+            <Router />
+        </AuthProvider>
+        
     );
 };
 
