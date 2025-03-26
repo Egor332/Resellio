@@ -1,9 +1,10 @@
 import CenteredContainer from "../../components/CenteredContainer/CenteredContainer";
+import RegisterCustomerForm from "../../components/RegisterCustomerForm/RegisterCustomerForm.tsx";
 
 function RegisterCustomer() {
     return (
         <CenteredContainer>
-            <h1>Customer register form placeholder</h1>
+            <RegisterCustomerForm/>
         </CenteredContainer>
     )
 }
