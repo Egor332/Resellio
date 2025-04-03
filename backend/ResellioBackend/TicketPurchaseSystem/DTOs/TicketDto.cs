@@ -1,4 +1,4 @@
-﻿namespace ResellioBackend.ShoppingCartManagementSystem.DTOs
+﻿namespace ResellioBackend.TicketPurchaseSystem.DTOs
 {
     public class TicketDto
     {

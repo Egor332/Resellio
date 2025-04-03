@@ -1,6 +1,6 @@
 ﻿using ResellioBackend.Results;
 
-namespace ResellioBackend.ShoppingCartManagementSystem.RedisServices.Abstractions
+namespace ResellioBackend.TicketPurchaseSystem.RedisServices.Abstractions
 {
     public interface IRedisService
     {

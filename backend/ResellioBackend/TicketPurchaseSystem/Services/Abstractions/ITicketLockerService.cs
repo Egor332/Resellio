@@ -1,7 +1,7 @@
 ﻿using ResellioBackend.Results;
-using ResellioBackend.ShoppingCartManagementSystem.Results;
+using ResellioBackend.TicketPurchaseSystem.Results;
 
-namespace ResellioBackend.ShoppingCartManagementSystem.Services.Abstractions
+namespace ResellioBackend.TicketPurchaseSystem.Services.Abstractions
 {
     public interface ITicketLockerService
     {

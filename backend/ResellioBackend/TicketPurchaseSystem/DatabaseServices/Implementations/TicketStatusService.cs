@@ -1,12 +1,12 @@
 ﻿using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
 using ResellioBackend.Results;
-using ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Abstractions;
 using ResellioBackend.EventManagementSystem.Enums;
 using System.Transactions;
 using ResellioBackend.TransactionManager;
 using ResellioBackend.EventManagementSystem.Models.Base;
+using ResellioBackend.TicketPurchaseSystem.DatabaseServices.Abstractions;
 
-namespace ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implementations
+namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
 {
     public class TicketStatusService : ITicketStatusService
     {
@@ -34,7 +34,7 @@ namespace ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implemen
                     };
                 }
 
-                if (((ticket.LastLock != null) && (ticket.LastLock > DateTime.UtcNow)) || (ticket.TicketState == TicketStates.Soled))
+                if (ticket.LastLock != null && ticket.LastLock > DateTime.UtcNow || ticket.TicketState == TicketStates.Soled)
                 {
                     return new ResultBase
                     {

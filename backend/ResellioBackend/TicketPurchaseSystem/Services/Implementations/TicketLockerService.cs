@@ -1,10 +1,10 @@
 ﻿using ResellioBackend.Results;
-using ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Abstractions;
-using ResellioBackend.ShoppingCartManagementSystem.RedisServices.Abstractions;
-using ResellioBackend.ShoppingCartManagementSystem.Results;
-using ResellioBackend.ShoppingCartManagementSystem.Services.Abstractions;
+using ResellioBackend.TicketPurchaseSystem.DatabaseServices.Abstractions;
+using ResellioBackend.TicketPurchaseSystem.RedisServices.Abstractions;
+using ResellioBackend.TicketPurchaseSystem.Results;
+using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
 
-namespace ResellioBackend.ShoppingCartManagementSystem.Services.Implementations
+namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
 {
     public class TicketLockerService : ITicketLockerService
     {
@@ -19,7 +19,7 @@ namespace ResellioBackend.ShoppingCartManagementSystem.Services.Implementations
         }
 
         public async Task<TicketLockResult> LockTicketAsync(int userId, Guid ticketId)
-        {            
+        {
             var isLockSuccess = await _redisService.InstantTicketLockAsync(ticketId, TimeSpan.FromMinutes(_defaultLockMinutes), userId);
             if (!isLockSuccess)
             {

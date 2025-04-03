@@ -1,4 +1,4 @@
-﻿namespace ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstractions
+﻿namespace ResellioBackend.TicketPurchaseSystem.RedisRepositories.Abstractions
 {
     public interface ITicketRedisRepository
     {

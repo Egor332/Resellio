@@ -1,7 +1,7 @@
-﻿using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstractions;
+﻿using ResellioBackend.TicketPurchaseSystem.RedisRepositories.Abstractions;
 using StackExchange.Redis;
 
-namespace ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Implementations
+namespace ResellioBackend.TicketPurchaseSystem.RedisRepositories.Implementations
 {
     public class CartRedisRepository : ICartRedisRepository
     {

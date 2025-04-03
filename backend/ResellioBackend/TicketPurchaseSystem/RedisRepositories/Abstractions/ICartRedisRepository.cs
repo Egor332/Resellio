@@ -1,6 +1,6 @@
 ﻿using StackExchange.Redis;
 
-namespace ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstractions
+namespace ResellioBackend.TicketPurchaseSystem.RedisRepositories.Abstractions
 {
     public interface ICartRedisRepository
     {

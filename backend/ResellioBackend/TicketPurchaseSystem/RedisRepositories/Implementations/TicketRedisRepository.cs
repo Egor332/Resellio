@@ -1,7 +1,7 @@
-﻿using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstractions;
+﻿using ResellioBackend.TicketPurchaseSystem.RedisRepositories.Abstractions;
 using StackExchange.Redis;
 
-namespace ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Implementations
+namespace ResellioBackend.TicketPurchaseSystem.RedisRepositories.Implementations
 {
     public class TicketRedisRepository : ITicketRedisRepository
     {
@@ -38,7 +38,7 @@ namespace ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Impleme
             if (userId.HasValue)
             {
                 int parsedUserId;
-                if (int.TryParse(userId, out  parsedUserId))
+                if (int.TryParse(userId, out parsedUserId))
                 {
                     return parsedUserId;
                 }

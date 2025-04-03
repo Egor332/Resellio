@@ -1,8 +1,8 @@
 ﻿using ResellioBackend.Results;
-using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstractions;
-using ResellioBackend.ShoppingCartManagementSystem.RedisServices.Abstractions;
+using ResellioBackend.TicketPurchaseSystem.RedisRepositories.Abstractions;
+using ResellioBackend.TicketPurchaseSystem.RedisServices.Abstractions;
 
-namespace ResellioBackend.ShoppingCartManagementSystem.RedisServices.Implementations
+namespace ResellioBackend.TicketPurchaseSystem.RedisServices.Implementations
 {
     public class RedisService : IRedisService
     {
@@ -54,7 +54,7 @@ namespace ResellioBackend.ShoppingCartManagementSystem.RedisServices.Implementat
         public async Task<ResultBase> UnlockTicketAsync(Guid ticketId, int userId)
         {
             var previousLockerId = await _ticketRepository.GetUserIdAsync(ticketId);
-            if ((previousLockerId != null) && (userId != previousLockerId))
+            if (previousLockerId != null && userId != previousLockerId)
             {
                 return new ResultBase
                 {

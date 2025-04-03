@@ -1,6 +1,6 @@
 ﻿using ResellioBackend.Results;
 
-namespace ResellioBackend.ShoppingCartManagementSystem.Services.Abstractions
+namespace ResellioBackend.TicketPurchaseSystem.Services.Abstractions
 {
     public interface ITicketUnlockerService
     {

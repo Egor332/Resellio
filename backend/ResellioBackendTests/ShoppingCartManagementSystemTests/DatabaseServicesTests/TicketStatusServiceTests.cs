@@ -3,7 +3,6 @@ using Moq;
 using ResellioBackend.EventManagementSystem.Enums;
 using ResellioBackend.EventManagementSystem.Models.Base;
 using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
-using ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implementations;
 using ResellioBackend;
 using System;
 using System.Collections.Generic;
@@ -13,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using ResellioBackend.TransactionManager;
+using ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations;
 
 namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseServicesTests
 {

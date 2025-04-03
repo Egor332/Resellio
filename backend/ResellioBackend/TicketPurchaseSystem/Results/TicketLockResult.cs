@@ -1,7 +1,7 @@
 ﻿using ResellioBackend.Results;
 using System.Security.Cryptography.X509Certificates;
 
-namespace ResellioBackend.ShoppingCartManagementSystem.Results
+namespace ResellioBackend.TicketPurchaseSystem.Results
 {
     public class TicketLockResult : ResultBase
     {

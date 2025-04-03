@@ -1,6 +1,6 @@
 ﻿using Moq;
-using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstractions;
-using ResellioBackend.ShoppingCartManagementSystem.RedisServices.Implementations;
+using ResellioBackend.TicketPurchaseSystem.RedisRepositories.Abstractions;
+using ResellioBackend.TicketPurchaseSystem.RedisServices.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Linq;

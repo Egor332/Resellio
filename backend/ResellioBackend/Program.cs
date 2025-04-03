@@ -4,14 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ResellioBackend.Kafka;
-using ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Abstractions;
-using ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Implementations;
-using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Abstractions;
-using ResellioBackend.ShoppingCartManagementSystem.RedisRepositories.Implementations;
-using ResellioBackend.ShoppingCartManagementSystem.RedisServices.Abstractions;
-using ResellioBackend.ShoppingCartManagementSystem.RedisServices.Implementations;
-using ResellioBackend.ShoppingCartManagementSystem.Services.Abstractions;
-using ResellioBackend.ShoppingCartManagementSystem.Services.Implementations;
 using ResellioBackend.UserManagementSystem.Factories.Abstractions;
 using ResellioBackend.UserManagementSystem.Factories.Implementations;
 using ResellioBackend.UserManagementSystem.Repositories.Abstractions;
@@ -28,6 +20,14 @@ using ResellioBackend.EventManagementSystem.Creators.Implementations;
 using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
 using ResellioBackend.EventManagementSystem.Repositories.Implementations;
 using ResellioBackend.TransactionManager;
+using ResellioBackend.TicketPurchaseSystem.DatabaseServices.Abstractions;
+using ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations;
+using ResellioBackend.TicketPurchaseSystem.RedisRepositories.Abstractions;
+using ResellioBackend.TicketPurchaseSystem.RedisRepositories.Implementations;
+using ResellioBackend.TicketPurchaseSystem.RedisServices.Abstractions;
+using ResellioBackend.TicketPurchaseSystem.RedisServices.Implementations;
+using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
+using ResellioBackend.TicketPurchaseSystem.Services.Implementations;
 
 namespace ResellioBackend
 {

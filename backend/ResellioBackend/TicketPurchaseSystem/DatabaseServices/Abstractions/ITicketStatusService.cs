@@ -1,7 +1,7 @@
 ﻿using ResellioBackend.EventManagementSystem.Models.Base;
 using ResellioBackend.Results;
 
-namespace ResellioBackend.ShoppingCartManagementSystem.DatabaseServices.Abstractions
+namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Abstractions
 {
     public interface ITicketStatusService
     {
