@@ -34,7 +34,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                     };
                 }
 
-                if (ticket.LastLock != null && ticket.LastLock > DateTime.UtcNow || ticket.TicketState == TicketStates.Soled)
+                if ((ticket.LastLock != null && ticket.LastLock > DateTime.UtcNow) || ticket.TicketState == TicketStates.Soled)
                 {
                     return new ResultBase
                     {
@@ -44,6 +44,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                 }
 
                 ticket.TicketState = TicketStates.Reserved;
+                ticket.Owner = null;
                 ticket.LastLock = newLockTime;
                 await _ticketsRepository.UpdateAsync(ticket);
 

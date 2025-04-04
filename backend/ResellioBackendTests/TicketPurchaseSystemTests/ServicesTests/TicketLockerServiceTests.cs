@@ -1,5 +1,5 @@
 ﻿using Moq;
-using ResellioBackend.ShoppingCartManagementSystem.Results;
+using ResellioBackend.TicketPurchaseSystem.Results;
 using ResellioBackend.TicketPurchaseSystem.DatabaseServices.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.RedisServices.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.Services.Implementations;
