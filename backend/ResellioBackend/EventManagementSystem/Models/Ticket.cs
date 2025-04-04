@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using ResellioBackend.EventManagementSystem.Enums;
+using ResellioBackend.UserManagementSystem.Models.Base;
 using ResellioBackend.UserManagementSystem.Models.Users;
 
 namespace ResellioBackend.EventManagementSystem.Models.Base
@@ -25,5 +26,8 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
         public int? OwnerId { get; set; }
         
         public Customer? Owner { get; set; }
+
+        public int SellerId { get; set; }
+        public UserBase Seller { get; set; }
     }
 }
