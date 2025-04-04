@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using ResellioBackend.TransactionManager;
 using ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations;
+using ResellioBackend.UserManagementSystem.Models.Users;
 
 namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseServicesTests
 {
@@ -121,6 +122,110 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
             // Assert
             Assert.True(result.Success);
             _mockTicketsRepository.Verify(tr => tr.UpdateAsync(ticket), Times.Once);
+        }
+
+        [Fact]
+        public async Task TryMarkAsSoledAsync_TicketAlreadySoled_ReturnsFailure()
+        {
+            // Arrange
+            var ticketId = Guid.NewGuid();
+            var ticket = new Ticket { TicketId = ticketId, TicketState = TicketStates.Soled };
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+                .ReturnsAsync(ticket);
+
+            // Act
+            var result = await _ticketStatusService.TryMarkAsSoledAsync(ticketId, new Customer());
+
+            // Assert
+            Assert.False(result.Success);
+        }
+
+        [Fact]
+        public async Task TryMarkAsSoledAsync_TicketReservedByDifferentUser_ReturnsFailure()
+        {
+            // Arrange
+            var ticketId = Guid.NewGuid();
+            var owner = new Customer { UserId = 1 };
+            var differentOwner = new Customer { UserId = 2 };
+            var ticket = new Ticket
+            {
+                TicketId = ticketId,
+                TicketState = TicketStates.Reserved,
+                LastLock = DateTime.UtcNow.AddMinutes(10),
+                OwnerId = differentOwner.UserId
+            };
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+                .ReturnsAsync(ticket);
+
+            // Act
+            var result = await _ticketStatusService.TryMarkAsSoledAsync(ticketId, owner);
+
+            // Assert
+            Assert.False(result.Success);
+        }
+
+        public async Task TryMarkAsSoledAsync_TicketReservedByThisUser_ReturnsSuccess()
+        {
+            // Arrange
+            var ticketId = Guid.NewGuid();
+            var owner = new Customer { UserId = 1 };
+            var ticket = new Ticket
+            {
+                TicketId = ticketId,
+                TicketState = TicketStates.Reserved,
+                LastLock = DateTime.UtcNow.AddMinutes(10),
+                OwnerId = owner.UserId
+            };
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+                .ReturnsAsync(ticket);
+
+            // Act
+            var result = await _ticketStatusService.TryMarkAsSoledAsync(ticketId, owner);
+
+            // Assert
+            Assert.True(result.Success);
+        }
+
+        public async Task TryMarkAsSoledAsync_TicketReservedButLockExpired_ReturnsSuccess()
+        {
+            // Arrange
+            var ticketId = Guid.NewGuid();
+            var owner = new Customer { UserId = 1 };
+            var ticket = new Ticket
+            {
+                TicketId = ticketId,
+                TicketState = TicketStates.Reserved,
+                LastLock = DateTime.UtcNow.AddMinutes(-5),
+                OwnerId = owner.UserId
+            };
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+                .ReturnsAsync(ticket);
+
+            // Act
+            var result = await _ticketStatusService.TryMarkAsSoledAsync(ticketId, owner);
+
+            // Assert
+            Assert.True(result.Success);
+        }
+
+        [Fact]
+        public async Task TryMarkAsSoledAsync_TicketAvailableForSale_ReturnsSuccess()
+        {
+            // Arrange
+            var ticketId = Guid.NewGuid();
+            var owner = new Customer { UserId = 1 };
+            var ticket = new Ticket { TicketId = ticketId, TicketState = TicketStates.Available };
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+                .ReturnsAsync(ticket);
+
+            // Act
+            var result = await _ticketStatusService.TryMarkAsSoledAsync(ticketId, owner);
+
+            // Assert
+            Assert.True(result.Success);
+            Assert.Equal($"Ticket: {ticketId} - soled", result.Message);
+            Assert.Equal(TicketStates.Soled, ticket.TicketState);
+            Assert.Equal(owner, ticket.Owner);
         }
 
     }
