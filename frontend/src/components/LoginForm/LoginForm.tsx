@@ -2,6 +2,7 @@ import { SyntheticEvent, useState } from 'react'
 import { Link } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import formStyles from '../../styles/FormStyles.module.css'
+import { Navigation } from '../../assets/constants/navigation'
 
 function LoginForm() {
   const [email, setEmail] = useState('')
@@ -40,7 +41,7 @@ function LoginForm() {
         <button type="submit" className={`btn btn-primary ${formStyles['btn-frst']}`}>
           Login
         </button>
-        <Link to="customers/register" className={`btn btn-secondary ${formStyles['btn-scnd']}`}>
+        <Link to={Navigation.REGISTER_CUSTOMER} className={`btn btn-secondary ${formStyles['btn-scnd']}`}>
           Register
         </Link>
       </div>

@@ -1,5 +1,4 @@
 import {SyntheticEvent, useState} from "react";
-import {Link} from "react-router-dom";
 import formStyles from '../../styles/FormStyles.module.css'
 
 const RegisterCustomerForm = () => {
@@ -13,13 +12,12 @@ const RegisterCustomerForm = () => {
     const [errorMsg, setErrorMsg] = useState<string>('');
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        //setCustomerData({ ...customerData, [e.target.name]: e.target.value });
-            const { name, value } = e.target;
-            if (name === 'confirmPassword') {
-                setConfirmPassword(value);
-            } else {
-                setCustomerData({ ...customerData, [name]: value });
-            }
+        const { name, value } = e.target;
+        if (name === 'confirmPassword') {
+            setConfirmPassword(value);
+        } else {
+            setCustomerData({ ...customerData, [name]: value });
+        }
     };
 
     const handleSubmit = async (event: SyntheticEvent) => {
@@ -38,7 +36,6 @@ const RegisterCustomerForm = () => {
                 body: JSON.stringify(customerData)
             });
 
-            console.log('check');
             console.log('Response status:', response.status);
             
             if (!response.ok){
@@ -118,9 +115,6 @@ const RegisterCustomerForm = () => {
                 <button type="submit" className={`btn btn-primary ${formStyles['btn-frst']}`}>
                     Register
                 </button>
-                <Link to="/login" className={`btn btn-secondary ${formStyles['btn-scnd']}`}>
-                    Log In
-                </Link>
             </div>
         </form>
     );
