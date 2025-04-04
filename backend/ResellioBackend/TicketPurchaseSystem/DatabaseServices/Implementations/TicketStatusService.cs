@@ -5,6 +5,8 @@ using System.Transactions;
 using ResellioBackend.TransactionManager;
 using ResellioBackend.EventManagementSystem.Models.Base;
 using ResellioBackend.TicketPurchaseSystem.DatabaseServices.Abstractions;
+using ResellioBackend.UserManagementSystem.Models.Base;
+using ResellioBackend.UserManagementSystem.Models.Users;
 
 namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
 {
@@ -63,6 +65,35 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                     Message = $"Error: {ex.Message}"
                 };
             }
+        }
+
+        public async Task<ResultBase> TryMarkAsSoledAsync(Guid ticketId, Customer owner)
+        {
+            var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLock(ticketId);
+            if (ticket.TicketState == TicketStates.Soled) 
+            {
+                return new ResultBase
+                {
+                    Success = false,
+                    Message = "Ticket have already been soled"
+                };
+            }
+            if ((ticket.TicketState == TicketStates.Reserved && ticket.LastLock > DateTime.UtcNow) 
+                && ((ticket.OwnerId == null) || (ticket.OwnerId != owner.UserId))) 
+            {
+                return new ResultBase
+                {
+                    Success = false,
+                    Message = "Ticket have already been reserved by somebody else"
+                };
+            }
+            ticket.TicketState = TicketStates.Soled;
+            ticket.Owner = owner;
+            return new ResultBase
+            {
+                Success = true,
+                Message = $"Ticket: {ticket.TicketId} - soled"
+            };
         }
 
         public async Task<ResultBase> UnlockTicketInDbAsync(Ticket ticket)
