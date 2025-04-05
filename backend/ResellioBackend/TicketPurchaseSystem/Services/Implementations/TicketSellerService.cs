@@ -27,7 +27,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                 var ticketSellingResult = await _ticketStatusService.TryMarkAsSoledAsync(ticketId, buyer);
                 if (!ticketSellingResult.Success) 
                 {
-                    await transaction.RollbackAsync();
+                    await _transactionManager.RollbackTransactionAsync(transaction);
                     return new ResultBase()
                     {
                         Success = false,
@@ -37,7 +37,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
 
             }
 
-            await transaction.CommitAsync();
+            await _transactionManager.CommitTransactionAsync(transaction);
             return new ResultBase()
             {
                 Success = true,
