@@ -67,7 +67,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
             }
         }
 
-        public async Task<ResultBase> TryMarkAsSoledAsync(Guid ticketId, Customer owner)
+        public async Task<ResultBase> TryMarkAsSoledAsync(Guid ticketId, Customer buyer)
         {
             var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLock(ticketId);
             if (ticket.TicketState == TicketStates.Soled) 
@@ -79,7 +79,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                 };
             }
             if ((ticket.TicketState == TicketStates.Reserved && ticket.LastLock > DateTime.UtcNow) 
-                && ((ticket.OwnerId == null) || (ticket.OwnerId != owner.UserId))) 
+                && ((ticket.OwnerId == null) || (ticket.OwnerId != buyer.UserId))) 
             {
                 return new ResultBase
                 {
@@ -88,7 +88,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                 };
             }
             ticket.TicketState = TicketStates.Soled;
-            ticket.Owner = owner;
+            ticket.Owner = buyer;
             ticket.Seller = null;
             return new ResultBase
             {

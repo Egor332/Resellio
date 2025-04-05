@@ -9,6 +9,6 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Abstractions
     {
         public Task<ResultBase> LockTicketInDbAsync(Guid ticketId, DateTime newLockTime);
         public Task<ResultBase> UnlockTicketInDbAsync(Ticket ticket);
-        public Task<ResultBase> TryMarkAsSoledAsync(Guid ticketId, Customer owner);
+        public Task<ResultBase> TryMarkAsSoledAsync(Guid ticketId, Customer buyer);
     }
 }
