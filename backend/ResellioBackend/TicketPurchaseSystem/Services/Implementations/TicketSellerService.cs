@@ -22,27 +22,39 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
         public async Task<ResultBase> TryMarkTicketsAsSoledAsync(List<Guid> ticketIds, Customer buyer)
         {
             using var transaction = await _transactionManager.BeginTransactionAsync();
-            foreach (var ticketId in ticketIds)
+            try
             {
-                var ticketSellingResult = await _ticketStatusService.TryMarkAsSoledAsync(ticketId, buyer);
-                if (!ticketSellingResult.Success) 
+                foreach (var ticketId in ticketIds)
                 {
-                    await _transactionManager.RollbackTransactionAsync(transaction);
-                    return new ResultBase()
+                    var ticketSellingResult = await _ticketStatusService.TryMarkAsSoledAsync(ticketId, buyer);
+                    if (!ticketSellingResult.Success)
                     {
-                        Success = false,
-                        Message = $"Error buying ticket: {ticketId} : " + ticketSellingResult.Message
-                    };
+                        await _transactionManager.RollbackTransactionAsync(transaction);
+                        return new ResultBase()
+                        {
+                            Success = false,
+                            Message = $"Error buying ticket: {ticketId} : " + ticketSellingResult.Message
+                        };
+                    }
+
                 }
 
+                await _transactionManager.CommitTransactionAsync(transaction);
+                return new ResultBase()
+                {
+                    Success = true,
+                    Message = "All ticket were assigned to the buyer"
+                };
             }
-
-            await _transactionManager.CommitTransactionAsync(transaction);
-            return new ResultBase()
+            catch (Exception ex)
             {
-                Success = true,
-                Message = "All ticket were assigned to the buyer"
-            };
+                await _transactionManager.RollbackTransactionAsync(transaction);
+                return new ResultBase()
+                {
+                    Success = false,
+                    Message = $"Error: " + ex.Message
+                };
+            }
         }
     }
 }
