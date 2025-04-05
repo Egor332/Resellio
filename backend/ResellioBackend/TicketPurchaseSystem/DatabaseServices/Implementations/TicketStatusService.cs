@@ -89,6 +89,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
             }
             ticket.TicketState = TicketStates.Soled;
             ticket.Owner = owner;
+            ticket.Seller = null;
             return new ResultBase
             {
                 Success = true,

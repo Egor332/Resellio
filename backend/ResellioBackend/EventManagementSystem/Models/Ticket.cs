@@ -27,7 +27,7 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
         
         public Customer? Owner { get; set; }
 
-        public int SellerId { get; set; }
-        public UserBase Seller { get; set; }
+        public int? SellerId { get; set; }
+        public UserBase? Seller { get; set; }
     }
 }
