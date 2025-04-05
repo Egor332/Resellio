@@ -66,7 +66,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
         {
             // Arrange
             var ticketId = Guid.NewGuid();
-            var ticket = new Ticket { LastLock = null, TicketState = TicketStates.Soled };
+            var ticket = new Ticket { LastLock = null, TicketState = TicketStates.Sold };
             _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
                                   .ReturnsAsync(ticket);
 
@@ -129,12 +129,12 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
         {
             // Arrange
             var ticketId = Guid.NewGuid();
-            var ticket = new Ticket { TicketId = ticketId, TicketState = TicketStates.Soled };
+            var ticket = new Ticket { TicketId = ticketId, TicketState = TicketStates.Sold };
             _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
                 .ReturnsAsync(ticket);
 
             // Act
-            var result = await _ticketStatusService.TryMarkAsSoledAsync(ticketId, new Customer());
+            var result = await _ticketStatusService.TryMarkAsSoldAsync(ticketId, new Customer());
 
             // Assert
             Assert.False(result.Success);
@@ -158,7 +158,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
                 .ReturnsAsync(ticket);
 
             // Act
-            var result = await _ticketStatusService.TryMarkAsSoledAsync(ticketId, owner);
+            var result = await _ticketStatusService.TryMarkAsSoldAsync(ticketId, owner);
 
             // Assert
             Assert.False(result.Success);
@@ -180,7 +180,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
                 .ReturnsAsync(ticket);
 
             // Act
-            var result = await _ticketStatusService.TryMarkAsSoledAsync(ticketId, owner);
+            var result = await _ticketStatusService.TryMarkAsSoldAsync(ticketId, owner);
 
             // Assert
             Assert.True(result.Success);
@@ -202,7 +202,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
                 .ReturnsAsync(ticket);
 
             // Act
-            var result = await _ticketStatusService.TryMarkAsSoledAsync(ticketId, owner);
+            var result = await _ticketStatusService.TryMarkAsSoldAsync(ticketId, owner);
 
             // Assert
             Assert.True(result.Success);
@@ -219,12 +219,12 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
                 .ReturnsAsync(ticket);
 
             // Act
-            var result = await _ticketStatusService.TryMarkAsSoledAsync(ticketId, owner);
+            var result = await _ticketStatusService.TryMarkAsSoldAsync(ticketId, owner);
 
             // Assert
             Assert.True(result.Success);
             Assert.Equal($"Ticket: {ticketId} - soled", result.Message);
-            Assert.Equal(TicketStates.Soled, ticket.TicketState);
+            Assert.Equal(TicketStates.Sold, ticket.TicketState);
             Assert.Equal(owner, ticket.Owner);
         }
 

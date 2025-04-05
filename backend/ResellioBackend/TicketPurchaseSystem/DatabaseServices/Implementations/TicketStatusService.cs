@@ -36,7 +36,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                     };
                 }
 
-                if ((ticket.LastLock != null && ticket.LastLock > DateTime.UtcNow) || ticket.TicketState == TicketStates.Soled)
+                if ((ticket.LastLock != null && ticket.LastLock > DateTime.UtcNow) || ticket.TicketState == TicketStates.Sold)
                 {
                     return new ResultBase
                     {
@@ -67,10 +67,10 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
             }
         }
 
-        public async Task<ResultBase> TryMarkAsSoledAsync(Guid ticketId, Customer buyer)
+        public async Task<ResultBase> TryMarkAsSoldAsync(Guid ticketId, Customer buyer)
         {
             var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLock(ticketId);
-            if (ticket.TicketState == TicketStates.Soled) 
+            if (ticket.TicketState == TicketStates.Sold) 
             {
                 return new ResultBase
                 {
@@ -87,7 +87,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                     Message = "Ticket have already been reserved by somebody else"
                 };
             }
-            ticket.TicketState = TicketStates.Soled;
+            ticket.TicketState = TicketStates.Sold;
             ticket.Owner = buyer;
             ticket.Seller = null;
             return new ResultBase

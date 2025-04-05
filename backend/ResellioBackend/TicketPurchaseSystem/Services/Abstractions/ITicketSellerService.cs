@@ -6,6 +6,6 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Abstractions
 {
     public interface ITicketSellerService
     {
-        public Task<ResultBase> TryMarkTicketsAsSoledAsync(List<Guid> ticketIds, Customer buyer);
+        public Task<ResultBase> TryMarkTicketsAsSoldAsync(List<Guid> ticketIds, Customer buyer);
     }
 }

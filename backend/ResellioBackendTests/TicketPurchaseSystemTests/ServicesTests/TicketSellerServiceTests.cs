@@ -36,11 +36,11 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
             _mockTransactionManager.Setup(tm => tm.BeginTransactionAsync())
                 .ReturnsAsync(mockTransaction);
 
-            _mockTicketStatusService.Setup(s => s.TryMarkAsSoledAsync(It.IsAny<Guid>(), buyer))
+            _mockTicketStatusService.Setup(s => s.TryMarkAsSoldAsync(It.IsAny<Guid>(), buyer))
                 .ReturnsAsync(new ResultBase { Success = true });
 
             // Act
-            var result = await _ticketSellerService.TryMarkTicketsAsSoledAsync(ticketIds, buyer);
+            var result = await _ticketSellerService.TryMarkTicketsAsSoldAsync(ticketIds, buyer);
 
             // Assert
             Assert.True(result.Success);
@@ -60,12 +60,12 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
             _mockTransactionManager.Setup(tm => tm.BeginTransactionAsync())
                 .ReturnsAsync(mockTransaction);
 
-            _mockTicketStatusService.SetupSequence(s => s.TryMarkAsSoledAsync(It.IsAny<Guid>(), buyer))
+            _mockTicketStatusService.SetupSequence(s => s.TryMarkAsSoldAsync(It.IsAny<Guid>(), buyer))
                 .ReturnsAsync(new ResultBase { Success = true }) // First ticket passes
                 .ReturnsAsync(new ResultBase { Success = false}); // Second fails
 
             // Act
-            var result = await _ticketSellerService.TryMarkTicketsAsSoledAsync(ticketIds, buyer);
+            var result = await _ticketSellerService.TryMarkTicketsAsSoldAsync(ticketIds, buyer);
 
             // Assert
             Assert.False(result.Success);

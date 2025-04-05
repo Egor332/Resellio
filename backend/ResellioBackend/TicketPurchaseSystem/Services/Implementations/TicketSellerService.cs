@@ -19,14 +19,14 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             _ticketStatusService = ticketStatusService;
         }
 
-        public async Task<ResultBase> TryMarkTicketsAsSoledAsync(List<Guid> ticketIds, Customer buyer)
+        public async Task<ResultBase> TryMarkTicketsAsSoldAsync(List<Guid> ticketIds, Customer buyer)
         {
             using var transaction = await _transactionManager.BeginTransactionAsync();
             try
             {
                 foreach (var ticketId in ticketIds)
                 {
-                    var ticketSellingResult = await _ticketStatusService.TryMarkAsSoledAsync(ticketId, buyer);
+                    var ticketSellingResult = await _ticketStatusService.TryMarkAsSoldAsync(ticketId, buyer);
                     if (!ticketSellingResult.Success)
                     {
                         await _transactionManager.RollbackTransactionAsync(transaction);
