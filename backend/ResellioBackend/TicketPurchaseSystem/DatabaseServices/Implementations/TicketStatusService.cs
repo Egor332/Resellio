@@ -93,7 +93,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
             return new ResultBase
             {
                 Success = true,
-                Message = $"Ticket: {ticket.TicketId} - soled"
+                Message = $"Ticket: {ticket.TicketId} - sold"
             };
         }
 
