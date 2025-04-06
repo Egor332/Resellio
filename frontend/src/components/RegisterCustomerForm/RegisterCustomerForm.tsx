@@ -1,5 +1,7 @@
 import {SyntheticEvent, useState} from "react";
 import formStyles from '../../styles/FormStyles.module.css'
+import { apiEndpoints, getApiEndpoint } from "../../assets/constants/api";
+import { apiRequest } from "../../utils/httpClient";
 
 const RegisterCustomerForm = () => {
     const [customerData, setCustomerData] = useState({
@@ -26,30 +28,14 @@ const RegisterCustomerForm = () => {
             setErrorMsg('Passwords do not match');
             return;
         }
-        
-        try {
-            const response = await fetch('/api/customers/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(customerData)
-            });
 
-            console.log('Response status:', response.status);
-            
-            if (!response.ok){
-                throw new Error('Registration failed');
-            } 
-            
-            console.log('Registration successful');
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                setErrorMsg(error.message);
-            } else {
-                setErrorMsg('An unknown error occurred');
-            }
+        try {
+            const response = await apiRequest(getApiEndpoint(apiEndpoints.CUSTOMERS_REGISTER), customerData);
+            console.log('Registration successful:', response); // TODO proper visual feedback
+            setErrorMsg('');
+        } catch (error: any) {
+            console.error('Registration failed:', error.message);
+            setErrorMsg(error.message || 'An error occurred during registration');
         }
     };
     
