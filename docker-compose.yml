@@ -1,10 +1,11 @@
-version: "3.8"
-
 services:
   frontend:
     build: 
       context: ./frontend
       dockerfile: Dockerfile
+    environment:
+      VITE_API_URL: http://backend:80
+      VITE_HOST: 0.0.0.0
     ports: 
       - "5173:5173"
     depends_on:
