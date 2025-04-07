@@ -70,7 +70,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
         public async Task<ResultBase> TryMarkAsSoldAsync(Guid ticketId, Customer buyer)
         {
             var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLock(ticketId);
-            if (ticket.TicketState == TicketStates.Sold) 
+            if (ticket!.TicketState == TicketStates.Sold) 
             {
                 return new ResultBase
                 {
