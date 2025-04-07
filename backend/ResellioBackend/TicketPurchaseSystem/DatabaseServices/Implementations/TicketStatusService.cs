@@ -75,7 +75,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                 return new ResultBase
                 {
                     Success = false,
-                    Message = "Ticket have already been soled"
+                    Message = "Ticket has already been sold"
                 };
             }
             if ((ticket.TicketState == TicketStates.Reserved && ticket.LastLock > DateTime.UtcNow) 
@@ -93,7 +93,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
             return new ResultBase
             {
                 Success = true,
-                Message = $"Ticket: {ticket.TicketId} - soled"
+                Message = $"Ticket: {ticket.TicketId} - sold"
             };
         }
 
