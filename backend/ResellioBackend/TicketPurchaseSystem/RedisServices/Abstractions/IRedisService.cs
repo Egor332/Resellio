@@ -8,5 +8,6 @@ namespace ResellioBackend.TicketPurchaseSystem.RedisServices.Abstractions
         public Task<ResultBase> UnlockTicketAsync(Guid ticketId, int userId);
         public Task DeleteFromCartAsync(Guid ticketId, int userId);
         public Task<DateTime> AddToCartAsync(Guid ticketId, int userId);
+        public Task<bool> ChangeExpirationTimeForTicketAsync(Guid ticketId, TimeSpan expirationTime, int userId);
     }
 }

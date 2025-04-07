@@ -17,9 +17,9 @@ namespace ResellioBackend.TicketPurchaseSystem.RedisRepositories.Implementations
             return await _redisDb.StringSetAsync($"ticket:{id}", userId.ToString(), timeSpan, When.NotExists);
         }
 
-        public async Task SetExpirationTimeAsync(Guid id, TimeSpan timeSpan)
+        public async Task<bool> SetExpirationTimeAsync(Guid id, TimeSpan timeSpan)
         {
-            await _redisDb.KeyExpireAsync($"ticket:{id}", timeSpan);
+            return await _redisDb.KeyExpireAsync($"ticket:{id}", timeSpan);
         }
 
         public async Task UnlockTicketAsync(Guid id)
