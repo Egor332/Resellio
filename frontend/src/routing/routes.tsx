@@ -1,4 +1,4 @@
-import { RouteObject, Navigate } from "react-router-dom";
+import { RouteObject } from "react-router-dom";
 import { Navigation } from "../assets/constants/navigation";
 import GuestWrapperPage from "../pages/GuestWrapperPage/GuestWrapperPage";
 import Login from "../pages/Login/Login";

@@ -6,6 +6,7 @@ using ResellioBackend.EventManagementSystem.Creators.Implementations;
 using ResellioBackend.EventManagementSystem.Models;
 using ResellioBackend.EventManagementSystem.Models.Base;
 using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
+using ResellioBackend.UserManagementSystem.Models.Users;
 
 namespace ResellioBackendTests.EventManagementSystemTests.ServicesTests;
 
@@ -25,6 +26,8 @@ public class TicketCreatorServiceTests
     {
         // Arrange
         var ticketType = new TicketType();
+        ticketType.Event = new Event();
+        ticketType.Event.Organiser = new Organiser();
         _ticketsRepositoryMock
             .Setup(repo => repo.AddAsync(It.IsAny<Ticket>()))
             .Returns(Task.CompletedTask)

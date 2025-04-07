@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResellioBackend;
 
@@ -11,9 +12,11 @@ using ResellioBackend;
 namespace ResellioBackend.Migrations
 {
     [DbContext(typeof(ResellioDbContext))]
-    partial class ResellioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250404130949_SellerPropAddedToTicket")]
+    partial class SellerPropAddedToTicket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace ResellioBackend.Migrations
                     b.Property<int?>("OwnerId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SellerId")
+                    b.Property<int>("SellerId")
                         .HasColumnType("int");
 
                     b.Property<int>("TicketState")
@@ -236,7 +239,9 @@ namespace ResellioBackend.Migrations
 
                     b.HasOne("ResellioBackend.UserManagementSystem.Models.Base.UserBase", "Seller")
                         .WithMany()
-                        .HasForeignKey("SellerId");
+                        .HasForeignKey("SellerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ResellioBackend.EventManagementSystem.Models.TicketType", "TicketType")
                         .WithMany("Tickets")

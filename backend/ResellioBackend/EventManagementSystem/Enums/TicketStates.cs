@@ -4,6 +4,6 @@
     {
         Available = 0,
         Reserved = 1, 
-        Soled = 2,
+        Sold = 2,
     }
 }
