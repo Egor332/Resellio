@@ -1,4 +1,6 @@
-﻿using ResellioBackend.Results;
+﻿using ResellioBackend.EventManagementSystem.Enums;
+using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
+using ResellioBackend.Results;
 using ResellioBackend.TicketPurchaseSystem.DatabaseServices.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.RedisRepositories.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.RedisServices.Abstractions;
@@ -10,15 +12,15 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
 {
     public class PurchaseLockService : IPurchaseLockService
     {
-        private readonly ITicketStatusService _ticketStatusService;
+        private readonly ITicketsRepository _ticketsRepository;
         private readonly IRedisService _redisService;
         private readonly IDatabaseTransactionManager _transactionManager;
         private readonly ICartRedisRepository _cartRedisRepository;
 
-        public PurchaseLockService(ITicketStatusService ticketStatusService, IRedisService redisService, 
+        public PurchaseLockService(ITicketsRepository ticketsRepository, IRedisService redisService, 
             IDatabaseTransactionManager transactionManager, ICartRedisRepository cartRedisRepository)
-        {
-            _ticketStatusService = ticketStatusService;
+        { 
+            _ticketsRepository = ticketsRepository;
             _redisService = redisService;
             _transactionManager = transactionManager;
             _cartRedisRepository = cartRedisRepository;
@@ -55,13 +57,18 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                 };
             }
 
-            await ChangeLockInDatabaseAsync(ticketIds, userId, maximumLockExtension);
+            await ChangeLockInDatabaseAsync(ticketIds, userId, maximumLockExtension, TicketStates.Reserved);
 
             throw new NotImplementedException();
         }
 
         public async Task<ResultBase> GetAddedTimeBackAsync(List<Guid> ticketIds, int userId)
         {
+            var cartLifeTime = await _cartRedisRepository.GetExpirationTimeAsync(userId);
+            if (cartLifeTime == null)
+            {
+                await RemoveAllTicketLocksAsync(ticketIds, userId);
+            }
             throw new NotImplementedException();
         }
 
@@ -93,12 +100,13 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             return true;
         }
         
-        private async Task ChangeLockInDatabaseAsync(IEnumerable<Guid> ticketIds, int? userId, DateTime newLockTime) 
+        private async Task ChangeLockInDatabaseAsync(IEnumerable<Guid> ticketIds, int? userId, DateTime? newLockTime, TicketStates newStatus) 
         {
             using var transaction = await _transactionManager.BeginTransactionAsync();
             foreach(var ticketId in ticketIds)
             {
-                await _ticketStatusService.SetNewLastLockAndIntenderWithRowLockAsync(ticketId, newLockTime, userId);
+                var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLock(ticketId);
+                ticket!.ChangeLockParameters(newLockTime, newStatus, userId);
             }
             await _transactionManager.CommitTransactionAsync(transaction);
         }
