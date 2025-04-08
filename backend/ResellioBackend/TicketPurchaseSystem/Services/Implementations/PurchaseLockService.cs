@@ -66,7 +66,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                 await RollbackTicketLocksAsync(ticketIds.ToList(), userId);
                 return new ResultBase()
                 {
-                    Success = true,
+                    Success = false,
                     Message = ex.Message
                 };
             }
