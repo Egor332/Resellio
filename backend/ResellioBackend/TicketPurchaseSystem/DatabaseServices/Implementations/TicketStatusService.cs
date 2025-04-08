@@ -26,7 +26,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
             using var transaction = await _transactionManager.BeginTransactionAsync();
             try
             {
-                var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLock(ticketId);
+                var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLockAsync(ticketId);
                 if (ticket == null)
                 {
                     return new ResultBase
@@ -69,7 +69,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
 
         public async Task<ResultBase> TryMarkAsSoldAsync(Guid ticketId, Customer buyer)
         {
-            var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLock(ticketId);
+            var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLockAsync(ticketId);
             if (ticket!.TicketState == TicketStates.Sold) 
             {
                 return new ResultBase

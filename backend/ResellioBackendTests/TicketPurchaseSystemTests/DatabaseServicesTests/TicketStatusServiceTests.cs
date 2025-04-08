@@ -35,7 +35,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
         {
             // Arrange
             var ticketId = Guid.NewGuid();
-            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLockAsync(ticketId))
                                   .ReturnsAsync((Ticket)null);
 
             // Act
@@ -51,7 +51,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
             // Arrange
             var ticketId = Guid.NewGuid();
             var ticket = new Ticket { LastLock = DateTime.UtcNow.AddMinutes(5) };
-            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLockAsync(ticketId))
                                   .ReturnsAsync(ticket);
 
             // Act
@@ -67,7 +67,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
             // Arrange
             var ticketId = Guid.NewGuid();
             var ticket = new Ticket { LastLock = null, TicketState = TicketStates.Sold };
-            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLockAsync(ticketId))
                                   .ReturnsAsync(ticket);
 
             // Act
@@ -83,7 +83,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
             // Arrange
             var ticketId = Guid.NewGuid();
             var ticket = new Ticket { LastLock = null };
-            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLockAsync(ticketId))
                                   .ReturnsAsync(ticket);
             _mockTicketsRepository.Setup(repo => repo.UpdateAsync(ticket)).Returns(Task.CompletedTask);
 
@@ -130,7 +130,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
             // Arrange
             var ticketId = Guid.NewGuid();
             var ticket = new Ticket { TicketId = ticketId, TicketState = TicketStates.Sold };
-            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLockAsync(ticketId))
                 .ReturnsAsync(ticket);
 
             // Act
@@ -154,7 +154,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
                 LastLock = DateTime.UtcNow.AddMinutes(10),
                 PurchaseIntenderId = differentOwner.UserId
             };
-            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLockAsync(ticketId))
                 .ReturnsAsync(ticket);
 
             // Act
@@ -176,7 +176,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
                 LastLock = DateTime.UtcNow.AddMinutes(10),
                 PurchaseIntenderId = owner.UserId
             };
-            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLockAsync(ticketId))
                 .ReturnsAsync(ticket);
 
             // Act
@@ -198,7 +198,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
                 LastLock = DateTime.UtcNow.AddMinutes(-5),
                 PurchaseIntenderId = owner.UserId
             };
-            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLockAsync(ticketId))
                 .ReturnsAsync(ticket);
 
             // Act
@@ -215,7 +215,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
             var ticketId = Guid.NewGuid();
             var owner = new Customer { UserId = 1 };
             var ticket = new Ticket { TicketId = ticketId, TicketState = TicketStates.Available };
-            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLock(ticketId))
+            _mockTicketsRepository.Setup(repo => repo.GetTicketByIdWithExclusiveRowLockAsync(ticketId))
                 .ReturnsAsync(ticket);
 
             // Act

@@ -59,17 +59,37 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
 
             await ChangeLockInDatabaseAsync(ticketIds, userId, maximumLockExtension, TicketStates.Reserved);
 
-            throw new NotImplementedException();
+            return new ResultBase()
+            {
+                Success = true,
+            };
         }
 
-        public async Task<ResultBase> GetAddedTimeBackAsync(List<Guid> ticketIds, int userId)
+        public async Task GetAddedTimeBackAsync(List<Guid> ticketIds, int userId)
         {
             var cartLifeTime = await _cartRedisRepository.GetExpirationTimeAsync(userId);
+            var realExpirationTime = DateTime.UtcNow;
             if (cartLifeTime == null)
             {
                 await RemoveAllTicketLocksAsync(ticketIds, userId);
             }
-            throw new NotImplementedException();
+            else
+            {
+                realExpirationTime += cartLifeTime.Value;
+                await TryChangeLockForTicketEnumerationAsync(ticketIds, userId, realExpirationTime);
+            }            
+            
+            using var transaction = await _transactionManager.BeginTransactionAsync();
+            foreach (var ticketId in ticketIds)
+            {
+                var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLockAsync(ticketId);
+                if ((ticket!.PurchaseIntenderId == null) || (ticket.PurchaseIntenderId != userId))
+                {
+                    continue;
+                }
+                ticket.ChangeLockParameters(null, TicketStates.Available, null);
+            }
+            await _transactionManager.CommitTransactionAsync(transaction);
         }
 
         private async Task RemoveAllTicketLocksAsync(List<Guid> ticketIds, int userId)
@@ -80,12 +100,12 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             }
         }
 
-        private async Task<bool> TryChangeLockForTicketEnumerationAsync(IEnumerable<Guid> ticketIds, int userId, DateTime maximumLockExtension)
+        private async Task<bool> TryChangeLockForTicketEnumerationAsync(IEnumerable<Guid> ticketIds, int userId, DateTime targetExpirationTime)
         {
             var ticketWithSuccessfulExtension = new List<Guid>();
             foreach (var ticketId in ticketIds)
             {
-                var lockExtension = maximumLockExtension - DateTime.UtcNow;
+                var lockExtension = targetExpirationTime - DateTime.UtcNow;
                 var ticketLockResult = await _redisService.ChangeExpirationTimeForTicketAsync(ticketId, lockExtension, userId);
                 if (ticketLockResult)
                 {
@@ -105,7 +125,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             using var transaction = await _transactionManager.BeginTransactionAsync();
             foreach(var ticketId in ticketIds)
             {
-                var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLock(ticketId);
+                var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLockAsync(ticketId);
                 ticket!.ChangeLockParameters(newLockTime, newStatus, userId);
             }
             await _transactionManager.CommitTransactionAsync(transaction);
