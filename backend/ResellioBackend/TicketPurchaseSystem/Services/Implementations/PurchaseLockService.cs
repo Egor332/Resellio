@@ -1,4 +1,5 @@
-﻿using ResellioBackend.EventManagementSystem.Enums;
+﻿using Microsoft.Extensions.Configuration.UserSecrets;
+using ResellioBackend.EventManagementSystem.Enums;
 using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
 using ResellioBackend.Results;
 using ResellioBackend.TicketPurchaseSystem.DatabaseServices.Abstractions;
@@ -56,8 +57,19 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                     Message = "Error occurred, possibly your shopping cart expired"
                 };
             }
-
-            await ChangeLockInDatabaseAsync(ticketIds, userId, maximumLockExtension, TicketStates.Reserved);
+            try
+            {
+                await ChangeLockInDatabaseAsync(ticketIds, userId, maximumLockExtension, TicketStates.Reserved);
+            }
+            catch (Exception ex)
+            {
+                await RollbackTicketLocksAsync(ticketIds.ToList(), userId);
+                return new ResultBase()
+                {
+                    Success = true,
+                    Message = ex.Message
+                };
+            }
 
             return new ResultBase()
             {
@@ -65,7 +77,30 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             };
         }
 
-        public async Task GetAddedTimeBackAsync(List<Guid> ticketIds, int userId)
+        public async Task RollbackAddedTimeAsync(List<Guid> ticketIds, int userId)
+        {
+            DateTime? realExpirationTime = await RollbackTicketLocksAsync(ticketIds, userId);         
+            
+            using var transaction = await _transactionManager.BeginTransactionAsync();
+            foreach (var ticketId in ticketIds)
+            {
+                var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLockAsync(ticketId);
+                if ((ticket!.PurchaseIntenderId == null) || (ticket.PurchaseIntenderId != userId))
+                {
+                    continue;
+                }
+                TicketStates newTicketState = TicketStates.Reserved;
+                if (realExpirationTime < DateTime.UtcNow)
+                {
+                    realExpirationTime = null;
+                }
+                
+                ticket.ChangeLockParameters(realExpirationTime, newTicketState, null);
+            }
+            await _transactionManager.CommitTransactionAsync(transaction);
+        }
+
+        private async Task<DateTime> RollbackTicketLocksAsync(List<Guid> ticketIds, int userId)
         {
             var cartLifeTime = await _cartRedisRepository.GetExpirationTimeAsync(userId);
             var realExpirationTime = DateTime.UtcNow;
@@ -77,19 +112,8 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             {
                 realExpirationTime += cartLifeTime.Value;
                 await TryChangeLockForTicketEnumerationAsync(ticketIds, userId, realExpirationTime);
-            }            
-            
-            using var transaction = await _transactionManager.BeginTransactionAsync();
-            foreach (var ticketId in ticketIds)
-            {
-                var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLockAsync(ticketId);
-                if ((ticket!.PurchaseIntenderId == null) || (ticket.PurchaseIntenderId != userId))
-                {
-                    continue;
-                }
-                ticket.ChangeLockParameters(null, TicketStates.Available, null);
             }
-            await _transactionManager.CommitTransactionAsync(transaction);
+            return realExpirationTime;
         }
 
         private async Task RemoveAllTicketLocksAsync(List<Guid> ticketIds, int userId)
@@ -123,12 +147,20 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
         private async Task ChangeLockInDatabaseAsync(IEnumerable<Guid> ticketIds, int? userId, DateTime? newLockTime, TicketStates newStatus) 
         {
             using var transaction = await _transactionManager.BeginTransactionAsync();
-            foreach(var ticketId in ticketIds)
+            try
             {
-                var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLockAsync(ticketId);
-                ticket!.ChangeLockParameters(newLockTime, newStatus, userId);
+                foreach (var ticketId in ticketIds)
+                {
+                    var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLockAsync(ticketId);
+                    ticket!.ChangeLockParameters(newLockTime, newStatus, userId);
+                }
+                await _transactionManager.CommitTransactionAsync(transaction);
             }
-            await _transactionManager.CommitTransactionAsync(transaction);
+            catch (Exception ex)
+            {
+                await _transactionManager.RollbackTransactionAsync(transaction);
+                throw new Exception($"Error occurred while changing locks in database, error message: {ex.Message}");
+            }
         }
     }
 }
