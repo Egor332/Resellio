@@ -23,7 +23,7 @@ public class TicketCreatorService: ITicketCreatorService
             TicketType = ticketType,
             TicketState = Enums.TicketStates.Available,
             LastLock = null,
-            Seller = ticketType.Event.Organiser
+            Holder = ticketType.Event.Organiser
         };
 
         return new GeneralResult<Ticket>()

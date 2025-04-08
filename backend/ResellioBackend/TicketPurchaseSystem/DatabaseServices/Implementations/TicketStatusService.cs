@@ -46,7 +46,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                 }
 
                 ticket.TicketState = TicketStates.Reserved;
-                ticket.Owner = null;
+                ticket.PurchaseIntender = null;
                 ticket.LastLock = newLockTime;
                 await _ticketsRepository.UpdateAsync(ticket);
 
@@ -79,7 +79,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                 };
             }
             if ((ticket.TicketState == TicketStates.Reserved && ticket.LastLock > DateTime.UtcNow) 
-                && ((ticket.OwnerId == null) || (ticket.OwnerId != buyer.UserId))) 
+                && ((ticket.PurchaseIntenderId == null) || (ticket.PurchaseIntenderId != buyer.UserId))) 
             {
                 return new ResultBase
                 {
@@ -88,8 +88,8 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                 };
             }
             ticket.TicketState = TicketStates.Sold;
-            ticket.Owner = buyer;
-            ticket.Seller = null;
+            ticket.PurchaseIntender = buyer;
+            ticket.Holder = null;
             return new ResultBase
             {
                 Success = true,

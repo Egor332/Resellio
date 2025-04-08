@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResellioBackend;
 
@@ -11,9 +12,11 @@ using ResellioBackend;
 namespace ResellioBackend.Migrations
 {
     [DbContext(typeof(ResellioDbContext))]
-    partial class ResellioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250408102256_SellerColumnRenamedInTicketTable")]
+    partial class SellerColumnRenamedInTicketTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace ResellioBackend.Migrations
                     b.Property<DateTime?>("LastLock")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("PurchaseIntenderId")
+                    b.Property<int?>("OwnerId")
                         .HasColumnType("int");
 
                     b.Property<int>("TicketState")
@@ -47,7 +50,7 @@ namespace ResellioBackend.Migrations
 
                     b.HasIndex("HolderId");
 
-                    b.HasIndex("PurchaseIntenderId");
+                    b.HasIndex("OwnerId");
 
                     b.HasIndex("TicketTypeId");
 
@@ -235,9 +238,9 @@ namespace ResellioBackend.Migrations
                         .HasForeignKey("HolderId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ResellioBackend.UserManagementSystem.Models.Users.Customer", "PurchaseIntender")
+                    b.HasOne("ResellioBackend.UserManagementSystem.Models.Users.Customer", "Owner")
                         .WithMany()
-                        .HasForeignKey("PurchaseIntenderId");
+                        .HasForeignKey("OwnerId");
 
                     b.HasOne("ResellioBackend.EventManagementSystem.Models.TicketType", "TicketType")
                         .WithMany("Tickets")
@@ -247,7 +250,7 @@ namespace ResellioBackend.Migrations
 
                     b.Navigation("Holder");
 
-                    b.Navigation("PurchaseIntender");
+                    b.Navigation("Owner");
 
                     b.Navigation("TicketType");
                 });
