@@ -118,12 +118,13 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
             };
         }
 
-        public async Task SetNewLastLockWithRowLockAsync(Guid ticketId, DateTime newLastLock)
+        public async Task SetNewLastLockAndIntenderWithRowLockAsync(Guid ticketId, DateTime newLastLock, int? purchaseIntenderId)
         {
             var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLock(ticketId);
             // We assume that ticket is not null here, because ticketId is from stripe or cart
             ticket!.LastLock = newLastLock;
             ticket.TicketState = TicketStates.Reserved;
+            ticket.PurchaseIntenderId = purchaseIntenderId;
         }
     }
 }

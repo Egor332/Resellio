@@ -139,6 +139,7 @@ namespace ResellioBackend
             builder.Services.AddScoped<ITicketUnlockerService, TicketUnlockerService>();
             builder.Services.AddScoped<ITicketSellerService, TicketSellerService>();
             builder.Services.AddScoped<ITicketLockTimeService, TicketLockTimeService>();
+            builder.Services.AddScoped<IPurchaseLockService, PurchaseLockService>();
 
             // Database services
             builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();
