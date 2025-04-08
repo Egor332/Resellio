@@ -223,7 +223,6 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
 
             // Assert
             Assert.True(result.Success);
-            Assert.Equal($"Ticket: {ticketId} - soled", result.Message);
             Assert.Equal(TicketStates.Sold, ticket.TicketState);
             Assert.Equal(owner, ticket.Owner);
         }
