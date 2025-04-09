@@ -88,8 +88,8 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                 };
             }
             ticket.TicketState = TicketStates.Sold;
-            ticket.PurchaseIntender = buyer;
-            ticket.Holder = null;
+            ticket.PurchaseIntender = null;
+            ticket.Holder = buyer;
             return new ResultBase
             {
                 Success = true,
