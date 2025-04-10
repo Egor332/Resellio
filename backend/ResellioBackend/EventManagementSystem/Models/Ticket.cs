@@ -31,5 +31,29 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
             TicketState = newStatus;
             PurchaseIntenderId = intenderId;
         }
+
+        public Money? GetPrice()
+        {
+            if (CurrentPrice != null)
+            {
+                return new Money() 
+                {
+                    Amount = CurrentPrice.Amount,
+                    CurrencyCode = CurrentPrice.CurrencyCode,
+                };
+            }
+            try
+            {
+                return new Money()
+                {
+                    Amount = TicketType.BasePrice.Amount,
+                    CurrencyCode = TicketType.BasePrice.CurrencyCode,
+                };
+            }
+            catch (Exception ex) 
+            {
+                return null;
+            }
+        }
     }
 }
