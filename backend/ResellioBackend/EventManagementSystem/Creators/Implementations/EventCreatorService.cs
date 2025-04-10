@@ -23,7 +23,7 @@ namespace ResellioBackend.EventManagementSystem.Creators.Implementations
             _ticketTypeCreatorService = ticketTypeCreatorService;
         }
 
-        public async Task<ResultBase> CreateEvent(EventDto eventDto, int organiserId)
+        public async Task<ResultBase> CreateEventAsync(EventDto eventDto, int organiserId)
         {
             var organiser = await _userRepository.GetByIdAsync(organiserId);
             if (organiser == null)

@@ -31,7 +31,7 @@ namespace ResellioBackend.EventManagementSystem.Controllers
 
             int organiserId = int.Parse(organiserIdClaim.Value);
             
-            var result = await _eventCreatorService.CreateEvent(eventDto, organiserId);
+            var result = await _eventCreatorService.CreateEventAsync(eventDto, organiserId);
             
             if (result.Success)
             {
