@@ -26,7 +26,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
             using var transaction = await _transactionManager.BeginTransactionAsync();
             try
             {
-                var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLock(ticketId);
+                var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLockAsync(ticketId);
                 if (ticket == null)
                 {
                     return new ResultBase
@@ -46,7 +46,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                 }
 
                 ticket.TicketState = TicketStates.Reserved;
-                ticket.Owner = null;
+                ticket.PurchaseIntender = null;
                 ticket.LastLock = newLockTime;
                 await _ticketsRepository.UpdateAsync(ticket);
 
@@ -69,8 +69,8 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
 
         public async Task<ResultBase> TryMarkAsSoldAsync(Guid ticketId, Customer buyer)
         {
-            var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLock(ticketId);
-            if (ticket.TicketState == TicketStates.Sold) 
+            var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLockAsync(ticketId);
+            if (ticket!.TicketState == TicketStates.Sold) 
             {
                 return new ResultBase
                 {
@@ -79,7 +79,7 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                 };
             }
             if ((ticket.TicketState == TicketStates.Reserved && ticket.LastLock > DateTime.UtcNow) 
-                && ((ticket.OwnerId == null) || (ticket.OwnerId != buyer.UserId))) 
+                && ((ticket.PurchaseIntenderId == null) || (ticket.PurchaseIntenderId != buyer.UserId))) 
             {
                 return new ResultBase
                 {
@@ -88,8 +88,8 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                 };
             }
             ticket.TicketState = TicketStates.Sold;
-            ticket.Owner = buyer;
-            ticket.Seller = null;
+            ticket.PurchaseIntender = null;
+            ticket.Holder = buyer;
             return new ResultBase
             {
                 Success = true,

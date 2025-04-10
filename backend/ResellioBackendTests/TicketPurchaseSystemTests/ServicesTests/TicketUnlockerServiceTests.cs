@@ -45,7 +45,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.ServicesTests
             var mockTransaction = new Mock<IDbTransaction>();
 
             _mockRedisService.Setup(r => r.DeleteFromCartAsync(ticketId, userId)).Returns(Task.CompletedTask);
-            _mockTicketsRepository.Setup(t => t.GetTicketByIdWithExclusiveRowLock(ticketId))
+            _mockTicketsRepository.Setup(t => t.GetTicketByIdWithExclusiveRowLockAsync(ticketId))
                                   .ReturnsAsync(new Ticket());
             _mockRedisService.Setup(r => r.UnlockTicketAsync(ticketId, userId))
                              .ReturnsAsync(new ResultBase { Success = true });
@@ -68,7 +68,7 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.ServicesTests
             var mockTransaction = new Mock<IDbTransaction>();
 
             _mockRedisService.Setup(r => r.DeleteFromCartAsync(ticketId, userId)).Returns(Task.CompletedTask);
-            _mockTicketsRepository.Setup(t => t.GetTicketByIdWithExclusiveRowLock(ticketId))
+            _mockTicketsRepository.Setup(t => t.GetTicketByIdWithExclusiveRowLockAsync(ticketId))
                                   .ReturnsAsync(new Ticket());
             _mockRedisService.Setup(r => r.UnlockTicketAsync(ticketId, userId))
                              .ReturnsAsync(new ResultBase { Success = false, Message = "Cache unlock failed" });

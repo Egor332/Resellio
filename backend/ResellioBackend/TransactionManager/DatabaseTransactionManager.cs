@@ -18,6 +18,7 @@ namespace ResellioBackend.TransactionManager
 
         public async Task CommitTransactionAsync(IDbContextTransaction transaction)
         {
+            await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
 

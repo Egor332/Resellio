@@ -23,11 +23,18 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
 
         public DateTime? LastLock { get; set; }
 
-        public int? OwnerId { get; set; }
+        public int? PurchaseIntenderId { get; set; }
         
-        public Customer? Owner { get; set; }
+        public Customer? PurchaseIntender { get; set; }
 
-        public int? SellerId { get; set; }
-        public UserBase? Seller { get; set; }
+        public int? HolderId { get; set; }
+        public UserBase? Holder { get; set; }
+
+        public void ChangeLockParameters(DateTime? newLock, TicketStates newStatus, int? intenderId)
+        {
+            LastLock = newLock;
+            TicketState = newStatus;
+            PurchaseIntenderId = intenderId;
+        }
     }
 }

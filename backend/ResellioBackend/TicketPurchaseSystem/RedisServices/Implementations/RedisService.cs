@@ -68,5 +68,24 @@ namespace ResellioBackend.TicketPurchaseSystem.RedisServices.Implementations
                 Success = true,
             };
         }
+
+        public async Task<bool> ChangeExpirationTimeForTicketAsync(Guid ticketId, TimeSpan expirationTime, int userId)
+        {
+            var lockerId = await _ticketRepository.GetUserIdAsync(ticketId);
+            if (lockerId != null && userId != lockerId)
+            {
+                return false;
+            }
+            var isExpirationSet = await _ticketRepository.SetExpirationTimeAsync(ticketId, expirationTime);
+            if (!isExpirationSet)
+            {
+                var isNewLockSet = await _ticketRepository.LockTicketAsync(ticketId, expirationTime, userId);
+                if (!isNewLockSet)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

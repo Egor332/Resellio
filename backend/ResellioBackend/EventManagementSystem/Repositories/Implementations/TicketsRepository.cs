@@ -32,7 +32,7 @@ public class TicketsRepository: ITicketsRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Ticket?> GetTicketByIdWithExclusiveRowLock(Guid ticketId)
+    public async Task<Ticket?> GetTicketByIdWithExclusiveRowLockAsync(Guid ticketId)
     {
         return await _dbSet.FromSqlRaw("SELECT * FROM Tickets WITH (XLOCK, ROWLOCK) WHERE TicketId = @p0", ticketId)
         .FirstOrDefaultAsync();

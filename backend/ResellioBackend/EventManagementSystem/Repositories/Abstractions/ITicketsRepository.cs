@@ -8,7 +8,7 @@ public interface ITicketsRepository
 
     public Task<Ticket?> GetTicketByIdAsync(Guid ticketId);
 
-    public Task<Ticket?> GetTicketByIdWithExclusiveRowLock(Guid ticketId);
+    public Task<Ticket?> GetTicketByIdWithExclusiveRowLockAsync(Guid ticketId);
 
     public Task UpdateAsync(Ticket ticket);
 }

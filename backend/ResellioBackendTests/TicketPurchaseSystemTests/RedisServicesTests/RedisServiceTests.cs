@@ -127,5 +127,96 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.RedisServicesTe
             // Assert
             Assert.True(result.Success);
         }
+
+
+        [Fact]
+        public async Task ChangeExpirationTimeForTicketAsync_WhenUserIsNotLocker_ShouldReturnFalse()
+        {
+            // Arrange
+            var ticketId = Guid.NewGuid();
+            var userId = 1;
+            var lockerId = 2;
+            var expirationTime = TimeSpan.FromMinutes(30);
+
+            _mockTicketRepository.Setup(r => r.GetUserIdAsync(ticketId))
+                .ReturnsAsync(lockerId);
+
+            // Act
+            var result = await _redisService.ChangeExpirationTimeForTicketAsync(ticketId, expirationTime, userId);
+
+            // Assert
+            Assert.False(result);
+            _mockTicketRepository.Verify(r => r.SetExpirationTimeAsync(It.IsAny<Guid>(), It.IsAny<TimeSpan>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task ChangeExpirationTimeForTicketAsync_WhenSetExpirationSucceeds_ShouldReturnTrue()
+        {
+            // Arrange
+            var ticketId = Guid.NewGuid();
+            var userId = 1;
+            TimeSpan expirationTime = TimeSpan.FromMinutes(30);
+
+            _mockTicketRepository.Setup(r => r.GetUserIdAsync(ticketId))
+                .ReturnsAsync((int?)userId);
+
+            _mockTicketRepository.Setup(r => r.SetExpirationTimeAsync(ticketId, expirationTime))
+                .ReturnsAsync(true);
+
+            // Act
+            var result = await _redisService.ChangeExpirationTimeForTicketAsync(ticketId, expirationTime, userId);
+
+            // Assert
+            Assert.True(result);
+            _mockTicketRepository.Verify(r => r.LockTicketAsync(It.IsAny<Guid>(), It.IsAny<TimeSpan>(), It.IsAny<int>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task ChangeExpirationTimeForTicketAsync_WhenSetExpirationFailsButLockSucceeds_ShouldReturnTrue()
+        {
+            // Arrange
+            var ticketId = Guid.NewGuid();
+            var userId = 1;
+            TimeSpan expirationTime = TimeSpan.FromMinutes(30);
+
+            _mockTicketRepository.Setup(r => r.GetUserIdAsync(ticketId))
+                .ReturnsAsync((int?)userId);
+
+            _mockTicketRepository.Setup(r => r.SetExpirationTimeAsync(ticketId, expirationTime))
+                .ReturnsAsync(false);
+
+            _mockTicketRepository.Setup(r => r.LockTicketAsync(ticketId, expirationTime, userId))
+                .ReturnsAsync(true);
+
+            // Act
+            var result = await _redisService.ChangeExpirationTimeForTicketAsync(ticketId, expirationTime, userId);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task ChangeExpirationTimeForTicketAsync_WhenBothSetAndLockFail_ShouldReturnFalse()
+        {
+            // Arrange
+            var ticketId = Guid.NewGuid();
+            var userId = 1;
+            TimeSpan expirationTime = TimeSpan.FromMinutes(30);
+
+            _mockTicketRepository.Setup(r => r.GetUserIdAsync(ticketId))
+                .ReturnsAsync((int?)userId);
+
+            _mockTicketRepository.Setup(r => r.SetExpirationTimeAsync(ticketId, expirationTime))
+                .ReturnsAsync(false);
+
+            _mockTicketRepository.Setup(r => r.LockTicketAsync(ticketId, expirationTime, userId))
+                .ReturnsAsync(false);
+
+            // Act
+            var result = await _redisService.ChangeExpirationTimeForTicketAsync(ticketId, expirationTime, userId);
+
+            // Assert
+            Assert.False(result);
+        }
     }
 }
