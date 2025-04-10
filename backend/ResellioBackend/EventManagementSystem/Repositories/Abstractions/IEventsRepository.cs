@@ -1,9 +1,10 @@
 using ResellioBackend.EventManagementSystem.Models;
 
-namespace ResellioBackend.EventManagementSystem.Repositories.Abstractions;
-
-public interface IEventsRepository
+namespace ResellioBackend.EventManagementSystem.Repositories.Abstractions
 {
-    public Task AddAsync(Event eventToBeAdded);
-    public Task UpdateAsync(Event eventToBeUpdated);
+    public interface IEventsRepository
+    {
+        public Task AddAsync(Event eventToBeAdded);
+        public Task UpdateAsync(Event eventToBeUpdated);
+    }
 }

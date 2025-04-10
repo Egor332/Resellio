@@ -35,7 +35,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                 return new ResultBase()
                 {
                     Success = false,
-                    Message = "Lock have already expired"
+                    Message = "Lock has already expired"
                 };
             }
             var maximumLockExtension = DateTime.UtcNow.AddMinutes(5);
@@ -159,7 +159,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             catch (Exception ex)
             {
                 await _transactionManager.RollbackTransactionAsync(transaction);
-                throw new Exception($"Error occurred while changing locks in database, error message: {ex.Message}");
+                throw new Exception($"Error occurred while changing locks in database", ex);
             }
         }
     }

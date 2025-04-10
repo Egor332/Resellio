@@ -5,51 +5,80 @@ using ResellioBackend.EventManagementSystem.Models.Base;
 using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
 using ResellioBackend.Results;
 
-namespace ResellioBackend.EventManagementSystem.Creators.Implementations;
-
-public class TicketTypeCreatorService: ITicketTypeCreatorService
+namespace ResellioBackend.EventManagementSystem.Creators.Implementations
 {
-    public readonly ITicketTypesRepository _ticketTypesRepository;
-    public readonly ITicketCreatorService _ticketCreatorService;
 
-    public TicketTypeCreatorService(ITicketTypesRepository ticketTypesRepository, ITicketCreatorService ticketCreatorService)
+    public class TicketTypeCreatorService : ITicketTypeCreatorService
     {
-        _ticketTypesRepository = ticketTypesRepository;
-        _ticketCreatorService = ticketCreatorService;
-    }
+        public readonly ITicketTypesRepository _ticketTypesRepository;
+        public readonly ITicketCreatorService _ticketCreatorService;
 
-    public async Task<GeneralResult<TicketType>> CreateTicketTypeAsync(TicketTypeDto ticketTypeDto, Event createdEvent)
-    {
-        TicketType newTicketType = new TicketType()
+        public TicketTypeCreatorService(ITicketTypesRepository ticketTypesRepository, ITicketCreatorService ticketCreatorService)
         {
-            Event = createdEvent,
-            Description = ticketTypeDto.Description,
-            MaxCount = ticketTypeDto.MaxCount,
-            Price = ticketTypeDto.Price,
-            Currency = ticketTypeDto.Currency,
-            AvailableFrom = ticketTypeDto.AvailableFrom,
-            Tickets = new List<Ticket>()
-        };
-
-        for (int i = 0; i < ticketTypeDto.MaxCount; i++)
-        {
-            var result = await _ticketCreatorService.CreateTicketAsync(newTicketType);
-            if (result.Success)
-                newTicketType.Tickets.Add(result.Data);
-            else
-                return new GeneralResult<TicketType>()
-                {
-                    Success = false,
-                    Message = result.Message
-                };
+            _ticketTypesRepository = ticketTypesRepository;
+            _ticketCreatorService = ticketCreatorService;
         }
 
-        return new GeneralResult<TicketType>()
+        public GeneralResult<TicketType> CreateTicketType(TicketTypeDto ticketTypeDto, Event createdEvent)
         {
-            Success = true,
-            Message = "Created successfully",
-            Data = newTicketType
-        };
+            var basePrice = GetPriceOrNull(ticketTypeDto.Price, ticketTypeDto.Currency);
+            if (basePrice == null)
+            {
+                return new GeneralResult<TicketType>
+                {
+                    Success = false,
+                    Message = "Unavailable currency provided"
+                };
+            }
 
+            TicketType newTicketType = new TicketType()
+            {
+                Event = createdEvent,
+                Description = ticketTypeDto.Description,
+                MaxCount = ticketTypeDto.MaxCount,
+                BasePrice = basePrice,
+                AvailableFrom = ticketTypeDto.AvailableFrom,
+                Tickets = new List<Ticket>()
+            };
+
+            for (int i = 0; i < ticketTypeDto.MaxCount; i++)
+            {
+                var result = _ticketCreatorService.CreateTicket(newTicketType);
+                if (result.Success)
+                {
+                    newTicketType.Tickets.Add(result.Data);
+                }
+                else
+                {
+                    return new GeneralResult<TicketType>()
+                    {
+                        Success = false,
+                        Message = result.Message
+                    };
+                }
+            }
+
+            return new GeneralResult<TicketType>()
+            {
+                Success = true,
+                Message = "Created successfully",
+                Data = newTicketType
+            };
+
+        }
+
+        private Money? GetPriceOrNull(decimal amount, string currency)
+        {
+            Money price = new Money();
+            var result = price.SetPrice(amount, currency);
+            if (result)
+            {
+                return price;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
