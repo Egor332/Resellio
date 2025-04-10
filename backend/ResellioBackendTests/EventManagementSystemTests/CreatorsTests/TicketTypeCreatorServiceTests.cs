@@ -24,7 +24,29 @@ public class TicketTypeCreatorServiceTests
     }
 
     [Fact]
-    public async Task TicketTypeCreatorService_CreateTicketTypeAsync_ShouldReturnSuccessAndTicketType_WhenAllTicketsCreatedSuccessfully()
+    public async Task CreateTicketTypeAsync_WhenCurrencyIsNotLegit_ShouldReturnFailure()
+    {
+        // Arrange
+        var ticketTypeDto = new TicketTypeDto
+        {
+            Description = "Test Ticket Type",
+            MaxCount = 3,
+            Price = 50,
+            Currency = "Not currency",
+            AvailableFrom = DateTime.Now
+        };
+
+        var createdEvent = new Event();
+
+        // Act
+        var result = await _ticketTypeCreatorService.CreateTicketTypeAsync(ticketTypeDto, createdEvent);
+
+        // Assert
+        Assert.False(result.Success);
+    }
+
+    [Fact]
+    public async Task CreateTicketTypeAsync_WhenAllTicketsCreatedSuccessfully_ShouldReturnSuccessAndTicketType()
     {
         // Arrange
         var ticketTypeDto = new TicketTypeDto
@@ -38,7 +60,6 @@ public class TicketTypeCreatorServiceTests
 
         var createdEvent = new Event();
 
-        // Simulation setup: each call to CreateTicketAsync returns success with a new ticket.
         _ticketCreatorServiceMock
             .Setup(service => service.CreateTicketAsync(It.IsAny<TicketType>()))
             .ReturnsAsync(() => new GeneralResult<Ticket>
@@ -54,13 +75,11 @@ public class TicketTypeCreatorServiceTests
         Assert.True(result.Success);
         Assert.NotNull(result.Data);
         Assert.Equal(ticketTypeDto.MaxCount, result.Data.Tickets.Count);
-
-        // Method calls verification
         _ticketCreatorServiceMock.Verify(service => service.CreateTicketAsync(It.IsAny<TicketType>()), Times.Exactly(ticketTypeDto.MaxCount));
     }
 
     [Fact]
-    public async Task TicketTypeCreatorService_CreateTicketTypeAsync_ShouldReturnFailure_WhenTicketCreationFails()
+    public async Task CreateTicketTypeAsync_WhenTicketCreationFails_ShouldReturnFailure()
     {
         // Arrange
         var ticketTypeDto = new TicketTypeDto
@@ -80,7 +99,6 @@ public class TicketTypeCreatorServiceTests
             .ReturnsAsync(() =>
             {
                 callCount++;
-                // Simulate that the second ticket creation fails
                 if (callCount == 2)
                 {
                     return new GeneralResult<Ticket>
@@ -100,7 +118,6 @@ public class TicketTypeCreatorServiceTests
 
         // Assert
         Assert.False(result.Success);
-        // Verify that the repository was never called as nothing should be created
         _ticketTypesRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<TicketType>()), Times.Never);
     }
 }
