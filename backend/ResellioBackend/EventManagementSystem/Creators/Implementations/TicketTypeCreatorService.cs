@@ -20,13 +20,23 @@ public class TicketTypeCreatorService: ITicketTypeCreatorService
 
     public async Task<GeneralResult<TicketType>> CreateTicketTypeAsync(TicketTypeDto ticketTypeDto, Event createdEvent)
     {
+        var basePrice = GetPriceOrNull(ticketTypeDto.Price, ticketTypeDto.Currency);
+        if (basePrice == null)
+        {
+            return new GeneralResult<TicketType>
+            {
+                Success = false,
+                Message = "Unavailable currency provided"
+            };
+        }
+
+
         TicketType newTicketType = new TicketType()
         {
             Event = createdEvent,
             Description = ticketTypeDto.Description,
             MaxCount = ticketTypeDto.MaxCount,
-            Price = ticketTypeDto.Price,
-            Currency = ticketTypeDto.Currency,
+            BasePrice = basePrice,
             AvailableFrom = ticketTypeDto.AvailableFrom,
             Tickets = new List<Ticket>()
         };
@@ -35,13 +45,17 @@ public class TicketTypeCreatorService: ITicketTypeCreatorService
         {
             var result = await _ticketCreatorService.CreateTicketAsync(newTicketType);
             if (result.Success)
+            {
                 newTicketType.Tickets.Add(result.Data);
+            }
             else
+            {
                 return new GeneralResult<TicketType>()
                 {
                     Success = false,
                     Message = result.Message
                 };
+            }
         }
 
         return new GeneralResult<TicketType>()
@@ -51,5 +65,19 @@ public class TicketTypeCreatorService: ITicketTypeCreatorService
             Data = newTicketType
         };
 
+    }
+
+    private Money? GetPriceOrNull(decimal amount, string currency)
+    {
+        Money price = new Money();
+        var result = price.SetPrice(amount, currency);
+        if (result)
+        {
+            return price;
+        }
+        else
+        {
+            return null;
+        }
     }
 }

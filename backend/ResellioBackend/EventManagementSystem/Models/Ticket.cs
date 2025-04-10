@@ -12,21 +12,16 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
         
         [Key]
         public Guid TicketId { get; set; }
-
         [Required]
         public int TicketTypeId { get; set; }
         [Required]
         public TicketType TicketType { get; set; }
-
+        public Money? CurrentPrice { get; set; }
         [Required]
         public TicketStates TicketState { get; set; }
-
         public DateTime? LastLock { get; set; }
-
-        public int? PurchaseIntenderId { get; set; }
-        
+        public int? PurchaseIntenderId { get; set; }        
         public Customer? PurchaseIntender { get; set; }
-
         public int? HolderId { get; set; }
         public UserBase? Holder { get; set; }
 

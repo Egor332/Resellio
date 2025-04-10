@@ -22,10 +22,7 @@ public class TicketType
     public int MaxCount { get; set; }
     
     [Required]
-    public decimal Price { get; set; }
-
-    [Required]
-    public string Currency { get; set; }
+    public Money BasePrice { get; set; }
     
     [Required]
     public DateTime AvailableFrom { get; set; }
