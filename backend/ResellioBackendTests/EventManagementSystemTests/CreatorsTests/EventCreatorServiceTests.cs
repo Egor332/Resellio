@@ -39,7 +39,7 @@ public class EventCreatorServiceTests
         var eventDto = new EventDto();
 
         // Act
-        var result = await _eventCreatorService.CreateEvent(eventDto, organiserId);
+        var result = await _eventCreatorService.CreateEventAsync(eventDto, organiserId);
 
         // Assert
         Assert.False(result.Success);
@@ -78,7 +78,7 @@ public class EventCreatorServiceTests
             .Returns(new GeneralResult<TicketType>(){Success = true, Data = new TicketType()});
 
         // Act
-        var result = await _eventCreatorService.CreateEvent(eventDto, organiserId);
+        var result = await _eventCreatorService.CreateEventAsync(eventDto, organiserId);
 
         // Assert
         Assert.True(result.Success);
