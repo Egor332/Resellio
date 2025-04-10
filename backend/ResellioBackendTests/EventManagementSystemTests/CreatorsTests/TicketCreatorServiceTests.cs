@@ -25,7 +25,8 @@ public class TicketCreatorServiceTests
     public async Task TicketCreatorService_CreateTicketAsync_ShouldReturnSuccessAndReturnTicket()
     {
         // Arrange
-        var ticketType = new TicketType();
+        var ticketPrice = new Money();
+        var ticketType = new TicketType() { BasePrice = ticketPrice };
         ticketType.Event = new Event();
         ticketType.Event.Organiser = new Organiser();
         _ticketsRepositoryMock
@@ -40,6 +41,8 @@ public class TicketCreatorServiceTests
         Assert.True(result.Success);
         Assert.NotNull(result.Data);
         Assert.Equal(ticketType, result.Data.TicketType);
+        Assert.Equal(ticketPrice.Amount, result.Data.CurrentPrice.Amount);
+        Assert.Equal(ticketPrice.CurrencyCode, result.Data.CurrentPrice.CurrencyCode);
     }
 }
 

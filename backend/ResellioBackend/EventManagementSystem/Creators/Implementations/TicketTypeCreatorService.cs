@@ -30,7 +30,6 @@ public class TicketTypeCreatorService: ITicketTypeCreatorService
             };
         }
 
-
         TicketType newTicketType = new TicketType()
         {
             Event = createdEvent,
