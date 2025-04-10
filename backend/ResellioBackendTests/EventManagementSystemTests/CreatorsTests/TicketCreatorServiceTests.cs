@@ -35,7 +35,7 @@ public class TicketCreatorServiceTests
             .Verifiable();
 
         // Act
-        var result = await _ticketCreatorService.CreateTicketAsync(ticketType);
+        var result = _ticketCreatorService.CreateTicket(ticketType);
 
         // Assert
         Assert.True(result.Success);

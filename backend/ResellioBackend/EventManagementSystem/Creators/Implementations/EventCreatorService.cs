@@ -7,73 +7,75 @@ using ResellioBackend.UserManagementSystem.Models.Base;
 using ResellioBackend.UserManagementSystem.Models.Users;
 using ResellioBackend.UserManagementSystem.Repositories.Abstractions;
 
-namespace ResellioBackend.EventManagementSystem.Creators.Implementations;
-
-public class EventCreatorService: IEventCreatorService
+namespace ResellioBackend.EventManagementSystem.Creators.Implementations
 {
-    private readonly IUsersRepository<Organiser> _userRepository;
-    private readonly IEventsRepository _eventRepository;
-    private readonly ITicketTypeCreatorService _ticketTypeCreatorService;
 
-    public EventCreatorService(IUsersRepository<Organiser> userRepository, IEventsRepository eventRepository, ITicketTypeCreatorService ticketTypeCreatorService)
+    public class EventCreatorService : IEventCreatorService
     {
-        _userRepository = userRepository;
-        _eventRepository = eventRepository;
-        _ticketTypeCreatorService = ticketTypeCreatorService;
-    }
+        private readonly IUsersRepository<Organiser> _userRepository;
+        private readonly IEventsRepository _eventRepository;
+        private readonly ITicketTypeCreatorService _ticketTypeCreatorService;
 
-    public async Task<ResultBase> CreateEventAsync(EventDto eventDto, int organiserId)
-    {
-        var organiser = await _userRepository.GetByIdAsync(organiserId);
-        if (organiser == null)
+        public EventCreatorService(IUsersRepository<Organiser> userRepository, IEventsRepository eventRepository, ITicketTypeCreatorService ticketTypeCreatorService)
         {
-            return new ResultBase()
-            {
-                Success = false,
-                Message = "Organiser not found"
-            };
+            _userRepository = userRepository;
+            _eventRepository = eventRepository;
+            _ticketTypeCreatorService = ticketTypeCreatorService;
         }
 
-        try
+        public async Task<ResultBase> CreateEvent(EventDto eventDto, int organiserId)
         {
-            var newEvent = new Event
+            var organiser = await _userRepository.GetByIdAsync(organiserId);
+            if (organiser == null)
             {
-                Organiser = organiser,
-                Name = eventDto.Name,
-                Description = eventDto.Description,
-                Start = eventDto.Start,
-                End = eventDto.End,
-                TicketTypes = new List<TicketType>()
-            };
-
-            foreach (TicketTypeDto ticketTypeDto in eventDto.TicketTypeDtos)
-            {
-                var result = await _ticketTypeCreatorService.CreateTicketTypeAsync(ticketTypeDto, newEvent);
-                if (result.Success)
-                    newEvent.TicketTypes.Add(result.Data); // this will also make EF add the TicketTypes to the database
-                else
-                    return new ResultBase()
-                    {
-                        Success = false,
-                        Message = result.Message
-                    };
+                return new ResultBase()
+                {
+                    Success = false,
+                    Message = "Organiser not found"
+                };
             }
 
-            await _eventRepository.AddAsync(newEvent);
+            try
+            {
+                var newEvent = new Event
+                {
+                    Organiser = organiser,
+                    Name = eventDto.Name,
+                    Description = eventDto.Description,
+                    Start = eventDto.Start,
+                    End = eventDto.End,
+                    TicketTypes = new List<TicketType>()
+                };
 
-            return new ResultBase()
+                foreach (TicketTypeDto ticketTypeDto in eventDto.TicketTypeDtos)
+                {
+                    var result = _ticketTypeCreatorService.CreateTicketType(ticketTypeDto, newEvent);
+                    if (result.Success)
+                        newEvent.TicketTypes.Add(result.Data); // this will also make EF add the TicketTypes to the database
+                    else
+                        return new ResultBase()
+                        {
+                            Success = false,
+                            Message = result.Message
+                        };
+                }
+
+                await _eventRepository.AddAsync(newEvent);
+
+                return new ResultBase()
+                {
+                    Success = true,
+                    Message = "Created successfully"
+                };
+            }
+            catch (Exception ex)
             {
-                Success = true,
-                Message = "Created successfully"
-            };
-        }
-        catch (Exception ex)
-        {
-            return new ResultBase()
-            {
-                Success = false,
-                Message = $"Error creating event: {ex.Message}"
-            };
+                return new ResultBase()
+                {
+                    Success = false,
+                    Message = $"Error creating event: {ex.Message}"
+                };
+            }
         }
     }
 }

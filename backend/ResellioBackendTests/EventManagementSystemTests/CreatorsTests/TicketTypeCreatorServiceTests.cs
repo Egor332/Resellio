@@ -39,7 +39,7 @@ public class TicketTypeCreatorServiceTests
         var createdEvent = new Event();
 
         // Act
-        var result = await _ticketTypeCreatorService.CreateTicketTypeAsync(ticketTypeDto, createdEvent);
+        var result = _ticketTypeCreatorService.CreateTicketType(ticketTypeDto, createdEvent);
 
         // Assert
         Assert.False(result.Success);
@@ -61,21 +61,21 @@ public class TicketTypeCreatorServiceTests
         var createdEvent = new Event();
 
         _ticketCreatorServiceMock
-            .Setup(service => service.CreateTicketAsync(It.IsAny<TicketType>()))
-            .ReturnsAsync(() => new GeneralResult<Ticket>
+            .Setup(service => service.CreateTicket(It.IsAny<TicketType>()))
+            .Returns(() => new GeneralResult<Ticket>
             {
                 Success = true,
                 Data = new Ticket()
             });
 
         // Act
-        var result = await _ticketTypeCreatorService.CreateTicketTypeAsync(ticketTypeDto, createdEvent);
+        var result = _ticketTypeCreatorService.CreateTicketType(ticketTypeDto, createdEvent);
 
         // Assert
         Assert.True(result.Success);
         Assert.NotNull(result.Data);
         Assert.Equal(ticketTypeDto.MaxCount, result.Data.Tickets.Count);
-        _ticketCreatorServiceMock.Verify(service => service.CreateTicketAsync(It.IsAny<TicketType>()), Times.Exactly(ticketTypeDto.MaxCount));
+        _ticketCreatorServiceMock.Verify(service => service.CreateTicket(It.IsAny<TicketType>()), Times.Exactly(ticketTypeDto.MaxCount));
     }
 
     [Fact]
@@ -95,8 +95,8 @@ public class TicketTypeCreatorServiceTests
 
         int callCount = 0;
         _ticketCreatorServiceMock
-            .Setup(service => service.CreateTicketAsync(It.IsAny<TicketType>()))
-            .ReturnsAsync(() =>
+            .Setup(service => service.CreateTicket(It.IsAny<TicketType>()))
+            .Returns(() =>
             {
                 callCount++;
                 if (callCount == 2)
@@ -114,7 +114,7 @@ public class TicketTypeCreatorServiceTests
             });
 
         // Act
-        var result = await _ticketTypeCreatorService.CreateTicketTypeAsync(ticketTypeDto, createdEvent);
+        var result = _ticketTypeCreatorService.CreateTicketType(ticketTypeDto, createdEvent);
 
         // Assert
         Assert.False(result.Success);
