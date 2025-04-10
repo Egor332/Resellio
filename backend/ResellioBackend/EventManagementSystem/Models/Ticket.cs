@@ -7,9 +7,7 @@ using ResellioBackend.UserManagementSystem.Models.Users;
 namespace ResellioBackend.EventManagementSystem.Models.Base
 {
     public class Ticket
-    {
-        // TODO: add other properties
-        
+    {        
         [Key]
         public Guid TicketId { get; set; }
         [Required]

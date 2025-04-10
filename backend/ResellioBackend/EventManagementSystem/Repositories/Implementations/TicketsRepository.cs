@@ -38,5 +38,15 @@ namespace ResellioBackend.EventManagementSystem.Repositories.Implementations
             return await _dbSet.FromSqlRaw("SELECT * FROM Tickets WITH (XLOCK, ROWLOCK) WHERE TicketId = @p0", ticketId)
             .FirstOrDefaultAsync();
         }
+
+        public async Task<Ticket?> GetTicketWithAllDependenciesByIdAsync(Guid ticketId)
+        {
+            return await _dbSet // TODO: consider NoTracking mode                
+                .Include(t => t.Holder)
+                .Include(t => t.PurchaseIntender)
+                .Include(t => t.TicketType)
+                .ThenInclude(tt => tt.Event)
+                .FirstOrDefaultAsync(t => t.TicketId == ticketId);
+        }
     }
 }
