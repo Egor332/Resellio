@@ -4,6 +4,6 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Abstractions
 {
     public interface ICheckoutSessionCreatorService
     {
-        public Task<CheckoutSessionCreationResult> CreateCheckoutSession(int userId);
+        public Task<CheckoutSessionCreationResult> CreateCheckoutSessionAsync(int userId);
     }
 }

@@ -22,7 +22,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             _cancelLink = configuration["FrontEndLinks:PaymentCancel"]!;
         }
 
-        public async Task<CheckoutSessionCreationResult> CreateCheckoutSession(int userId)
+        public async Task<CheckoutSessionCreationResult> CreateCheckoutSessionAsync(int userId)
         {
             var lineItemsResult = await _purchaseItemCreatorService.CreatePurchaseItemListAsync(userId);
             if (!lineItemsResult.Success) 
