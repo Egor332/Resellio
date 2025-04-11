@@ -24,7 +24,7 @@ public class TicketTypeCreatorServiceTests
     }
 
     [Fact]
-    public async Task CreateTicketTypeAsync_WhenCurrencyIsNotLegit_ShouldReturnFailure()
+    public void CreateTicketType_WhenCurrencyIsNotLegit_ShouldReturnFailure()
     {
         // Arrange
         var ticketTypeDto = new TicketTypeDto
@@ -46,7 +46,7 @@ public class TicketTypeCreatorServiceTests
     }
 
     [Fact]
-    public async Task CreateTicketTypeAsync_WhenAllTicketsCreatedSuccessfully_ShouldReturnSuccessAndTicketType()
+    public void CreateTicketType_WhenAllTicketsCreatedSuccessfully_ShouldReturnSuccessAndTicketType()
     {
         // Arrange
         var ticketTypeDto = new TicketTypeDto
@@ -79,7 +79,7 @@ public class TicketTypeCreatorServiceTests
     }
 
     [Fact]
-    public async Task CreateTicketTypeAsync_WhenTicketCreationFails_ShouldReturnFailure()
+    public void CreateTicketType_WhenTicketCreationFails_ShouldReturnFailure()
     {
         // Arrange
         var ticketTypeDto = new TicketTypeDto
