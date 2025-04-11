@@ -22,7 +22,7 @@ public class TicketCreatorServiceTests
     }
 
     [Fact]
-    public async Task TicketCreatorService_CreateTicketAsync_ShouldReturnSuccessAndReturnTicket()
+    public void CreateTicket_ShouldReturnSuccessAndReturnTicket()
     {
         // Arrange
         var ticketPrice = new Money();
