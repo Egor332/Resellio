@@ -9,12 +9,12 @@ using Stripe.Checkout;
 
 namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
 {
-    public class StripePurchaseItemCreatorService : IPurchaseItemCreatorService
+    public class StripePurchaseItemsCreatorService : IPurchaseItemCreatorService
     {
         private readonly ITicketsRepository _ticketsRepository;
         private readonly ICartRedisRepository _cartRedisRepository;
 
-        public StripePurchaseItemCreatorService(ICartRedisRepository cartRedisRepository, ITicketsRepository ticketsRepository)
+        public StripePurchaseItemsCreatorService(ICartRedisRepository cartRedisRepository, ITicketsRepository ticketsRepository)
         {
             _cartRedisRepository = cartRedisRepository;
             _ticketsRepository = ticketsRepository;
