@@ -1,14 +1,16 @@
-namespace ResellioBackend.EventManagementSystem.DTOs;
-
-public class TicketTypeDto
+namespace ResellioBackend.EventManagementSystem.DTOs
 {
-    public string Description { get; set; }
-    
-    public int MaxCount { get; set; }
-    
-    public decimal Price { get; set; }
-    
-    public string Currency { get; set; }
-    
-    public DateTime AvailableFrom { get; set; }
+
+    public class TicketTypeDto
+    {
+        public string Description { get; set; }
+
+        public int MaxCount { get; set; }
+
+        public decimal Price { get; set; }
+
+        public string Currency { get; set; }
+
+        public DateTime AvailableFrom { get; set; }
+    }
 }

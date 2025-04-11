@@ -5,32 +5,39 @@ using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
 using ResellioBackend.Results;
 using ResellioBackend.UserManagementSystem.Models.Users;
 
-namespace ResellioBackend.EventManagementSystem.Creators.Implementations;
-
-public class TicketCreatorService: ITicketCreatorService
+namespace ResellioBackend.EventManagementSystem.Creators.Implementations
 {
-    public readonly ITicketsRepository _ticketsRepository;
 
-    public TicketCreatorService(ITicketsRepository ticketsRepository)
+    public class TicketCreatorService : ITicketCreatorService
     {
-        _ticketsRepository = ticketsRepository;
-    }
+        public readonly ITicketsRepository _ticketsRepository;
 
-    public async Task<GeneralResult<Ticket>> CreateTicketAsync(TicketType ticketType)
-    {
-        Ticket newTicket = new Ticket()
+        public TicketCreatorService(ITicketsRepository ticketsRepository)
         {
-            TicketType = ticketType,
-            TicketState = Enums.TicketStates.Available,
-            LastLock = null,
-            Holder = ticketType.Event.Organiser
-        };
+            _ticketsRepository = ticketsRepository;
+        }
 
-        return new GeneralResult<Ticket>()
+        public GeneralResult<Ticket> CreateTicket(TicketType ticketType)
         {
-            Success = true,
-            Message = "Created successfully",
-            Data = newTicket            
-        };
+            Ticket newTicket = new Ticket()
+            {
+                TicketType = ticketType,
+                TicketState = Enums.TicketStates.Available,
+                LastLock = null,
+                Holder = ticketType.Event.Organiser,
+                CurrentPrice = new Money()
+                {
+                    Amount = ticketType.BasePrice.Amount,
+                    CurrencyCode = ticketType.BasePrice.CurrencyCode,
+                }
+            };
+
+            return new GeneralResult<Ticket>()
+            {
+                Success = true,
+                Message = "Created successfully",
+                Data = newTicket
+            };
+        }
     }
 }
