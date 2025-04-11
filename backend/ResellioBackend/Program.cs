@@ -28,6 +28,7 @@ using ResellioBackend.TicketPurchaseSystem.RedisServices.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.RedisServices.Implementations;
 using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.Services.Implementations;
+using Stripe;
 
 namespace ResellioBackend
 {
@@ -148,7 +149,6 @@ namespace ResellioBackend
             // Repositories
             builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));
             builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
-
             builder.Services.AddScoped<IEventsRepository, EventsRepository>();
             builder.Services.AddScoped<ITicketTypesRepository, TicketTypesRepository>();
             builder.Services.AddScoped<ITicketsRepository, TicketsRepository>();
@@ -156,6 +156,9 @@ namespace ResellioBackend
             
             // Factory
             builder.Services.AddTransient<IUserFactory, UserFactory>();
+
+            // Stripe configuration
+            StripeConfiguration.ApiKey = configuration["Stripe:SecretKey"];
 
             // CORS
             var allowedOrigins = configuration["AllowedOrigins"];
