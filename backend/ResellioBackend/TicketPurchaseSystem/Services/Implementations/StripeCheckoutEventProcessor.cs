@@ -12,11 +12,14 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
     {
         private readonly ITicketSellerService _ticketSellerService;
         private readonly IUsersRepository<UserManagementSystem.Models.Users.Customer> _customersRepository;
+        private readonly ICheckoutSessionManagerService _checkoutSessionManagerService;
 
-        public StripeCheckoutEventProcessor(ITicketSellerService ticketSellerService, IUsersRepository<UserManagementSystem.Models.Users.Customer> customersRepository)
+        public StripeCheckoutEventProcessor(ITicketSellerService ticketSellerService, IUsersRepository<UserManagementSystem.Models.Users.Customer> customersRepository,
+            ICheckoutSessionManagerService checkoutSessionManagerService)
         {
             _ticketSellerService = ticketSellerService;
             _customersRepository = customersRepository;
+            _checkoutSessionManagerService = checkoutSessionManagerService;
         }
 
         public async Task<ResultBase> ProcessCheckoutEventAsync(Stripe.Event stripeEvent)
@@ -24,61 +27,54 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             if (stripeEvent.Type == StripeEventTypes.CheckoutSessionCompleted)
             {
                 var session = stripeEvent.Data.Object as Session;
-                var sessionLineItemsService = new SessionLineItemService();
-                var lineItems = await sessionLineItemsService.ListAsync(session!.Id, new SessionLineItemListOptions
-                {
-                    Limit = 20
-                });
-                var ticketIds = new List<Guid>();
-
-                foreach (var item in lineItems.Data)
-                {
-                    var price = item.Price;
-                    var productId = price.ProductId;
-
-                    if (!string.IsNullOrEmpty(productId))
+                try
+                {                    
+                    var userId = _checkoutSessionManagerService.GetUserIdOrNullFromSessionMetadata(session);
+                    if (userId == null)
                     {
-                        var productService = new ProductService();
-                        var product = await productService.GetAsync(productId);
-
-                        if (product.Metadata.TryGetValue("ticketId", out var ticketIdStr)
-                            && Guid.TryParse(ticketIdStr, out var ticketId))
-                        {
-                            ticketIds.Add(ticketId);
-                        }
+                        throw new Exception("No userId in metadata");
                     }
-                }
-                var userIdstring = session.Metadata["userId"];
-                var userId = int.Parse(userIdstring);
-                var buyer = await _customersRepository.GetByIdAsync(userId);
-                if (buyer != null)
-                {
+                    var ticketIds = await _checkoutSessionManagerService.GetTicketIdsOrNullFromSessionAsync(session);
+                    if (ticketIds == null)
+                    {
+                        throw new Exception("No tickets in metadata");
+                    }
+
+                    var buyer = await _customersRepository.GetByIdAsync(userId.Value);
+                    if (buyer == null)
+                    {
+                        throw new Exception("User with this Id does not exist");
+                    }
                     var sellingResult = await _ticketSellerService.TryMarkTicketsAsSoldAsync(ticketIds, buyer);
-                    if (sellingResult.Success)
+                    if (!sellingResult.Success)
                     {
-                        return new ResultBase()
-                        {
-                            Success = true,
-                            Message = "soled"
-                        };
+                        throw new Exception("Can't sell tickets");
                     }
+                    return new ResultBase()
+                    {
+                        Success = true,
+                        Message = "soled"
+                    };
                 }
-                var refundService = new Stripe.RefundService();
-                await refundService.CreateAsync(new RefundCreateOptions
+                catch (Exception ex)
                 {
-                    PaymentIntent = session.PaymentIntentId,
-                    Reason = "lock_expired",
-                    Metadata = new Dictionary<string, string>
+                    var refundService = new Stripe.RefundService();
+                    await refundService.CreateAsync(new RefundCreateOptions
                     {
-                        { "reason", "ticket lock expired" },
-                        { "userId", session.Metadata["userId"] }
-                    }
-                });
-                return new ResultBase()
-                {
-                    Success = true,
-                    Message = "Refunded"
-                };
+                        PaymentIntent = session.PaymentIntentId,
+                        Reason = "requested_by_customer",
+                        Metadata = new Dictionary<string, string>
+                        {
+                            { "reason", ex.Message },
+                            { "userId", session.Metadata["userId"] }
+                        }
+                    });
+                    return new ResultBase()
+                    {
+                        Success = true,
+                        Message = "Refunded"
+                    };
+                }
             }
             else
             {
@@ -88,7 +84,6 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                     Message = "Nothing"
                 };
             }
-            throw new NotImplementedException();
         }
     }
 }
