@@ -142,6 +142,7 @@ namespace ResellioBackend
             builder.Services.AddScoped<IPurchaseLockService, PurchaseLockService>();
             builder.Services.AddScoped<ICheckoutSessionCreatorService, StripeCheckoutSessionCreatorService>();
             builder.Services.AddTransient<IPurchaseItemCreatorService, StripePurchaseItemsCreatorService>();
+            builder.Services.AddTransient<ICheckoutEventProcessor, StripeCheckoutEventProcessor>();
 
             // Database services
             builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();
