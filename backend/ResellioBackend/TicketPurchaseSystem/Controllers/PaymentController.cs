@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
 using ResellioBackend.UserManagementSystem.Statics;
-using System.Runtime.CompilerServices;
+using Stripe;
 
 namespace ResellioBackend.TicketPurchaseSystem.Controllers
 {
@@ -13,11 +12,13 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
     {
         private readonly ICheckoutSessionCreatorService _checkoutSessionCreatorService;
         private readonly string _publishableKey;
+        private readonly string _secretKey;
 
         public PaymentController(ICheckoutSessionCreatorService checkoutSessionCreatorService, IConfiguration configuration) 
         {
             _checkoutSessionCreatorService = checkoutSessionCreatorService;
             _publishableKey = configuration["Stripe:PublishableKey"]!;
+            _secretKey = configuration["Stripe:SecretKey"]!;
         }
 
         [Authorize(Policy = AuthorizationPolicies.CustomerPolicy)]
@@ -45,6 +46,20 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
         [HttpPost("payment-webhook")]
         public async Task<IActionResult> PaymentWebhook()
         {
+            var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+            Stripe.Event stripeEvent; // with namespace to escape collisions with our Event model
+
+            try
+            {
+                stripeEvent = EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"], _secretKey);
+                // stripe Event processor
+            }
+            catch (StripeException ex) 
+            {
+                Console.WriteLine($"Webhook error: {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+
             return Ok();
         }
     }

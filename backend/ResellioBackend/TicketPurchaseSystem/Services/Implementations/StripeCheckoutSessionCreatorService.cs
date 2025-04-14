@@ -52,7 +52,8 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                 Metadata = new Dictionary<string, string>()
                 {
                     { "userId", userId.ToString() }
-                }
+                },
+                ExpiresAt = DateTime.UtcNow + new TimeSpan(0, 31, 0),
             };
 
             var service = new SessionService();
