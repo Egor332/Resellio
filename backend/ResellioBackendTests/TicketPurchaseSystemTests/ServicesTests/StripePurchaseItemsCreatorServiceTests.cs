@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ResellioBackend.TicketPurchaseSystem.Services.Implementations;
+using ResellioBackend.TicketPurchaseSystem.Statics;
 
 namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
 {
@@ -92,7 +93,7 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
 
             var expectedTicketIds = new List<string> { ticket1Id.ToString(), ticket2Id.ToString() };
             var actualTicketIds = result.ItemList
-                .Select(item => item.PriceData.ProductData.Metadata["ticketId"])
+                .Select(item => item.PriceData.ProductData.Metadata[CheckoutSessionMetadataKeys.TicketId])
                 .ToList();
 
             foreach (var id in expectedTicketIds)
