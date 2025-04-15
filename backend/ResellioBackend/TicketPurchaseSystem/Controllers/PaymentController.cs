@@ -13,12 +13,15 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
         private readonly ICheckoutSessionCreatorService _checkoutSessionCreatorService;
         private readonly string _publishableKey;
         private readonly string _secretKey;
+        private readonly ICheckoutEventProcessor _checkoutEventProcessor;
 
-        public PaymentController(ICheckoutSessionCreatorService checkoutSessionCreatorService, IConfiguration configuration) 
+        public PaymentController(ICheckoutSessionCreatorService checkoutSessionCreatorService, IConfiguration configuration,
+            ICheckoutEventProcessor checkoutEventProcessor) 
         {
             _checkoutSessionCreatorService = checkoutSessionCreatorService;
             _publishableKey = configuration["Stripe:PublishableKey"]!;
             _secretKey = configuration["Stripe:SecretKey"]!;
+            _checkoutEventProcessor = checkoutEventProcessor;
         }
 
         [Authorize(Policy = AuthorizationPolicies.CustomerPolicy)]
@@ -52,7 +55,8 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
             try
             {
                 stripeEvent = EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"], _secretKey);
-                // stripe Event processor
+                var result = await _checkoutEventProcessor.ProcessCheckoutEventAsync(stripeEvent);
+                return Ok(result.Message);
             }
             catch (StripeException ex) 
             {
@@ -60,7 +64,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
                 return BadRequest(ex.Message);
             }
 
-            return Ok();
+            
         }
     }
 }

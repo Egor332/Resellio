@@ -14,13 +14,17 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
         private readonly ITicketSellerService _ticketSellerService;
         private readonly IUsersRepository<UserManagementSystem.Models.Users.Customer> _customersRepository;
         private readonly ICheckoutSessionManagerService _checkoutSessionManagerService;
+        private readonly IRefundService _refundService;
 
-        public StripeCheckoutEventProcessor(ITicketSellerService ticketSellerService, IUsersRepository<UserManagementSystem.Models.Users.Customer> customersRepository,
-            ICheckoutSessionManagerService checkoutSessionManagerService)
+        public StripeCheckoutEventProcessor(ITicketSellerService ticketSellerService, 
+            IUsersRepository<UserManagementSystem.Models.Users.Customer> customersRepository,
+            ICheckoutSessionManagerService checkoutSessionManagerService,
+            IRefundService refundService)
         {
             _ticketSellerService = ticketSellerService;
             _customersRepository = customersRepository;
             _checkoutSessionManagerService = checkoutSessionManagerService;
+            _refundService = refundService;
         }
 
         public async Task<ResultBase> ProcessCheckoutEventAsync(Stripe.Event stripeEvent)
@@ -59,17 +63,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                 }
                 catch (Exception ex)
                 {
-                    var refundService = new Stripe.RefundService();
-                    await refundService.CreateAsync(new RefundCreateOptions
-                    {
-                        PaymentIntent = session.PaymentIntentId,
-                        Reason = "requested_by_customer",
-                        Metadata = new Dictionary<string, string>
-                        {
-                            { "reason", ex.Message },
-                            { "userId", session.Metadata[CheckoutSessionMetadataKeys.UserId] }
-                        }
-                    });
+                    await _refundService.RefundPaymentAsync(session.PaymentIntentId, ex);
                     return new ResultBase()
                     {
                         Success = true,
