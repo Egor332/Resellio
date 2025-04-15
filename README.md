@@ -33,11 +33,11 @@
 # Running frontend in development
 The most convenient way is to run all other dependencies (backend, db etc.) through docker.
 
-1. Run docker-compose (use `--build` flag to ensure the newest code is used and `-d` to run in detached mode)
+1. Run docker-compose (use `--build` flag to ensure the newest code is used and `-d` to run in detached mode) in project root folder:
     ```sh
     docker-compose up --build -d
     
-2. Run frontend locally on different port than docker exposes it (currently 5173):
+2. Run frontend locally on different port than docker exposes it (currently 5173) in `/frontend` folder:
     ```sh
     npm run dev -- --port=3000
 
