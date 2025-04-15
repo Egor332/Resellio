@@ -67,7 +67,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                         Metadata = new Dictionary<string, string>
                         {
                             { "reason", ex.Message },
-                            { "userId", session.Metadata["userId"] }
+                            { "userId", session.Metadata[CheckoutSessionMetadataKeys.UserId] }
                         }
                     });
                     return new ResultBase()

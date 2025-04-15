@@ -1,5 +1,6 @@
 ﻿using ResellioBackend.TicketPurchaseSystem.Results;
 using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
+using ResellioBackend.TicketPurchaseSystem.Statics;
 using Stripe.Checkout;
 
 namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
@@ -51,7 +52,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                 CancelUrl = _cancelLink,
                 Metadata = new Dictionary<string, string>()
                 {
-                    { "userId", userId.ToString() }
+                    { CheckoutSessionMetadataKeys.UserId, userId.ToString() }
                 },
                 ExpiresAt = DateTime.UtcNow + new TimeSpan(0, 31, 0),
             };

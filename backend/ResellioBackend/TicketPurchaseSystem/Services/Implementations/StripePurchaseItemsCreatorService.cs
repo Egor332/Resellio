@@ -5,6 +5,7 @@ using ResellioBackend.TicketPurchaseSystem.RedisRepositories.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.RedisServices.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.Results;
 using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
+using ResellioBackend.TicketPurchaseSystem.Statics;
 using Stripe.Checkout;
 
 namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
@@ -62,7 +63,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                             Name = ticket.TicketType.Event.Name,
                             Metadata = new Dictionary<string, string>
                             {
-                                { "ticketId", ticket.TicketId.ToString() }
+                                { CheckoutSessionMetadataKeys.TicketId, ticket.TicketId.ToString() }
                             }
                         }
                     },

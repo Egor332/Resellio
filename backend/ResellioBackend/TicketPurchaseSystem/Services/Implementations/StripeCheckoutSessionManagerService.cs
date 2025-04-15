@@ -1,4 +1,5 @@
 ﻿using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
+using ResellioBackend.TicketPurchaseSystem.Statics;
 using Stripe;
 using Stripe.Checkout;
 
@@ -25,7 +26,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                     var productService = new ProductService();
                     var product = await productService.GetAsync(productId);
 
-                    if (product.Metadata.TryGetValue("ticketId", out var ticketIdString)
+                    if (product.Metadata.TryGetValue(CheckoutSessionMetadataKeys.TicketId, out var ticketIdString)
                         && Guid.TryParse(ticketIdString, out var ticketId))
                     {
                         ticketIds.Add(ticketId);
@@ -38,7 +39,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
 
         public int? GetUserIdOrNullFromSessionMetadata(Session session)
         {
-            var userIdString = session.Metadata["userId"];
+            var userIdString = session.Metadata[CheckoutSessionMetadataKeys.UserId];
             int userId;
             var parseResult = int.TryParse(userIdString, out userId);
             if (parseResult) 
