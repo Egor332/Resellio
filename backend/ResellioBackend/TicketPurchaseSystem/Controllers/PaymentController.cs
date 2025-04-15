@@ -12,7 +12,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
     {
         private readonly ICheckoutSessionCreatorService _checkoutSessionCreatorService;
         private readonly string _publishableKey;
-        private readonly string _secretKey;
+        private readonly string _webhookSecretKey;
         private readonly ICheckoutEventProcessor _checkoutEventProcessor;
 
         public PaymentController(ICheckoutSessionCreatorService checkoutSessionCreatorService, IConfiguration configuration,
@@ -20,7 +20,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
         {
             _checkoutSessionCreatorService = checkoutSessionCreatorService;
             _publishableKey = configuration["Stripe:PublishableKey"]!;
-            _secretKey = configuration["Stripe:SecretKey"]!;
+            _webhookSecretKey = configuration["Stripe:WebhookSecretKey"]!;
             _checkoutEventProcessor = checkoutEventProcessor;
         }
 
@@ -45,7 +45,6 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
             }
         }
 
-        [NonAction]
         [HttpPost("payment-webhook")]
         public async Task<IActionResult> PaymentWebhook()
         {
@@ -54,7 +53,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
 
             try
             {
-                stripeEvent = EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"], _secretKey);
+                stripeEvent = EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"], _webhookSecretKey);
                 var result = await _checkoutEventProcessor.ProcessCheckoutEventAsync(stripeEvent);
                 return Ok(result.Message);
             }
