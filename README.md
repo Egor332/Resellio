@@ -44,3 +44,17 @@ The most convenient way is to run all other dependencies (backend, db etc.) thro
 3. Stop docker-compose:
    ```sh
    docker-compose down
+
+# Access MSSQL database running in Docker:
+In apprioprate container run this:
+```sh
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P Pass@word -N -C
+```
+
+Ensure in docker-compose db service contains the following env variables:
+```yaml
+- MSSQL_ENCRYPT=OPTIONAL
+- MSSQL_TRUST_CERT=ON
+```
+
+
