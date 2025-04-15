@@ -1,4 +1,5 @@
 ﻿using ResellioBackend.Results;
+using ResellioBackend.TicketPurchaseSystem.Exceptions;
 using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.Statics;
 using ResellioBackend.UserManagementSystem.Repositories.Abstractions;
@@ -32,23 +33,23 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                     var userId = _checkoutSessionManagerService.GetUserIdOrNullFromSessionMetadata(session);
                     if (userId == null)
                     {
-                        throw new Exception("No userId in metadata");
+                        throw new PurchaseException("No userId in metadata");
                     }
                     var ticketIds = await _checkoutSessionManagerService.GetTicketIdsOrNullFromSessionAsync(session);
                     if (ticketIds == null)
                     {
-                        throw new Exception("No tickets in metadata");
+                        throw new PurchaseException("No tickets in metadata");
                     }
 
                     var buyer = await _customersRepository.GetByIdAsync(userId.Value);
                     if (buyer == null)
                     {
-                        throw new Exception("User with this Id does not exist");
+                        throw new PurchaseException("User with this Id does not exist");
                     }
                     var sellingResult = await _ticketSellerService.TryMarkTicketsAsSoldAsync(ticketIds, buyer);
                     if (!sellingResult.Success)
                     {
-                        throw new Exception("Can't sell tickets");
+                        throw new PurchaseException("Can't sell tickets");
                     }
                     return new ResultBase()
                     {
