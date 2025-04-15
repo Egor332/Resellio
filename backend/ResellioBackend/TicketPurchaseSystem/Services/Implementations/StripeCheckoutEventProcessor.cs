@@ -5,7 +5,6 @@ using ResellioBackend.TicketPurchaseSystem.Statics;
 using ResellioBackend.UserManagementSystem.Repositories.Abstractions;
 using Stripe;
 using Stripe.Checkout;
-using Stripe.TestHelpers;
 
 namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
 {
@@ -58,7 +57,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                     return new ResultBase()
                     {
                         Success = true,
-                        Message = "soled"
+                        Message = "sold"
                     };
                 }
                 catch (Exception ex)
