@@ -107,8 +107,10 @@ namespace ResellioBackend.TicketPurchaseSystem.DatabaseServices.Implementations
                     Message = "This ticket does not exist"
                 };
             }
-
-            ticket.TicketState = TicketStates.Available;
+            if (ticket.TicketState != TicketStates.Sold)
+            {
+                ticket.TicketState = TicketStates.Available;
+            }
             ticket.LastLock = null;
             await _ticketsRepository.UpdateAsync(ticket);
 
