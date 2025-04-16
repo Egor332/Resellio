@@ -37,7 +37,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
             var sessionCreationResult = await _checkoutSessionCreatorService.CreateCheckoutSessionAsync(userId);
             if (sessionCreationResult.Success)
             {
-                return Ok(new { PyblishableKey = _publishableKey, SessionId = sessionCreationResult.CreatedSession.Id });
+                return Ok(new { PublishableKey = _publishableKey, SessionId = sessionCreationResult.CreatedSession.Id });
             }
             else
             {
