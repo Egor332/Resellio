@@ -125,6 +125,23 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.DatabaseService
         }
 
         [Fact]
+        public async Task UnlockTicketInDbAsync_TicketCanBeUnlockedButSold_ReturnsSuccessAndNotChangeState()
+        {
+            // Arrange
+            var ticketId = Guid.NewGuid();
+            var ticket = new Ticket { TicketState = TicketStates.Sold, LastLock = DateTime.UtcNow };
+            _mockTicketsRepository.Setup(repo => repo.UpdateAsync(ticket)).Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _ticketStatusService.UnlockTicketInDbAsync(ticket);
+
+            // Assert
+            Assert.True(result.Success);
+            Assert.Equal(TicketStates.Sold, ticket.TicketState);
+            _mockTicketsRepository.Verify(tr => tr.UpdateAsync(ticket), Times.Once);
+        }
+
+        [Fact]
         public async Task TryMarkAsSoledAsync_TicketAlreadySoled_ReturnsFailure()
         {
             // Arrange
