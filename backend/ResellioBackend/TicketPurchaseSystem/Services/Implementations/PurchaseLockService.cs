@@ -40,14 +40,11 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             }
             var maximumLockExtension = DateTime.UtcNow.AddMinutes(5);
             var currentLockExpiration = DateTime.UtcNow + cartLifeTime;
+            var ticketIds = await _cartRedisRepository.GetAllTicketsAsync(userId);
             if (maximumLockExtension < currentLockExpiration)
             {
-                return new ResultBase()
-                {
-                    Success = true
-                };
+                return await TryFinalLockStageAsync(ticketIds, userId, maximumLockExtension, TicketStates.Reserved);
             }
-            var ticketIds = await _cartRedisRepository.GetAllTicketsAsync(userId);
             var isTicketLockSucceed = await TryChangeLockForTicketEnumerationAsync(ticketIds, userId, maximumLockExtension);
             if (!isTicketLockSucceed) 
             {
@@ -57,24 +54,8 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                     Message = "Error occurred, possibly your shopping cart expired"
                 };
             }
-            try
-            {
-                await ChangeLockInDatabaseAsync(ticketIds, userId, maximumLockExtension, TicketStates.Reserved);
-            }
-            catch (Exception ex)
-            {
-                await RollbackTicketLocksAsync(ticketIds.ToList(), userId);
-                return new ResultBase()
-                {
-                    Success = false,
-                    Message = ex.Message
-                };
-            }
 
-            return new ResultBase()
-            {
-                Success = true,
-            };
+            return await TryFinalLockStageAsync(ticketIds, userId, maximumLockExtension, TicketStates.Reserved);
         }
 
         public async Task RollbackAddedTimeAsync(List<Guid> ticketIds, int userId)
@@ -98,6 +79,27 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                 ticket.ChangeLockParameters(realExpirationTime, newTicketState, null);
             }
             await _transactionManager.CommitTransactionAsync(transaction);
+        }
+
+        private async  Task<ResultBase> TryFinalLockStageAsync(IEnumerable<Guid> ticketIds, int userId, DateTime? maximumLockExtension, TicketStates newStatus)
+        {
+            try
+            {
+                await ChangeLockInDatabaseAsync(ticketIds, userId, maximumLockExtension, TicketStates.Reserved);
+                return new ResultBase()
+                {
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                await RollbackTicketLocksAsync(ticketIds.ToList(), userId);
+                return new ResultBase()
+                {
+                    Success = false,
+                    Message = ex.Message
+                };
+            }
         }
 
         private async Task<DateTime> RollbackTicketLocksAsync(List<Guid> ticketIds, int userId)

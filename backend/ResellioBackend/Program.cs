@@ -28,6 +28,7 @@ using ResellioBackend.TicketPurchaseSystem.RedisServices.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.RedisServices.Implementations;
 using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.Services.Implementations;
+using Stripe;
 
 namespace ResellioBackend
 {
@@ -139,6 +140,11 @@ namespace ResellioBackend
             builder.Services.AddScoped<ITicketUnlockerService, TicketUnlockerService>();
             builder.Services.AddScoped<ITicketSellerService, TicketSellerService>();
             builder.Services.AddScoped<IPurchaseLockService, PurchaseLockService>();
+            builder.Services.AddScoped<ICheckoutSessionCreatorService, StripeCheckoutSessionCreatorService>();
+            builder.Services.AddTransient<IPurchaseItemCreatorService, StripePurchaseItemsCreatorService>();
+            builder.Services.AddTransient<ICheckoutEventProcessor, StripeCheckoutEventProcessor>();
+            builder.Services.AddScoped<ICheckoutSessionManagerService, StripeCheckoutSessionManagerService>();
+            builder.Services.AddScoped<IRefundService, StripeRefundService>();
 
             // Database services
             builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();
@@ -146,7 +152,6 @@ namespace ResellioBackend
             // Repositories
             builder.Services.AddScoped(typeof(IUsersRepository<>), typeof(UsersRepository<>));
             builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
-
             builder.Services.AddScoped<IEventsRepository, EventsRepository>();
             builder.Services.AddScoped<ITicketTypesRepository, TicketTypesRepository>();
             builder.Services.AddScoped<ITicketsRepository, TicketsRepository>();
@@ -154,6 +159,9 @@ namespace ResellioBackend
             
             // Factory
             builder.Services.AddTransient<IUserFactory, UserFactory>();
+
+            // Stripe configuration
+            StripeConfiguration.ApiKey = configuration["Stripe:SecretKey"];
 
             // CORS
             var allowedOrigins = configuration["AllowedOrigins"];
