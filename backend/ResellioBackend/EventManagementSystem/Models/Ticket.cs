@@ -40,7 +40,7 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
                     CurrencyCode = CurrentPrice.CurrencyCode,
                 };
             }
-            if (this.TicketType == null)
+            if (this.TicketType != null)
             {
                 return new Money()
                 {
