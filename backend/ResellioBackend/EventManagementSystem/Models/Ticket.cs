@@ -40,15 +40,15 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
                     CurrencyCode = CurrentPrice.CurrencyCode,
                 };
             }
-            try
+            if (this.TicketType == null)
             {
                 return new Money()
                 {
-                    Amount = TicketType.BasePrice.Amount,
+                    Amount = TicketType!.BasePrice.Amount,
                     CurrencyCode = TicketType.BasePrice.CurrencyCode,
                 };
             }
-            catch (Exception ex) 
+            else
             {
                 return null;
             }
