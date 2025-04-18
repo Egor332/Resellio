@@ -46,7 +46,7 @@ The most convenient way is to run all other dependencies (backend, db etc.) thro
    docker-compose down
 
 # Access MSSQL database running in Docker:
-In apprioprate container run this:
+In appropriate container run this:
 ```sh
 /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P Pass@word -N -C
 ```
