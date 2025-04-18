@@ -28,13 +28,13 @@ namespace ResellioBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int?>("HolderId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("LastLock")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("OwnerId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SellerId")
+                    b.Property<int?>("PurchaseIntenderId")
                         .HasColumnType("int");
 
                     b.Property<int>("TicketState")
@@ -45,9 +45,9 @@ namespace ResellioBackend.Migrations
 
                     b.HasKey("TicketId");
 
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("HolderId");
 
-                    b.HasIndex("SellerId");
+                    b.HasIndex("PurchaseIntenderId");
 
                     b.HasIndex("TicketTypeId");
 
@@ -99,10 +99,6 @@ namespace ResellioBackend.Migrations
                     b.Property<DateTime>("AvailableFrom")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -112,9 +108,6 @@ namespace ResellioBackend.Migrations
 
                     b.Property<int>("MaxCount")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("TypeId");
 
@@ -230,13 +223,14 @@ namespace ResellioBackend.Migrations
 
             modelBuilder.Entity("ResellioBackend.EventManagementSystem.Models.Base.Ticket", b =>
                 {
-                    b.HasOne("ResellioBackend.UserManagementSystem.Models.Users.Customer", "Owner")
+                    b.HasOne("ResellioBackend.UserManagementSystem.Models.Base.UserBase", "Holder")
                         .WithMany()
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("HolderId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ResellioBackend.UserManagementSystem.Models.Base.UserBase", "Seller")
+                    b.HasOne("ResellioBackend.UserManagementSystem.Models.Users.Customer", "PurchaseIntender")
                         .WithMany()
-                        .HasForeignKey("SellerId");
+                        .HasForeignKey("PurchaseIntenderId");
 
                     b.HasOne("ResellioBackend.EventManagementSystem.Models.TicketType", "TicketType")
                         .WithMany("Tickets")
@@ -244,9 +238,34 @@ namespace ResellioBackend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Owner");
+                    b.OwnsOne("ResellioBackend.EventManagementSystem.Models.Money", "CurrentPrice", b1 =>
+                        {
+                            b1.Property<Guid>("TicketId")
+                                .HasColumnType("uniqueidentifier");
 
-                    b.Navigation("Seller");
+                            b1.Property<decimal>("Amount")
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("PriceAmount");
+
+                            b1.Property<string>("CurrencyCode")
+                                .IsRequired()
+                                .HasMaxLength(3)
+                                .HasColumnType("nvarchar(3)")
+                                .HasColumnName("PriceCurrency");
+
+                            b1.HasKey("TicketId");
+
+                            b1.ToTable("Tickets");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TicketId");
+                        });
+
+                    b.Navigation("CurrentPrice");
+
+                    b.Navigation("Holder");
+
+                    b.Navigation("PurchaseIntender");
 
                     b.Navigation("TicketType");
                 });
@@ -268,6 +287,32 @@ namespace ResellioBackend.Migrations
                         .WithMany("TicketTypes")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("ResellioBackend.EventManagementSystem.Models.Money", "BasePrice", b1 =>
+                        {
+                            b1.Property<int>("TicketTypeTypeId")
+                                .HasColumnType("int");
+
+                            b1.Property<decimal>("Amount")
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("PriceAmount");
+
+                            b1.Property<string>("CurrencyCode")
+                                .IsRequired()
+                                .HasMaxLength(3)
+                                .HasColumnType("nvarchar(3)")
+                                .HasColumnName("PriceCurrency");
+
+                            b1.HasKey("TicketTypeTypeId");
+
+                            b1.ToTable("TicketTypes");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TicketTypeTypeId");
+                        });
+
+                    b.Navigation("BasePrice")
                         .IsRequired();
 
                     b.Navigation("Event");

@@ -65,6 +65,33 @@ namespace ResellioBackend
                 .HasForeignKey(prt => prt.OwnerId) 
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Configure Ticket to Holder relation
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.Holder)
+                .WithMany()
+                .HasForeignKey(t => t.HolderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure Ticket to PurchaseIntender relation
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.PurchaseIntender)
+                .WithMany()
+                .HasForeignKey(t => t.PurchaseIntenderId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            // Configure price properties of Ticket and TicketType
+            modelBuilder.Entity<TicketType>().OwnsOne(tt => tt.BasePrice, basePrice =>
+            {
+                basePrice.Property(p => p.Amount).HasColumnName("PriceAmount").HasColumnType("decimal(18,2)");
+                basePrice.Property(p => p.CurrencyCode).HasColumnName("PriceCurrency").HasMaxLength(3).IsRequired();
+            });
+
+            modelBuilder.Entity<Ticket>().OwnsOne(t => t.CurrentPrice, currentPrice =>
+            {
+                currentPrice.Property(p => p.Amount).HasColumnName("PriceAmount").HasColumnType("decimal(18,2)");
+                currentPrice.Property(p => p.CurrencyCode).HasColumnName("PriceCurrency").HasMaxLength(3).IsRequired();
+            });
+
             base.OnModelCreating(modelBuilder);
         }
     }

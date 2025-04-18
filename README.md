@@ -33,14 +33,28 @@
 # Running frontend in development
 The most convenient way is to run all other dependencies (backend, db etc.) through docker.
 
-1. Run docker-compose (use `--build` flag to ensure the newest code is used and `-d` to run in detached mode)
+1. Run docker-compose (use `--build` flag to ensure the newest code is used and `-d` to run in detached mode) in project root folder:
     ```sh
     docker-compose up --build -d
     
-2. Run frontend locally on different port than docker exposes it (currently 5173):
+2. Run frontend locally on different port than docker exposes it (currently 5173) in `/frontend` folder:
     ```sh
     npm run dev -- --port=3000
 
 3. Stop docker-compose:
    ```sh
    docker-compose down
+
+# Access MSSQL database running in Docker:
+In appropriate container run this:
+```sh
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P Pass@word -N -C
+```
+
+Ensure in docker-compose db service contains the following env variables:
+```yaml
+- MSSQL_ENCRYPT=OPTIONAL
+- MSSQL_TRUST_CERT=ON
+```
+
+

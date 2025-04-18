@@ -30,7 +30,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             using var transaction = await _databaseTransactionManager.BeginTransactionAsync();
             try
             {
-                var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLock(ticketId);
+                var ticket = await _ticketsRepository.GetTicketByIdWithExclusiveRowLockAsync(ticketId);
                 var unlockInCash = await _redisService.UnlockTicketAsync(ticketId, userId);
                 if (!unlockInCash.Success)
                 {

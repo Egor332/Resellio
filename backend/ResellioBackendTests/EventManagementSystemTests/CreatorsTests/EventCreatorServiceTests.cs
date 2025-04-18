@@ -71,11 +71,11 @@ public class EventCreatorServiceTests
 
         // Creating ticket types simulation
         _ticketTypeCreatorServiceMock
-            .Setup(service => service.CreateTicketTypeAsync(ticketTypeDto1, It.IsAny<Event>()))
-            .ReturnsAsync(new GeneralResult<TicketType>(){Success = true, Data = new TicketType()});
+            .Setup(service => service.CreateTicketType(ticketTypeDto1, It.IsAny<Event>()))
+            .Returns(new GeneralResult<TicketType>(){Success = true, Data = new TicketType()});
         _ticketTypeCreatorServiceMock
-            .Setup(service => service.CreateTicketTypeAsync(ticketTypeDto2, It.IsAny<Event>()))
-            .ReturnsAsync(new GeneralResult<TicketType>(){Success = true, Data = new TicketType()});
+            .Setup(service => service.CreateTicketType(ticketTypeDto2, It.IsAny<Event>()))
+            .Returns(new GeneralResult<TicketType>(){Success = true, Data = new TicketType()});
 
         // Act
         var result = await _eventCreatorService.CreateEventAsync(eventDto, organiserId);
@@ -85,8 +85,8 @@ public class EventCreatorServiceTests
 
         // Verification of method calls 
         _userRepositoryMock.Verify(repo => repo.GetByIdAsync(organiserId), Times.Once);
-        _ticketTypeCreatorServiceMock.Verify(service => service.CreateTicketTypeAsync(ticketTypeDto1, It.IsAny<Event>()), Times.Once);
-        _ticketTypeCreatorServiceMock.Verify(service => service.CreateTicketTypeAsync(ticketTypeDto2, It.IsAny<Event>()), Times.Once);
+        _ticketTypeCreatorServiceMock.Verify(service => service.CreateTicketType(ticketTypeDto1, It.IsAny<Event>()), Times.Once);
+        _ticketTypeCreatorServiceMock.Verify(service => service.CreateTicketType(ticketTypeDto2, It.IsAny<Event>()), Times.Once);
         _eventRepositoryMock.Verify(repo => repo.AddAsync(It.Is<Event>(e =>
             e.Organiser == organiser &&
             e.Name == eventDto.Name &&

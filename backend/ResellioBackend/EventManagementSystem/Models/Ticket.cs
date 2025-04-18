@@ -7,27 +7,51 @@ using ResellioBackend.UserManagementSystem.Models.Users;
 namespace ResellioBackend.EventManagementSystem.Models.Base
 {
     public class Ticket
-    {
-        // TODO: add other properties
-        
+    {        
         [Key]
         public Guid TicketId { get; set; }
-
         [Required]
         public int TicketTypeId { get; set; }
         [Required]
         public TicketType TicketType { get; set; }
-
+        public Money? CurrentPrice { get; set; }
         [Required]
         public TicketStates TicketState { get; set; }
-
         public DateTime? LastLock { get; set; }
+        public int? PurchaseIntenderId { get; set; }        
+        public Customer? PurchaseIntender { get; set; }
+        public int? HolderId { get; set; }
+        public UserBase? Holder { get; set; }
 
-        public int? OwnerId { get; set; }
-        
-        public Customer? Owner { get; set; }
+        public void ChangeLockParameters(DateTime? newLock, TicketStates newStatus, int? intenderId)
+        {
+            LastLock = newLock;
+            TicketState = newStatus;
+            PurchaseIntenderId = intenderId;
+        }
 
-        public int? SellerId { get; set; }
-        public UserBase? Seller { get; set; }
+        public Money? GetPrice()
+        {
+            if (CurrentPrice != null)
+            {
+                return new Money() 
+                {
+                    Amount = CurrentPrice.Amount,
+                    CurrencyCode = CurrentPrice.CurrencyCode,
+                };
+            }
+            if (this.TicketType != null)
+            {
+                return new Money()
+                {
+                    Amount = TicketType!.BasePrice.Amount,
+                    CurrencyCode = TicketType.BasePrice.CurrencyCode,
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

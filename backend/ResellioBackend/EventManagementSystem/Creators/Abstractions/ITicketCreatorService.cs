@@ -2,9 +2,10 @@ using ResellioBackend.EventManagementSystem.Models;
 using ResellioBackend.EventManagementSystem.Models.Base;
 using ResellioBackend.Results;
 
-namespace ResellioBackend.EventManagementSystem.Creators.Abstractions;
-
-public interface ITicketCreatorService
+namespace ResellioBackend.EventManagementSystem.Creators.Abstractions
 {
-    Task<GeneralResult<Ticket>> CreateTicketAsync(TicketType ticketType);
+    public interface ITicketCreatorService
+    {
+        public GeneralResult<Ticket> CreateTicket(TicketType ticketType);
+    }
 }
