@@ -29,7 +29,7 @@ namespace ResellioBackend.UserManagementSystem.Controllers
             var result = await _authenticationService.LoginAsync(credentials);
             if (result.Success)
             {
-                return Ok(new { result.Token, result.Message });
+                return Ok(new { result.Token, result.UserRole, result.Message });
             }
             else
             {
