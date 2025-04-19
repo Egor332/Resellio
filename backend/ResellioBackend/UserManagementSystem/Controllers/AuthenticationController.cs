@@ -13,11 +13,14 @@ namespace ResellioBackend.UserManagementSystem.Controllers
         private readonly IAuthenticationService _authenticationService;
         private readonly IConfirmEmailService _confirmEmailService;
         private readonly IRequestEmailVerificationService _requestEmailVerificationService;
-        public AuthenticationController(IAuthenticationService authenticationService, IConfirmEmailService confirmEmailService,  IRequestEmailVerificationService requestEmailVerificationService)
+        private readonly string _loginFrontEndUrl;
+        public AuthenticationController(IAuthenticationService authenticationService, IConfirmEmailService confirmEmailService,  IRequestEmailVerificationService requestEmailVerificationService,
+            IConfiguration configuration)
         {
             _authenticationService = authenticationService;
             _confirmEmailService = confirmEmailService;
             _requestEmailVerificationService = requestEmailVerificationService;
+            _loginFrontEndUrl = configuration["FrontEndLinks:Login"];
         }
 
         [HttpPost("login")]
@@ -40,7 +43,7 @@ namespace ResellioBackend.UserManagementSystem.Controllers
             var result = await _confirmEmailService.ConfirmEmailAsync(token);
             if (result.Success)
             {
-                return Ok(new { result.Message });
+                return Redirect(_loginFrontEndUrl);
             }
             else
             {
