@@ -30,6 +30,11 @@
     ```sh
     npm install
 
+# Frontend formatting
+    The project uses Prettier as a formatter, to format all files use:
+    ```sh
+    npm run format
+
 # Running frontend in development
 The most convenient way is to run all other dependencies (backend, db etc.) through docker.
 
