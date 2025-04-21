@@ -29,6 +29,7 @@ using ResellioBackend.TicketPurchaseSystem.RedisServices.Implementations;
 using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.Services.Implementations;
 using Stripe;
+using ResellioBackend.Paging;
 
 namespace ResellioBackend
 {
@@ -145,6 +146,7 @@ namespace ResellioBackend
             builder.Services.AddTransient<ICheckoutEventProcessor, StripeCheckoutEventProcessor>();
             builder.Services.AddScoped<ICheckoutSessionManagerService, StripeCheckoutSessionManagerService>();
             builder.Services.AddScoped<IRefundService, StripeRefundService>();
+            builder.Services.AddTransient<IPagingService, PagingService>();
 
             // Database services
             builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();
