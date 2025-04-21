@@ -1,9 +1,10 @@
 import CenteredContainer from "../../components/CenteredContainer/CenteredContainer";
+import RegisterOrganizerForm from "../../components/RegisterOrganizerForm/RegisterOrganizerForm.tsx";
 
 function RegisterOrganiser() {
     return (
         <CenteredContainer>
-            <h1>Organiser register form placeholder</h1>
+            <RegisterOrganizerForm/>
         </CenteredContainer>
     )
 }

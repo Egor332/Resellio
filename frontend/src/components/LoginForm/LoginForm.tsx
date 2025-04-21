@@ -2,9 +2,12 @@ import { SyntheticEvent, useState } from 'react'
 import { Link } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import formStyles from '../../styles/FormStyles.module.css'
-import { Navigation } from '../../assets/constants/navigation'
 
-function LoginForm() {
+interface Props {
+    onRegisterClick: () => void;
+}
+
+function LoginForm({ onRegisterClick }: Props) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -38,12 +41,19 @@ function LoginForm() {
       </div>
       {errorMsg && <div className="alert alert-danger">{errorMsg}</div>}
       <div className={formStyles['btn-row']}>
-        <button type="submit" className={`btn btn-primary ${formStyles['btn-frst']}`}>
+        <button 
+            type="submit" 
+            className={`btn btn-primary ${formStyles['btn-frst']}`}
+        >
           Login
         </button>
-        <Link to={Navigation.REGISTER_CUSTOMER} className={`btn btn-secondary ${formStyles['btn-scnd']}`}>
+        <button
+            type="button"
+            className={`btn btn-secondary ${formStyles['btn-scnd']}`}
+            onClick={onRegisterClick}
+        >
           Register
-        </Link>
+        </button>
       </div>
       <div className="d-flex justify-content-between">
         <Link to="/reset-password" className="btn btn-link p-0">

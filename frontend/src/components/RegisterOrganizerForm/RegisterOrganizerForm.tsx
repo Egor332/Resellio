@@ -1,9 +1,9 @@
-import {SyntheticEvent, useState} from "react";
+import { SyntheticEvent, useState} from "react";
 import formStyles from '../../styles/FormStyles.module.css'
-import { apiEndpoints, getApiEndpoint } from "../../assets/constants/api";
+import { apiEndpoints } from "../../assets/constants/api";
 import { apiRequest } from "../../utils/httpClient";
 
-const RegisterForm = () => {
+const RegisterOrganizerForm = () => {
     const [userData, setUserData] = useState({
         firstName: '',
         lastName: '',
@@ -13,7 +13,6 @@ const RegisterForm = () => {
     });
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [errorMsg, setErrorMsg] = useState<string>('');
-    const [userType, setUserType] = useState<'customer' | 'organizer'>('customer');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -31,15 +30,9 @@ const RegisterForm = () => {
             return;
         }
 
-        const endpoint = userType === 'organizer'
-            ? apiEndpoints.ORGANIZERS_REGISTER
-            : apiEndpoints.CUSTOMERS_REGISTER;
+        const endpoint = apiEndpoints.ORGANIZERS_REGISTER;
 
         const payload = { ...userData };
-
-        if (userType !== 'organizer') {
-            delete payload.organiserName;
-        }
 
         try {
             const response = await apiRequest(endpoint, payload);
@@ -50,34 +43,10 @@ const RegisterForm = () => {
             setErrorMsg(error.message || 'An error occurred during registration');
         }
     };
-    
+
     return (
         <form onSubmit={handleSubmit} className={`text-start ${formStyles['form']}`}>
-            <label className="form-label fw-bold me-3">Register as:</label>
-            <div className="form-check form-check-inline">
-                <input
-                    className="form-check-input"
-                    type="radio"
-                    name="userType"
-                    id="customer"
-                    value="customer"
-                    checked={userType === 'customer'}
-                    onChange={() => setUserType('customer')}
-                />
-                <label className="form-check-label" htmlFor="customer">Customer</label>
-            </div>
-            <div className="form-check form-check-inline">
-                <input
-                    className="form-check-input"
-                    type="radio"
-                    name="userType"
-                    id="organizer"
-                    value="organizer"
-                    checked={userType === 'organizer'}
-                    onChange={() => setUserType('organizer')}
-                />
-                <label className="form-check-label" htmlFor="organizer">Organizer</label>
-            </div>
+            <label className="form-label fw-bold me-3">Register as an organizer</label>
             <div className={formStyles['form-row']}>
                 <label className="form-label fw-bold">First Name:</label>
                 <input
@@ -100,19 +69,17 @@ const RegisterForm = () => {
                     required
                 />
             </div>
-            {userType === 'organizer' && (
-                <div className={formStyles['form-row']}>
-                    <label className="form-label fw-bold">Organiser Name:</label>
-                    <input
-                        type="text"
-                        name="organiserName"
-                        className={`form-control ${formStyles['form-input']}`}
-                        value={userData.organiserName}
-                        onChange={handleChange}
-                        required={userType === 'organizer'}
-                    />
-                </div>
-            )}
+            <div className={formStyles['form-row']}>
+                <label className="form-label fw-bold">Organiser Name:</label>
+                <input
+                    type="text"
+                    name="organiserName"
+                    className={`form-control ${formStyles['form-input']}`}
+                    value={userData.organiserName}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
             <div className={formStyles['form-row']}>
                 <label className="form-label fw-bold">Email:</label>
                 <input
@@ -156,4 +123,4 @@ const RegisterForm = () => {
     );
 };
 
-export default RegisterForm;
+export default RegisterOrganizerForm;
