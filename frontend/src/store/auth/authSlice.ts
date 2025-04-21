@@ -19,7 +19,7 @@ export interface Organiser {
 }
 
 interface AuthState {
-  user: Customer| Organiser | null
+  user: Customer | Organiser | null
   token: string | null
   isAuthenticated: boolean
   loading: boolean
@@ -52,6 +52,27 @@ const initialState: AuthState = {
   isAuthenticated: !!localStorage.getItem('auth_token'),
   loading: false,
   error: null,
+}
+
+const createEmptyUserByRole = (role: Role): Customer | Organiser => {
+  if (role === 'Organiser') {
+    return {
+      email: '',
+      firstName: '',
+      lastName: '',
+      organiserName: '',
+      role: role,
+    } as Organiser
+  } else if (role === 'Customer') {
+    return {
+      email: '',
+      firstName: '',
+      lastName: '',
+      role: role,
+    } as Customer
+  } else {
+    throw new Error('Invalid role')
+  }
 }
 
 export const loginUser = createAsyncThunk(
@@ -100,7 +121,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Login cases
       .addCase(loginUser.pending, (state) => {
         state.loading = true
         state.error = null
@@ -108,11 +128,10 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false
         state.isAuthenticated = true
-        state.user = {
-          id: '',
-          email: '',
-          role: action.payload.userRole,
-        }
+
+        state.user = createEmptyUserByRole(action.payload.userRole)
+        console.log('User: ', state.user)
+
         state.token = action.payload.token
         localStorage.setItem('auth_token', action.payload.token)
       })
@@ -122,7 +141,6 @@ const authSlice = createSlice({
         state.isAuthenticated = false
       })
 
-      // Register customer cases
       .addCase(registerCustomer.pending, (state) => {
         state.loading = true
         state.error = null
@@ -135,7 +153,6 @@ const authSlice = createSlice({
         state.error = action.payload as string
       })
 
-      // Register organiser cases
       .addCase(registerOrganiser.pending, (state) => {
         state.loading = true
         state.error = null

@@ -7,7 +7,7 @@ import { AppDispatch } from '../../store/store'
 import { logout } from '../../store/auth/authSlice'
 import { useNavigate } from 'react-router-dom'
 
-function OrganiserHeader() {
+function OrganisersHeader() {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
 
@@ -16,8 +16,18 @@ function OrganiserHeader() {
       icon: <PersonIcon />,
       tooltip: 'Account',
       menuItems: [
-        { label: 'My Events', path: Navigation.MY_EVENTS },
-        { label: 'Profile', path: Navigation.PROFILE },
+        {
+          label: 'Home',
+          onClick: () => {
+            navigate(Navigation.ORGANISERS)
+          },
+        },
+        {
+          label: 'Profile',
+          onClick: () => {
+            navigate(Navigation.ORGANISERS_PROFILE)
+          },
+        },
         {
           label: 'Logout',
           onClick: () => {
@@ -39,4 +49,4 @@ function OrganiserHeader() {
   )
 }
 
-export default OrganiserHeader
+export default OrganisersHeader

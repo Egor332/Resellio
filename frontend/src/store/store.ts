@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer, { logout } from './auth/authSlice'
-import uiReducer from './ui/uiSlice'
+import bannerReducer from './banner/bannerSlice'
 
 const authMiddleware = (store: any) => {
   let listenerAdded = false
@@ -24,7 +24,7 @@ const authMiddleware = (store: any) => {
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    ui: uiReducer,
+    banner: bannerReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(authMiddleware),

@@ -8,22 +8,32 @@ import { AppDispatch } from '../../store/store'
 import { logout } from '../../store/auth/authSlice'
 import { useNavigate } from 'react-router-dom'
 
-function CustomerHeader() {
+function CustomersHeader() {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
 
   const customerNavItems: NavItem[] = [
     {
       icon: <ShoppingCartIcon />,
-      path: Navigation.CART, // Assuming this path exists in Navigation
+      path: Navigation.CUSTOMERS_CART,
       tooltip: 'Shopping Cart',
     },
     {
       icon: <PersonIcon />,
       tooltip: 'Account',
       menuItems: [
-        { label: 'My Tickets', path: Navigation.MY_TICKETS }, // Assuming these paths exist
-        { label: 'Profile', path: Navigation.PROFILE },
+        {
+          label: 'Home',
+          onClick: () => {
+            navigate(Navigation.CUSTOMERS)
+          },
+        },
+        {
+          label: 'Profile',
+          onClick: () => {
+            navigate(Navigation.CUSTOMERS_PROFILE)
+          },
+        },
         {
           label: 'Logout',
           onClick: () => {
@@ -45,4 +55,4 @@ function CustomerHeader() {
   )
 }
 
-export default CustomerHeader
+export default CustomersHeader
