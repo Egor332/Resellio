@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 
-namespace ResellioBackend.Paging
+namespace ResellioBackend.Common.Paging
 {
     public class PagingService : IPagingService
     {

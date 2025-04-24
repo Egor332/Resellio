@@ -33,8 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="EventManagementSystem\Filtering\FIlterServices\Abstractions\" />
-    <Folder Include="EventManagementSystem\Filtering\FIlterServices\Implementrations\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

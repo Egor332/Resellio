@@ -1,4 +1,4 @@
-﻿namespace ResellioBackend.Paging
+﻿namespace ResellioBackend.Common.Paging
 {
     public interface IPagingService
     {

@@ -29,7 +29,7 @@ using ResellioBackend.TicketPurchaseSystem.RedisServices.Implementations;
 using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.Services.Implementations;
 using Stripe;
-using ResellioBackend.Paging;
+using ResellioBackend.Common.Paging;
 
 namespace ResellioBackend
 {

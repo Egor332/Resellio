@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ResellioBackend.Paging;
+using ResellioBackend.Common.Paging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
