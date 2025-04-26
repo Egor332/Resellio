@@ -3,19 +3,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ResellioBackend.Common.Paging
 {
-    public class PagingService : IPagingService
+    public class PaginationService : IPaginationService
     {
-        public async Task<PagingResult<T>> ApplyPagingAsync<T>(IQueryable<T> query, int page, int pageSize)
-        {
+        public async Task<PaginationResult<T>> ApplyPagingAsync<T>(IQueryable<T> query, int page, int pageSize)
+        {           
+
             if (!query.Expression.ToString().Contains("OrderBy"))
             {
                 throw new InvalidOperationException("You must apply OrderBy before paging.");
             }
 
+            if (page < 1)
+            {
+                throw new ArgumentOutOfRangeException($"Page number must be higher than 0, got {page}");
+            }
+
+            if (pageSize < 1) 
+            {
+                throw new ArgumentOutOfRangeException($"Page size number must be higher than 0, got {pageSize}");
+            }
+
             var totalAmount = await query.CountAsync();
             var items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 
-            return new PagingResult<T>
+            return new PaginationResult<T>
             {
                 Items = items,
                 TotalAmount = totalAmount,

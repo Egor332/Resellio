@@ -1,8 +1,11 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ResellioBackend.Common.Paging;
 using ResellioBackend.EventManagementSystem.Creators.Abstractions;
 using ResellioBackend.EventManagementSystem.DTOs;
+using ResellioBackend.EventManagementSystem.Filtering;
+using ResellioBackend.EventManagementSystem.Services.Abstractions;
 using ResellioBackend.UserManagementSystem.Statics;
 
 namespace ResellioBackend.EventManagementSystem.Controllers
@@ -13,10 +16,12 @@ namespace ResellioBackend.EventManagementSystem.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IEventCreatorService _eventCreatorService;
+        private readonly IEventService _eventService;
         
-        public EventsController(IEventCreatorService eventCreatorService)
+        public EventsController(IEventCreatorService eventCreatorService, IEventService eventService)
         {
             _eventCreatorService = eventCreatorService;
+            _eventService = eventService;
         }
 
         [Authorize(Policy = AuthorizationPolicies.OrganiserPolicy)]
@@ -41,6 +46,21 @@ namespace ResellioBackend.EventManagementSystem.Controllers
             {
                 return BadRequest(new { result.Message });
             }
+        }
+
+        [HttpGet("get-events")]
+        public async Task<IActionResult> GetEvents([FromQuery]EventsFilter filters)
+        {
+            var paginationResponse = new PaginationResult<EventInfoDto>();
+            try
+            {
+                paginationResponse = await _eventService.GetFiltratedEventsWithPagingAsync(filters);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(paginationResponse);
         }
     }
 }

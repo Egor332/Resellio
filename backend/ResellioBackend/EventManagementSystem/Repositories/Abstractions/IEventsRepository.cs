@@ -6,5 +6,6 @@ namespace ResellioBackend.EventManagementSystem.Repositories.Abstractions
     {
         public Task AddAsync(Event eventToBeAdded);
         public Task UpdateAsync(Event eventToBeUpdated);
+        public IQueryable<Event> GetAllAsQueryable();
     }
 }

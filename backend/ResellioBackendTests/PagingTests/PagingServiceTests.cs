@@ -10,11 +10,11 @@ namespace ResellioBackendTests.PagingTests
 {
     public class PagingServiceTests
     {
-        private readonly PagingService _pagingService;
+        private readonly PaginationService _pagingService;
 
         public PagingServiceTests()
         {
-            _pagingService = new PagingService();
+            _pagingService = new PaginationService();
         }
 
         private IQueryable<TestEntity> GetTestData(int count)
