@@ -5,6 +5,7 @@ using ResellioBackend.Common.Paging;
 using ResellioBackend.EventManagementSystem.Creators.Abstractions;
 using ResellioBackend.EventManagementSystem.DTOs;
 using ResellioBackend.EventManagementSystem.Filtering;
+using ResellioBackend.EventManagementSystem.RequestsParameters;
 using ResellioBackend.EventManagementSystem.Services.Abstractions;
 using ResellioBackend.UserManagementSystem.Statics;
 
@@ -49,12 +50,12 @@ namespace ResellioBackend.EventManagementSystem.Controllers
         }
 
         [HttpGet("get-events")]
-        public async Task<IActionResult> GetEvents([FromQuery]EventsFilter filters)
+        public async Task<IActionResult> GetEvents([FromQuery]GetEventRequestParameters parameters)
         {
             var paginationResponse = new PaginationResult<EventInfoDto>();
             try
             {
-                paginationResponse = await _eventService.GetFiltratedEventsWithPagingAsync(filters);
+                paginationResponse = await _eventService.GetFiltratedEventsWithPagingAsync(parameters.Filter, parameters.Pagination.Page, parameters.Pagination.PageSize);
             }
             catch (ArgumentOutOfRangeException ex)
             {
