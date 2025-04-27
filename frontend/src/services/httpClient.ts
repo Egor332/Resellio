@@ -1,6 +1,7 @@
 import { TApiEndpoint } from '../assets/constants/api'
+import getEnvVariable from '../utils/envUtils'
 
-const DEFAULT_TIMEOUT = parseInt(import.meta.env.VITE_HTTP_TIMEOUT) || 10000
+const DEFAULT_TIMEOUT = parseInt(getEnvVariable(import.meta.env, 'VITE_DEFAULT_HTTP_TIMEOUT'))
 
 /**
  * A generic HTTP client function to make API requests.
@@ -14,8 +15,6 @@ export const apiRequest = async (
   timeout?: number
 ): Promise<any> => {
   try {
-    console.log('Requesting:', endpoint.url, data) // TODO: Remove in production
-
     const token = endpoint.isAuthRequired
       ? localStorage.getItem('auth_token')
       : null

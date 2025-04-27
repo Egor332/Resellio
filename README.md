@@ -30,6 +30,12 @@
     ```sh
     npm install
 
+# Frontend formatting
+The project uses Prettier as a formatter, to format all files use:
+```sh
+npm run format
+```
+
 # Running frontend in development
 The most convenient way is to run all other dependencies (backend, db etc.) through docker.
 
@@ -44,6 +50,21 @@ The most convenient way is to run all other dependencies (backend, db etc.) thro
 3. Stop docker-compose:
    ```sh
    docker-compose down
+
+env.development is no longer stored on remote repo, here is its scheme:
+```
+# Base URL for the API
+VITE_API_URL = '<API base URL>'
+
+# Hostname for the application
+VITE_HOST = '<application hostname>'
+
+# Port for the frontend development server
+VITE_FRONTEND_PORT = <frontend server port>
+
+# Default HTTP timeout in milliseconds
+VITE_DEFAULT_HTTP_TIMEOUT = <timeout in ms>
+```
 
 # Access MSSQL database running in Docker:
 In appropriate container run this:
