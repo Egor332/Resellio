@@ -149,6 +149,7 @@ namespace ResellioBackend
             builder.Services.AddTransient<IPaginationService, PaginationService>();
             builder.Services.AddTransient<IGetRequestService, GetRequestService>();
             builder.Services.AddTransient<IEventService, EventManagementSystem.Services.Implementations.EventService>();
+            builder.Services.AddTransient<ITicketTypeService, TicketTypeService>();
 
             // Database services
             builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();

@@ -16,5 +16,17 @@ namespace ResellioBackend.EventManagementSystem.Mapper
                 End = model.End,
             };
         }
+
+        public static TicketTypeInfoDto TicketTypeToTicketTypeInfoDto(TicketType model)
+        {
+            return new TicketTypeInfoDto()
+            {
+                TypeId = model.TypeId,
+                Description = model.Description,
+                AvailableFrom = model.AvailableFrom,
+                AmountOfTickets = model.MaxCount,
+                BasePrice = model.BasePrice,
+            };
+        }
     }
 }

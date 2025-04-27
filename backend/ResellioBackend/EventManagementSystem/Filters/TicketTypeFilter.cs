@@ -10,7 +10,7 @@ namespace ResellioBackend.EventManagementSystem.Filtering
 
         public IQueryable<TicketType> ApplyFilters(IQueryable<TicketType> query)
         {
-            query.Where(tt  => tt.EventId == EventId);
+            query = query.Where(tt  => tt.EventId == EventId);
             return query;
         }
     }

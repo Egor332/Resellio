@@ -26,8 +26,8 @@ namespace ResellioBackend.EventManagementSystem.Controllers
         }
 
         [Authorize(Policy = AuthorizationPolicies.OrganiserPolicy)]
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateEventAsync([FromBody] EventDto eventDto)
+        [HttpPost("create-event")]
+        public async Task<IActionResult> CreateEvent([FromBody] EventDto eventDto)
         {
             var organiserIdClaim = User.FindFirst(BearerTokenClaimsNames.Id);
             if (organiserIdClaim == null)

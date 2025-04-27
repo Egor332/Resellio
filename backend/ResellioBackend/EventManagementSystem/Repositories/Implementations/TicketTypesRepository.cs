@@ -21,5 +21,10 @@ namespace ResellioBackend.EventManagementSystem.Repositories.Implementations
             await _dbSet.AddAsync(ticketType);
             await _context.SaveChangesAsync();
         }
+
+        public IQueryable<TicketType> GetAllAsQueryable()
+        {
+            return _dbSet.OrderBy(tt => tt.BasePrice.Amount);
+        }
     }
 }
