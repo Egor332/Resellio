@@ -15,8 +15,6 @@ export const apiRequest = async (
   timeout?: number
 ): Promise<any> => {
   try {
-    console.log('Requesting:', endpoint.url, data) // TODO: Remove in production
-
     const token = endpoint.isAuthRequired
       ? localStorage.getItem('auth_token')
       : null

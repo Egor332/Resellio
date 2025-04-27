@@ -130,7 +130,6 @@ const authSlice = createSlice({
         state.isAuthenticated = true
 
         state.user = createEmptyUserByRole(action.payload.userRole)
-        console.log('User: ', state.user)
 
         state.token = action.payload.token
         localStorage.setItem('auth_token', action.payload.token)
