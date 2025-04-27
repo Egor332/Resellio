@@ -2,17 +2,23 @@ import {EventBaseDto} from "../../dtos/EventBaseDto.tsx";
 import {EventExtendedDto} from "../../dtos/EventExtendedDto.tsx";
 import React, {useState} from "react";
 import {EventCard} from "../EventCard/EventCard.tsx";
-import {Box, Grid, Pagination, Stack, TextField} from '@mui/material';
+import {Box, Checkbox, FormControlLabel, Grid, Pagination, Stack, TextField} from '@mui/material';
 
 const ITEMS_PER_PAGE = 3;
 
 export const EventList: React.FC<{ events: (EventBaseDto | EventExtendedDto)[] }> = ({events}) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    // future events are those which have not ended by now
+    const [showFutureOnly, setShowFutureOnly] = useState(false);
     
-    const filteredEvents = events.filter(event =>
-        event.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const now = new Date();
+    
+    const filteredEvents = events.filter(event => {
+            const matchesSearch = event.name.toLowerCase().includes(searchQuery.toLowerCase());
+            const isFutureEvent = new Date(event.end) > now;
+            return matchesSearch && (!showFutureOnly || isFutureEvent);
+    });
     
     const pageCount = Math.ceil(filteredEvents.length / ITEMS_PER_PAGE);
     const paginatedEvents = filteredEvents.slice(
@@ -28,6 +34,11 @@ export const EventList: React.FC<{ events: (EventBaseDto | EventExtendedDto)[] }
         setSearchQuery(e.target.value);
         setCurrentPage(1);
     };
+
+    const handleShowFutureOnlyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setShowFutureOnly(e.target.checked);
+        setCurrentPage(1);
+    };
     
     if (events.length === 0){
         return <p>No events available</p>
@@ -35,15 +46,27 @@ export const EventList: React.FC<{ events: (EventBaseDto | EventExtendedDto)[] }
 
     return (
         <Box display='flex' flexDirection='column' gap={4}>
-            {/* Search */}
-            <Box mb={2}>
+            {/* Search + Filter */}
+            <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} alignItems={{ sm: 'center' }} gap={2} mb={2}>
                 <TextField
                     label="Search events"
                     variant="outlined"
                     value={searchQuery}
                     onChange={handleSearchChange}
+                    fullWidth
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={showFutureOnly}
+                            onChange={handleShowFutureOnlyChange}
+                            color="primary"
+                        />
+                    }
+                    label="Hide past events"
                 />
             </Box>
+
 
             {/* Event Grid */}
             <Grid container spacing={3} justifyContent="center">
