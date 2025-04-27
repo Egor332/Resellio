@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace ResellioBackendTests.PagingTests
 {
-    public class PagingServiceTests
+    public class PaginationServiceTests
     {
         private readonly PaginationService _pagingService;
 
-        public PagingServiceTests()
+        public PaginationServiceTests()
         {
             _pagingService = new PaginationService();
         }
