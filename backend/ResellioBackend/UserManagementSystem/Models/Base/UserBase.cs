@@ -36,6 +36,8 @@ namespace ResellioBackend.UserManagementSystem.Models.Base
 
         public abstract List<Claim> GetClaims();
 
+        public abstract string GetRole();
+
         public virtual ResultBase ValidateAccount()
         {
             if (IsActive)
