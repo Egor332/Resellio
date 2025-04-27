@@ -4,7 +4,7 @@ import React, {useState} from "react";
 import {EventCard} from "../EventCard/EventCard.tsx";
 import {Box, Grid, Pagination, Stack, TextField} from '@mui/material';
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 3;
 
 export const EventList: React.FC<{ events: (EventBaseDto | EventExtendedDto)[] }> = ({events}) => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -40,16 +40,15 @@ export const EventList: React.FC<{ events: (EventBaseDto | EventExtendedDto)[] }
                 <TextField
                     label="Search events"
                     variant="outlined"
-                    fullWidth
                     value={searchQuery}
                     onChange={handleSearchChange}
                 />
             </Box>
 
             {/* Event Grid */}
-            <Grid container spacing={3}>
+            <Grid container spacing={3} justifyContent="center">
                 {paginatedEvents.map((event) => (
-                    <Grid item xs={12} sm={6} md={4} key={event.id}>
+                    <Grid item xs={12} sm={6} md={3} key={event.id}>
                         <EventCard event={event} />
                     </Grid>
                 ))}
