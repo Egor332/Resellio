@@ -47,6 +47,7 @@ namespace ResellioBackend.UserManagementSystem.Services.Implementations
 
             var token = GetSessionToken(user);
             result.Token = token;
+            result.UserRole = user.GetRole();
 
             return result;
         }

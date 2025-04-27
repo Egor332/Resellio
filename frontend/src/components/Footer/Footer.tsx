@@ -1,12 +1,21 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
+import { Box, Container, Typography } from '@mui/material'
 
-function Footer() {
+interface FooterProps {
+  backgroundColor: string
+}
+
+function Footer({ backgroundColor }: FooterProps) {
   return (
-    <footer className="bg-dark text-white text-center py-3">
-      <div className="container">
-        <p className="mb-0">© 2025 Resellio. All rights reserved.</p>
-      </div>
-    </footer>
+    <Box
+      component="footer"
+      sx={{ py: 2, textAlign: 'center', bgcolor: backgroundColor }}
+    >
+      <Container>
+        <Typography variant="body2" color="white">
+          © 2025 Resellio. All rights reserved.
+        </Typography>
+      </Container>
+    </Box>
   )
 }
 

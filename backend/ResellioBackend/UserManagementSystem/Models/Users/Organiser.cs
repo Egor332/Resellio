@@ -51,5 +51,10 @@ namespace ResellioBackend.UserManagementSystem.Models.Users
 
             return claims;
         }
+
+        public override string GetRole()
+        {
+            return AuthorizationPolicies.OrganiserPolicy;
+        }
     }
 }
