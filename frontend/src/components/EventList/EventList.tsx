@@ -45,7 +45,7 @@ export const EventList: React.FC<{ events: (EventBaseDto | EventExtendedDto)[] }
     }
 
     return (
-        <Box display='flex' flexDirection='column' gap={4}>
+        <Box display='flex' alignItems="center" flexDirection='column' gap={4}>
             {/* Search + Filter */}
             <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} alignItems={{ sm: 'center' }} gap={2} mb={2}>
                 <TextField
@@ -53,7 +53,6 @@ export const EventList: React.FC<{ events: (EventBaseDto | EventExtendedDto)[] }
                     variant="outlined"
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    fullWidth
                 />
                 <FormControlLabel
                     control={
