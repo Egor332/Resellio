@@ -55,7 +55,7 @@ namespace ResellioBackend.EventManagementSystem.Controllers
             var paginationResponse = new PaginationResult<EventInfoDto>();
             try
             {
-                paginationResponse = await _eventService.GetFiltratedEventsWithPagingAsync(parameters.Filter, parameters.Pagination.Page, parameters.Pagination.PageSize);
+                paginationResponse = await _eventService.GetEventsAsync(parameters.Filter, parameters.Pagination.Page, parameters.Pagination.PageSize);
             }
             catch (ArgumentOutOfRangeException ex)
             {

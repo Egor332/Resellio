@@ -16,7 +16,7 @@ namespace ResellioBackend.EventManagementSystem.Filtering
         {
             if ((EventIds != null) && (EventIds.Count > 0))
             {
-                query = query.Where(e => EventIds.Contains(e.OrganiserId));
+                query = query.Where(e => EventIds.Contains(e.EventId));
             }
 
             if ((OrganiserIds != null) && (OrganiserIds.Count > 0))
