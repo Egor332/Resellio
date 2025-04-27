@@ -1,28 +1,23 @@
 import React from 'react';
 import { Card, CardContent, Typography, Box, Button } from '@mui/material';
-import { useSelector } from 'react-redux';
 import {EventBaseDto} from "../../dtos/EventBaseDto.tsx";
 import {EventExtendedDto} from "../../dtos/EventExtendedDto.tsx";
+import {useSelector} from "react-redux";
 
-const selectCurrentOrganiserName = (state: any): string | null => {
-    return state.auth.user?.role === 'Organiser' ? state.auth.user.organiserName : null
-}
+const selectCurrentUserRole = (state: any): string | null => {
+    return state.auth.user?.role ?? null;
+};
 
 export const EventCard: React.FC<{ event: EventBaseDto | EventExtendedDto }> = ({event}) => {
-    const currentOrganiserName = useSelector(selectCurrentOrganiserName);
-    const isMyEvent = currentOrganiserName && event.organiserName === currentOrganiserName;
-
+    const role = useSelector(selectCurrentUserRole);
+    const isOrganiser = role === 'Organiser';
+    
     return (
         <Card variant="outlined" sx={{ mb: 2 }}>
             <CardContent>
                 {/* Name */}
                 <Box display="flex" justifyContent="space-between" alignItems="center">
-                    <Typography variant="h6">{event.name}</Typography>
-                    {isMyEvent && (
-                        <Typography variant="caption" color="primary">
-                            Your Event:
-                        </Typography>
-                    )}
+                    <Typography variant="h6" align="center">{event.name}</Typography>
                 </Box>
 
                 {/* Dates */}
@@ -43,7 +38,7 @@ export const EventCard: React.FC<{ event: EventBaseDto | EventExtendedDto }> = (
                 </Typography>
 
                 {/* Tickets balance – display if got the extended event version */}
-                {('ticketsSold' in event) && (
+                {('ticketsSold' in event && 'ticketsTotal' in event) && (
                     <Typography variant="body2" mt={1}>
                         Sold: {event.ticketsSold} / {event.ticketsTotal}
                     </Typography>
@@ -51,7 +46,7 @@ export const EventCard: React.FC<{ event: EventBaseDto | EventExtendedDto }> = (
 
                 {/* Button */}
                 <Box mt={2}>
-                    {isMyEvent ? (
+                    {isOrganiser ? (
                         <Button variant="outlined" color="primary">
                             Edit event
                         </Button>
