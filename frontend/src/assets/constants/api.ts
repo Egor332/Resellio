@@ -1,3 +1,5 @@
+import { getEnvVariable } from '../../../vite.config'
+
 export interface TApiEndpoint {
   url: string
   method: 'GET' | 'POST' | 'PUT' | 'DELETE'
@@ -34,7 +36,7 @@ export const apiEndpoints: TApiEndpoints = {
   },
 }
 
-const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:80'
+const apiUrl = getEnvVariable(import.meta.env, 'VITE_API_URL')
 
 export const getApiEndpoint = (endpoint: TApiEndpoint): TApiEndpoint => {
   // Use relative paths in development to leverage the proxy
