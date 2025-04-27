@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace ResellioBackend.Common.Paging
 {
@@ -22,9 +23,18 @@ namespace ResellioBackend.Common.Paging
             {
                 throw new ArgumentOutOfRangeException($"Page size number must be higher than 0, got {pageSize}");
             }
-
-            var totalAmount = await query.CountAsync();
-            var items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            int totalAmount;
+            List<T> items;
+            if (query.Provider is IAsyncQueryProvider)
+            {
+                totalAmount = await query.CountAsync();
+                items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            }
+            else
+            {
+                totalAmount = query.Count();
+                items = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            }
 
             return new PaginationResult<T>
             {
