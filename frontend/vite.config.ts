@@ -1,13 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
-
-export function getEnvVariable(env: Record<string, string>, key: string): string {
-  const value = env[key];
-  if (!value) {
-    throw new Error(`Environment variable "${key}" is required but not defined.`);
-  }
-  return value;
-}
+import getEnvVariable from './src/utils/envUtils'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {

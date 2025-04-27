@@ -1,7 +1,7 @@
 import { TApiEndpoint } from '../assets/constants/api'
-import { getEnvVariable } from '../../vite.config'
+import getEnvVariable from '../utils/envUtils'
 
-const DEFAULT_TIMEOUT = parseInt(getEnvVariable(import.meta.env, 'VITE_HTTP_TIMEOUT'))
+const DEFAULT_TIMEOUT = parseInt(getEnvVariable(import.meta.env, 'VITE_DEFAULT_HTTP_TIMEOUT'))
 
 /**
  * A generic HTTP client function to make API requests.

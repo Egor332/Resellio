@@ -1,4 +1,4 @@
-import { getEnvVariable } from '../../../vite.config'
+import getEnvVariable from '../../utils/envUtils'
 
 export interface TApiEndpoint {
   url: string
