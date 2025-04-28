@@ -26,7 +26,7 @@ namespace ResellioBackend.EventManagementSystem.Controllers
         }
 
         [Authorize(Policy = AuthorizationPolicies.OrganiserPolicy)]
-        [HttpPost("create-event")]
+        [HttpPost("event")]
         public async Task<IActionResult> CreateEvent([FromBody] EventDto eventDto)
         {
             var organiserIdClaim = User.FindFirst(BearerTokenClaimsNames.Id);
@@ -49,7 +49,7 @@ namespace ResellioBackend.EventManagementSystem.Controllers
             }
         }
 
-        [HttpGet("get-events")]
+        [HttpGet("events")]
         public async Task<IActionResult> GetEvents([FromQuery]GetEventRequestParameters parameters)
         {
             var paginationResponse = new PaginationResult<EventInfoDto>();

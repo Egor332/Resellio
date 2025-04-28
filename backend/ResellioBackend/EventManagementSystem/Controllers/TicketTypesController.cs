@@ -18,7 +18,7 @@ namespace ResellioBackend.EventManagementSystem.Controllers
             _ticketTypeService = ticketTypeService;
         }
 
-        [HttpGet("get-ticket-types-of-event")]
+        [HttpGet("ticket-types-of-event")]
         public async Task<IActionResult> GetTicketTypesOfEvent([FromQuery] GetTicketTypesOfEventRequestParameters parameters)
         {
             var paginationResponse = new PaginationResult<TicketTypeInfoDto>();

@@ -31,7 +31,7 @@ namespace ResellioBackend.EventManagementSystem.Filtering
 
             if (EndsBefore != null)
             {
-                query = query.Where(e => e.End >= EndsBefore);
+                query = query.Where(e => e.End <= EndsBefore);
             }
 
             if (!string.IsNullOrEmpty(NamePart))

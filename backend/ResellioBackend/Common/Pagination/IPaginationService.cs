@@ -2,6 +2,6 @@
 {
     public interface IPaginationService
     {
-        public Task<PaginationResult<T>> ApplyPagingAsync<T>(IQueryable<T> query, int page, int pageSize);
+        public Task<PaginationResult<T>> ApplyPaginationAsync<T>(IQueryable<T> query, int page, int pageSize);
     }
 }

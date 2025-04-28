@@ -32,7 +32,7 @@ namespace ResellioBackendTests.PagingTests
 
             // Act & Assert
             await Assert.ThrowsAsync<InvalidOperationException>(() =>
-                _pagingService.ApplyPagingAsync(data, 1, 5));
+                _pagingService.ApplyPaginationAsync(data, 1, 5));
         }
 
         private async Task<AppDbContext> CreateDbContextWithDataAsync(int count)
@@ -58,7 +58,7 @@ namespace ResellioBackendTests.PagingTests
             var context = await CreateDbContextWithDataAsync(10);
             var query = context.TestEntities.OrderBy(e => e.Id);
 
-            var result = await _pagingService.ApplyPagingAsync(query, page: 2, pageSize: 3);
+            var result = await _pagingService.ApplyPaginationAsync(query, page: 2, pageSize: 3);
 
             Assert.Equal(10, result.TotalAmount);
             Assert.Equal(2, result.PageNumber);
@@ -74,7 +74,7 @@ namespace ResellioBackendTests.PagingTests
             var query = context.TestEntities.OrderBy(e => e.Id);
 
             // Act
-            var result = await _pagingService.ApplyPagingAsync(query, page: 3, pageSize: 5);
+            var result = await _pagingService.ApplyPaginationAsync(query, page: 3, pageSize: 5);
 
             // Assert
             Assert.Equal(10, result.TotalAmount);

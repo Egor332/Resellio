@@ -42,7 +42,7 @@ namespace ResellioBackendTests.EventManagementSystemTests.ServicesTests
                 TotalAmount = 2
             };
 
-            _mockPaginationService.Setup(p => p.ApplyPagingAsync<TestModel>(It.IsAny<IQueryable<TestModel>>(), 1, 10))
+            _mockPaginationService.Setup(p => p.ApplyPaginationAsync<TestModel>(It.IsAny<IQueryable<TestModel>>(), 1, 10))
                 .ReturnsAsync(paginatedModels);
 
             Func<TestModel, TestDto> mapper = model => new TestDto { Id = model.Id, Name = model.Name };
@@ -67,7 +67,7 @@ namespace ResellioBackendTests.EventManagementSystemTests.ServicesTests
                 });
 
             filterMock.Verify(f => f.ApplyFilters(It.IsAny<IQueryable<TestModel>>()), Times.Once);
-            _mockPaginationService.Verify(p => p.ApplyPagingAsync<TestModel>(It.IsAny<IQueryable<TestModel>>(), 1, 10), Times.Once);
+            _mockPaginationService.Verify(p => p.ApplyPaginationAsync<TestModel>(It.IsAny<IQueryable<TestModel>>(), 1, 10), Times.Once);
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace ResellioBackendTests.EventManagementSystemTests.ServicesTests
             filterMock.Setup(f => f.ApplyFilters(It.IsAny<IQueryable<TestModel>>()))
                 .Returns(models);
 
-            _mockPaginationService.Setup(p => p.ApplyPagingAsync<TestModel>(It.IsAny<IQueryable<TestModel>>(), 100, 10))
+            _mockPaginationService.Setup(p => p.ApplyPaginationAsync<TestModel>(It.IsAny<IQueryable<TestModel>>(), 100, 10))
                 .ThrowsAsync(new ArgumentOutOfRangeException());
 
             Func<TestModel, TestDto> mapper = model => new TestDto { Id = model.Id, Name = model.Name };

@@ -1,5 +1,6 @@
 ﻿using ResellioBackend.EventManagementSystem.DTOs;
 using ResellioBackend.EventManagementSystem.Models;
+using ResellioBackend.EventManagementSystem.Models.Base;
 
 namespace ResellioBackend.EventManagementSystem.Mapper
 {
@@ -26,6 +27,20 @@ namespace ResellioBackend.EventManagementSystem.Mapper
                 AvailableFrom = model.AvailableFrom,
                 AmountOfTickets = model.MaxCount,
                 BasePrice = model.BasePrice,
+            };
+        }
+
+        public static TicketInfoDto TicketToTicketInfoDto(Ticket model)
+        {
+            return new TicketInfoDto()
+            {
+                Id = model.TicketId,
+                IsOnSale = (model.TicketState == Enums.TicketStates.Available) || (model.TicketState == Enums.TicketStates.Reserved),
+                CurrentPrice = model.GetPrice(),
+                EventName = model.TicketType.Event.Name,
+                EventDescription = model.TicketType.Event.Description,
+                TicketTypeDescription = model.TicketType.Description,
+                IsHoldByOrganiser = (model.HolderId == model.TicketType.Event.OrganiserId)
             };
         }
     }

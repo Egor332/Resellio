@@ -21,7 +21,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
         }
 
         [Authorize(Policy = AuthorizationPolicies.CustomerPolicy)]
-        [HttpPost("LockTicket")]
+        [HttpPost("lock-ticket")]
         public async Task<IActionResult> LockTicket([FromBody] TicketDto dto)
         {
             var userIdString = User.FindFirst(BearerTokenClaimsNames.Id);
@@ -42,7 +42,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
         }
 
         [Authorize(Policy = AuthorizationPolicies.CustomerPolicy)]
-        [HttpPost("UnlockTicket")]
+        [HttpPost("unlock-ticket")]
         public async Task<IActionResult> UnlockTicket([FromBody] TicketDto dto)
         {
             var userIdString = User.FindFirst(BearerTokenClaimsNames.Id);

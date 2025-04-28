@@ -24,7 +24,7 @@ namespace ResellioBackend.EventManagementSystem.Services.Implementations
             var paginatedModels = new PaginationResult<TModel>();
             try
             {
-                paginatedModels = await _pagingService.ApplyPagingAsync<TModel>(query, page, pageSize);
+                paginatedModels = await _pagingService.ApplyPaginationAsync<TModel>(query, page, pageSize);
             }
             catch (ArgumentOutOfRangeException)
             {

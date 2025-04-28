@@ -48,5 +48,25 @@ namespace ResellioBackend.EventManagementSystem.Repositories.Implementations
                 .ThenInclude(tt => tt.Event)
                 .FirstOrDefaultAsync(t => t.TicketId == ticketId);
         }
+
+        public IQueryable<Ticket> GetMyTicketsAsQueryableNoTracking(int userId)
+        {
+            return _dbSet
+                .AsNoTracking()
+                .Where(t => t.HolderId == userId)
+                .Include(t => t.TicketType)
+                .ThenInclude(tt => tt.Event)
+                .OrderBy(t => t.TicketId);
+        }
+
+        public IQueryable<Ticket> GetTicketsOfTypeNoTracking(int ticketTypeId)
+        {
+            return _dbSet
+                .AsNoTracking()
+                .Where(t => t.TicketTypeId == ticketTypeId)
+                .Include(t => t.TicketType)
+                .ThenInclude(tt => tt.Event)
+                .OrderBy(t => t.TicketId);
+        }
     }
 }
