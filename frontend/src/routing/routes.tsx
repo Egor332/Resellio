@@ -13,6 +13,7 @@ import CustomersCart from '../pages/CustomersCart/CustomersCart'
 import OrganisersHome from '../pages/OrganisersHome/OrganisersHome'
 import CustomersProfile from '../pages/CustomersProfile/CustomersProfile'
 import OrganisersProfile from '../pages/OrganisersProfile/OrganisersProfile'
+import OrganisersAddEvent from '../pages/OrganisersAddEvent/OrganisersAddEvent'
 
 export const routes: RouteObject[] = [
   {
@@ -81,6 +82,10 @@ export const routes: RouteObject[] = [
         path: Navigation.ORGANISERS_PROFILE,
         element: <OrganisersProfile />,
       },
+      {
+        path: Navigation.ORGANISERS_ADD_EVENT,
+        element: <OrganisersAddEvent />
+      }
     ],
   },
 
