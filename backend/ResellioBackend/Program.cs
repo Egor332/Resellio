@@ -12,8 +12,6 @@ using ResellioBackend.UserManagementSystem.Services.Abstractions;
 using ResellioBackend.UserManagementSystem.Services.Implementations;
 using ResellioBackend.UserManagementSystem.Statics;
 using StackExchange.Redis;
-using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using ResellioBackend.EventManagementSystem.Creators.Abstractions;
 using ResellioBackend.EventManagementSystem.Creators.Implementations;
@@ -29,6 +27,9 @@ using ResellioBackend.TicketPurchaseSystem.RedisServices.Implementations;
 using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.Services.Implementations;
 using Stripe;
+using ResellioBackend.Common.Paging;
+using ResellioBackend.EventManagementSystem.Services.Abstractions;
+using ResellioBackend.EventManagementSystem.Services.Implementations;
 
 namespace ResellioBackend
 {
@@ -145,6 +146,11 @@ namespace ResellioBackend
             builder.Services.AddTransient<ICheckoutEventProcessor, StripeCheckoutEventProcessor>();
             builder.Services.AddScoped<ICheckoutSessionManagerService, StripeCheckoutSessionManagerService>();
             builder.Services.AddScoped<IRefundService, StripeRefundService>();
+            builder.Services.AddTransient<IPaginationService, PaginationService>();
+            builder.Services.AddTransient<IGetRequestService, GetRequestService>();
+            builder.Services.AddTransient<IEventService, EventManagementSystem.Services.Implementations.EventService>();
+            builder.Services.AddTransient<ITicketTypeService, TicketTypeService>();
+            builder.Services.AddTransient<ITicketService, TicketService >();
 
             // Database services
             builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();
