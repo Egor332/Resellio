@@ -12,7 +12,7 @@ namespace ResellioBackend.EventManagementSystem.Services.Implementations
     public class TicketService : ITicketService
     {
         private readonly ITicketsRepository _ticketRepository;
-        private IGetRequestService _getRequestService;
+        private readonly IGetRequestService _getRequestService;
 
         public TicketService(ITicketsRepository ticketsRepository, IGetRequestService getRequestService)
         {
