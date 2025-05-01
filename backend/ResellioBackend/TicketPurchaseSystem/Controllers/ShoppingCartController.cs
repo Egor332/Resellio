@@ -13,11 +13,13 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
     {
         private readonly ITicketLockerService _ticketLockerService;
         private readonly ITicketUnlockerService _ticketUnlockerService;
+        private readonly IShoppingCartService _shoppingCartService;
 
-        public ShoppingCartController(ITicketLockerService ticketLockerService, ITicketUnlockerService ticketUnlockerService)
+        public ShoppingCartController(ITicketLockerService ticketLockerService, ITicketUnlockerService ticketUnlockerService, IShoppingCartService shoppingCartService)
         {
             _ticketLockerService = ticketLockerService;
             _ticketUnlockerService = ticketUnlockerService;
+            _shoppingCartService = shoppingCartService;
         }
 
         [Authorize(Policy = AuthorizationPolicies.CustomerPolicy)]
@@ -60,6 +62,20 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
             {
                 return BadRequest(result.Message);
             }
+        }
+
+        [Authorize(Policy = AuthorizationPolicies.CustomerPolicy)]
+        [HttpGet("cart-info")]
+        public async Task<IActionResult> CartInfo()
+        {
+            var userIdString = User.FindFirst(BearerTokenClaimsNames.Id);
+            if (userIdString == null)
+            {
+                return Unauthorized();
+            }
+            var userId = int.Parse(userIdString.Value);
+            var result = await _shoppingCartService.GetShoppingCartInfoAsync(userId);
+            return Ok(result);
         }
     }
 }

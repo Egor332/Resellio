@@ -151,6 +151,7 @@ namespace ResellioBackend
             builder.Services.AddTransient<IEventService, EventManagementSystem.Services.Implementations.EventService>();
             builder.Services.AddTransient<ITicketTypeService, TicketTypeService>();
             builder.Services.AddTransient<ITicketService, TicketService >();
+            builder.Services.AddTransient<IShoppingCartService, ShoppingCartService>();
 
             // Database services
             builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();
