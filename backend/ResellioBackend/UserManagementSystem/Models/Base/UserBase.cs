@@ -1,4 +1,5 @@
 ﻿using ResellioBackend.Results;
+using ResellioBackend.UserManagementSystem.DTOs.Base;
 using ResellioBackend.UserManagementSystem.Statics;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
@@ -72,6 +73,17 @@ namespace ResellioBackend.UserManagementSystem.Models.Base
             claims.Add(emailClaim);
             claims.Add(idClaim);
             return claims;
+        }
+
+        public virtual UserInfoDto GetMyInfo()
+        {
+            return new UserInfoDto()
+            {
+                Email = this.Email,
+                FirstName = this.FirstName,
+                LastName = this.LastName,
+                CreatedDate = this.CreatedDate,
+            };
         }
     }
 }
