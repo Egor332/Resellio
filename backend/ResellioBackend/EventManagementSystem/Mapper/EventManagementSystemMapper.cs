@@ -27,6 +27,7 @@ namespace ResellioBackend.EventManagementSystem.Mapper
                 AvailableFrom = model.AvailableFrom,
                 AmountOfTickets = model.MaxCount,
                 BasePrice = model.BasePrice,
+                EventId = model.EventId,
             };
         }
 
@@ -40,7 +41,9 @@ namespace ResellioBackend.EventManagementSystem.Mapper
                 EventName = model.TicketType.Event.Name,
                 EventDescription = model.TicketType.Event.Description,
                 TicketTypeDescription = model.TicketType.Description,
-                IsHoldByOrganiser = (model.HolderId == model.TicketType.Event.OrganiserId)
+                IsHoldByOrganiser = (model.HolderId == model.TicketType.Event.OrganiserId),
+                EventId = model.TicketType.TypeId,
+                TicketTypeId = model.TicketTypeId,
             };
         }
     }
