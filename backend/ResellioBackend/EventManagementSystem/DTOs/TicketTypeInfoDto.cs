@@ -9,5 +9,6 @@ namespace ResellioBackend.EventManagementSystem.DTOs
         public DateTime AvailableFrom { get; set; }
         public int AmountOfTickets { get; set; } // Not available tickets, but in general
         public Money BasePrice { get; set; }
+        public int EventId { get; set; }
     }
 }
