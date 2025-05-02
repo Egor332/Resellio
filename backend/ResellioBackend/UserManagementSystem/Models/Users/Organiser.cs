@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
 using ResellioBackend.Results;
+using ResellioBackend.UserManagementSystem.DTOs.Base;
 using ResellioBackend.UserManagementSystem.Models.Base;
 using ResellioBackend.UserManagementSystem.Statics;
 using System.ComponentModel.DataAnnotations;
@@ -55,6 +56,18 @@ namespace ResellioBackend.UserManagementSystem.Models.Users
         public override string GetRole()
         {
             return AuthorizationPolicies.OrganiserPolicy;
+        }
+
+        public override UserInfoDto GetMyInfo()
+        {
+            return new UserInfoDto()
+            {
+                Email = this.Email,
+                FirstName = this.FirstName,
+                LastName = this.LastName,
+                CreatedDate = this.CreatedDate,
+                OrganiserName = this.OrganiserName,
+            };
         }
     }
 }
