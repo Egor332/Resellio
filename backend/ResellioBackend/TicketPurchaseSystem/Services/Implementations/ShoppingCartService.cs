@@ -45,7 +45,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             {
                 IsCartExist = isExist,
                 ticketsInCart = ticketsInfo,
-                CartExpirationTime = DateTime.UtcNow + timeToExpiration,
+                CartExpirationTime = (timeToExpiration != null) ? DateTime.UtcNow + timeToExpiration : null,
             };
         }
     }
