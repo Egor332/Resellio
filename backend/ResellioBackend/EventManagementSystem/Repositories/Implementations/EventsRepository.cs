@@ -27,5 +27,10 @@ namespace ResellioBackend.EventManagementSystem.Repositories.Implementations
             _dbSet.Update(eventToUpdate);
             await _context.SaveChangesAsync();
         }
+
+        public IQueryable<Event> GetAllAsQueryable()
+        {
+            return _dbSet.OrderBy(e => e.EventId);
+        }
     }
 }
