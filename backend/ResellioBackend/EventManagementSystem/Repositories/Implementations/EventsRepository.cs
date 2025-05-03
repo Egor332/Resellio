@@ -30,7 +30,8 @@ namespace ResellioBackend.EventManagementSystem.Repositories.Implementations
 
         public IQueryable<Event> GetAllAsQueryable()
         {
-            return _dbSet.OrderBy(e => e.EventId);
+            return _dbSet.OrderBy(e => e.EventId)
+                .Include(e => e.Organiser);
         }
     }
 }
