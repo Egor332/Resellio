@@ -1,18 +1,15 @@
-import { Outlet } from "react-router-dom";
-import GuestHeader from "../../components/GuestHeader/GuestHeader";
-import Footer from "../../components/Footer/Footer";
-import styles from './GuestWrapperPage.module.css';
+import Footer from '../../components/Footer/Footer'
+import GuestHeader from '../../components/GuestHeader/GuestHeader'
+import BaseWrapperPage from '../../pages/BaseWrapperPage/BaseWrapperPage'
+import { ROLE_COLORS } from '../../theme/themeConstants'
 
-function GuestWrapperPage() {
+const GuestWrapperPage = () => {
   return (
-    <div className={styles['guest-wrapper']}>
-      <GuestHeader />
-      <div className={styles['content']}>
-        <Outlet />
-      </div>
-      <Footer />
-    </div>
-  );
-};
+    <BaseWrapperPage
+      Header={GuestHeader}
+      Footer={() => <Footer backgroundColor={ROLE_COLORS.GUEST.primary} />}
+    />
+  )
+}
 
-export default GuestWrapperPage;
+export default GuestWrapperPage

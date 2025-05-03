@@ -13,5 +13,7 @@ namespace ResellioBackend.EventManagementSystem.DTOs
         public DateTime End { get; set; }
 
         public List<TicketTypeDto> TicketTypeDtos { get; set; }
+
+        public IFormFile EventImage { get; set; }
     }
 }
