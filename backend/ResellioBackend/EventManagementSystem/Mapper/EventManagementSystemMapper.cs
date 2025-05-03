@@ -15,6 +15,7 @@ namespace ResellioBackend.EventManagementSystem.Mapper
                 Description = model.Description,
                 Start = model.Start,
                 End = model.End,
+                OrganiserId = model.OrganiserId,
             };
         }
 

@@ -7,7 +7,7 @@ namespace ResellioBackend.EventManagementSystem.Filtering
     {
         public List<int>? EventIds { get; set; }
         public List<int>? OrganiserIds { get; set; }
-
+        public string? OrganiserNamePart { get; set; }
         public DateTime? StartsAfter { get; set; }
         public DateTime? EndsBefore { get; set; }
         public string? NamePart { get; set; }
@@ -22,6 +22,11 @@ namespace ResellioBackend.EventManagementSystem.Filtering
             if ((OrganiserIds != null) && (OrganiserIds.Count > 0))
             {
                 query = query.Where(e => OrganiserIds.Contains(e.OrganiserId));
+            }
+
+            if (!string.IsNullOrEmpty(OrganiserNamePart))
+            {
+                query = query.Where(e => e.Organiser.OrganiserName.Contains(OrganiserNamePart));
             }
 
             if (StartsAfter != null)
