@@ -10,10 +10,10 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
 {
     public class ShoppingCartService : IShoppingCartService
     {
-        private readonly ICartRedisRepository _cartRepository;
+        private readonly ICartCacheRepository _cartRepository;
         private readonly ITicketsRepository _ticketsRepository;
 
-        public ShoppingCartService(ICartRedisRepository cartRedisRepository, ITicketsRepository ticketsRepository)
+        public ShoppingCartService(ICartCacheRepository cartRedisRepository, ITicketsRepository ticketsRepository)
         {
             _cartRepository = cartRedisRepository;
             _ticketsRepository = ticketsRepository;

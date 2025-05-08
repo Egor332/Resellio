@@ -11,14 +11,14 @@ namespace ResellioBackendTests.ShoppingCartManagementSystemTests.RedisServicesTe
 {
     public class RedisServiceTests
     {
-        private readonly Mock<ITicketRedisRepository> _mockTicketRepository;
-        private readonly Mock<ICartRedisRepository> _mockCartRepository;
+        private readonly Mock<ITicketCacheRepository> _mockTicketRepository;
+        private readonly Mock<ICartCacheRepository> _mockCartRepository;
         private readonly RedisService _redisService;
 
         public RedisServiceTests()
         {
-            _mockTicketRepository = new Mock<ITicketRedisRepository>();
-            _mockCartRepository = new Mock<ICartRedisRepository>();
+            _mockTicketRepository = new Mock<ITicketCacheRepository>();
+            _mockCartRepository = new Mock<ICartCacheRepository>();
             _redisService = new RedisService(_mockTicketRepository.Object, _mockCartRepository.Object);
         }
 

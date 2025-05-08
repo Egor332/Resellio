@@ -15,13 +15,13 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
 {
     public class StripePurchaseItemsCreatorServiceTests
     {
-        private readonly Mock<ICartRedisRepository> _mockCartRedisRepo;
+        private readonly Mock<ICartCacheRepository> _mockCartRedisRepo;
         private readonly Mock<ITicketsRepository> _mockTicketsRepo;
         private readonly StripePurchaseItemsCreatorService _service;
 
         public StripePurchaseItemsCreatorServiceTests()
         {
-            _mockCartRedisRepo = new Mock<ICartRedisRepository>();
+            _mockCartRedisRepo = new Mock<ICartCacheRepository>();
             _mockTicketsRepo = new Mock<ITicketsRepository>();
             _service = new StripePurchaseItemsCreatorService(_mockCartRedisRepo.Object, _mockTicketsRepo.Object);
         }

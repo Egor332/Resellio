@@ -56,18 +56,15 @@ namespace ResellioBackend
             builder.Services.AddHttpContextAccessor();
             // builder.Services.AddTransient<LinkGenerator>();
 
-            // Kafka
+            // Message broker
             builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
 
-            // Redis
+            // Cache
             builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
             {
                 var redisConnectionString = configuration["Redis:ConnectionString"];
                 return ConnectionMultiplexer.Connect(redisConnectionString);
-            });
-            builder.Services.AddScoped<ICartRedisRepository, CartRedisRepository>();
-            builder.Services.AddScoped<ITicketRedisRepository, TicketRedisRepository>();
-            builder.Services.AddScoped<IRedisService, RedisService>();
+            });            
 
             // Authentication and Authorization
             builder.Services.AddAuthentication(options =>
@@ -163,8 +160,12 @@ namespace ResellioBackend
             builder.Services.AddScoped<IEventsRepository, EventsRepository>();
             builder.Services.AddScoped<ITicketTypesRepository, TicketTypesRepository>();
             builder.Services.AddScoped<ITicketsRepository, TicketsRepository>();
-            
-            
+            builder.Services.AddScoped<ICartCacheRepository, CartRedisRepository>();
+            builder.Services.AddScoped<ITicketCacheRepository, TicketRedisRepository>();
+            builder.Services.AddScoped<IRedisService, RedisService>();
+            builder.Services.AddScoped<IStateCacheRepository, StateRedisRepository>();
+
+
             // Factory
             builder.Services.AddTransient<IUserFactory, UserFactory>();
 

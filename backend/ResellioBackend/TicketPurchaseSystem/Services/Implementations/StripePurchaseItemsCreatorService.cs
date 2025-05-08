@@ -13,9 +13,9 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
     public class StripePurchaseItemsCreatorService : IPurchaseItemCreatorService
     {
         private readonly ITicketsRepository _ticketsRepository;
-        private readonly ICartRedisRepository _cartRedisRepository;
+        private readonly ICartCacheRepository _cartRedisRepository;
 
-        public StripePurchaseItemsCreatorService(ICartRedisRepository cartRedisRepository, ITicketsRepository ticketsRepository)
+        public StripePurchaseItemsCreatorService(ICartCacheRepository cartRedisRepository, ITicketsRepository ticketsRepository)
         {
             _cartRedisRepository = cartRedisRepository;
             _ticketsRepository = ticketsRepository;
