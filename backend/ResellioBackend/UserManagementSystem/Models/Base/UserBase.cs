@@ -35,6 +35,8 @@ namespace ResellioBackend.UserManagementSystem.Models.Base
         [Required]
         public bool IsActive { get; set; }
 
+        public string? ConnectedSellingAccount {  get; set; }
+
         public abstract List<Claim> GetClaims();
 
         public abstract string GetRole();
@@ -83,6 +85,7 @@ namespace ResellioBackend.UserManagementSystem.Models.Base
                 FirstName = this.FirstName,
                 LastName = this.LastName,
                 CreatedDate = this.CreatedDate,
+                ConfirmedSeller = !(this.ConnectedSellingAccount == null)
             };
         }
     }
