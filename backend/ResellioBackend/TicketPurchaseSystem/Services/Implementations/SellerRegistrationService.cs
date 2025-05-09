@@ -17,10 +17,8 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             _clientId = configuration["Stripe:ClientId"];
         }
 
-        public async Task<string> StartRegistrationAsync(int userId, string hostInfo)
+        public async Task<string> StartRegistrationAsync(int userId, string redirectUri)
         {
-            var redirectUri = hostInfo + "api/SellerRegistration/oauth-callback";
-
             var state = await _stateService.CreateAndStoreStateAsync(userId);
 
             var stripeUrl = $"https://connect.stripe.com/oauth/authorize" +

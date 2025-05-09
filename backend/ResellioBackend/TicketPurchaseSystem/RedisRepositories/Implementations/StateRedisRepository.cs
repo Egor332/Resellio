@@ -15,7 +15,7 @@ namespace ResellioBackend.TicketPurchaseSystem.RedisRepositories.Implementations
 
         public async Task AddStateAsync(string state, int userId)
         {
-            await _redisDb.SetAddAsync(state, userId.ToString());
+            await _redisDb.StringSetAsync(state, userId.ToString(), TimeSpan.FromMinutes(10));
         }
 
         public async Task RemoveStateAsync(string state)
@@ -23,10 +23,10 @@ namespace ResellioBackend.TicketPurchaseSystem.RedisRepositories.Implementations
             await _redisDb.KeyDeleteAsync(state);
         }
 
-        public async Task<IEnumerable<int>> GetUserIdAsync(string state)
+        public async Task<string?> GetUserIdAsync(string state)
         {
-            var userId = await _redisDb.SetMembersAsync(state);
-            return Array.ConvertAll(userId, id => int.Parse((string)id));
+            return await _redisDb.StringGetAsync(state);
+                   
         }
     }
 }

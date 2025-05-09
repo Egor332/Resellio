@@ -26,13 +26,21 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
 
         public async Task<int?> ValidateStateAsync(string state)
         {
-            var userIds = await _stateCacheRepository.GetUserIdAsync(state);
-            if (userIds.Count() != 1)
+            var userIdStr = await _stateCacheRepository.GetUserIdAsync(state);
+            if (string.IsNullOrEmpty(userIdStr))
             {
                 return null;
             }
-            var userId = userIds.First();
-            return userId;
+            int userId;
+
+            if (int.TryParse(userIdStr, out userId))
+            {
+                return userId;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

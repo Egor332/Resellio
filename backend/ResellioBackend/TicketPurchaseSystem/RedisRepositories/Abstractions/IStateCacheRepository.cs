@@ -6,6 +6,6 @@
 
         public Task RemoveStateAsync(string state);
 
-        public Task<IEnumerable<int>> GetUserIdAsync(string state);
+        public Task<string?> GetUserIdAsync(string state);
     }
 }
