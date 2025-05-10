@@ -48,8 +48,8 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
                     {
                         CurrencyCode = "USD",
                         Amount = 10,
-                    }
-                   
+                    },
+                    HolderId = 1,                   
                 }; 
                 _mockTicketsRepository.Setup(repo => repo.GetTicketWithAllDependenciesByIdAsync(ticketId))
                                       .ReturnsAsync(ticket);

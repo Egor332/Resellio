@@ -28,7 +28,7 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
             int expectedUserId = 123;
             _mockStateCacheRepository
                 .Setup(repo => repo.GetUserIdAsync(state))
-                .ReturnsAsync(new List<int> { expectedUserId });
+                .ReturnsAsync(expectedUserId.ToString());
 
             // Act
             var result = await _service.ValidateStateAsync(state);
@@ -44,7 +44,7 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
             string state = "empty-state";
             _mockStateCacheRepository
                 .Setup(repo => repo.GetUserIdAsync(state))
-                .ReturnsAsync(new List<int>());
+                .ReturnsAsync("");
 
             // Act
             var result = await _service.ValidateStateAsync(state);
