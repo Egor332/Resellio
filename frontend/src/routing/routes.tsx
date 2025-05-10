@@ -84,8 +84,8 @@ export const routes: RouteObject[] = [
       },
       {
         path: Navigation.ORGANISERS_ADD_EVENT,
-        element: <OrganisersAddEvent />
-      }
+        element: <OrganisersAddEvent />,
+      },
     ],
   },
 
