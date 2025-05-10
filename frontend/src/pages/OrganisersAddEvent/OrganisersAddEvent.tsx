@@ -24,18 +24,17 @@ function OrganisersAddEvent() {
       formData.append('Start', new Date(eventData.start).toISOString())
       formData.append('End', new Date(eventData.end).toISOString())
 
-      eventData.ticketTypes.forEach((ticketType: TicketType) => {
-        const ticketTypeJson = JSON.stringify({
-          description: ticketType.description,
-          maxCount: ticketType.maxCount,
-          price: ticketType.price,
-          currency: ticketType.currency,
-          availableFrom: typeof ticketType.availableFrom === 'string'
-            ? new Date(ticketType.availableFrom).toISOString()
-            : ticketType.availableFrom.toISOString(),
-        })
-        formData.append('TicketTypeDtos', ticketTypeJson)
-      })
+      const ticketTypesArray = eventData.ticketTypes.map(ticketType => ({
+        description: ticketType.description,
+        maxCount: ticketType.maxCount,
+        price: ticketType.price,
+        currency: ticketType.currency,
+        availableFrom: typeof ticketType.availableFrom === 'string'
+          ? new Date(ticketType.availableFrom).toISOString()
+          : ticketType.availableFrom.toISOString(),
+      }));
+      
+      formData.append('TicketTypeDtos', JSON.stringify(ticketTypesArray));
 
       if (eventData.image && eventData.image instanceof File) {
         formData.append('EventImage', eventData.image)
