@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import {
   Box,
   TextField,
   Button,
   Typography,
   Grid,
-  InputAdornment,
   Paper,
   Divider,
-  IconButton,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from '@mui/material'
-import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import { EventDto, TicketType } from '../../dtos/EventDto'
+import TicketTypeItem from './TicketTypeItem'
+
+const defaultTicketType: TicketType = {
+  description: '',
+  maxCount: 1,
+  price: 0,
+  currency: 'PLN',
+  availableFrom: new Date(),
+}
 
 const defaultEventData: EventDto = {
   name: '',
@@ -24,15 +26,7 @@ const defaultEventData: EventDto = {
   start: '',
   end: '',
   image: null,
-  ticketTypes: [
-    {
-      description: '',
-      maxCount: 1,
-      price: 0,
-      currency: 'PLN',
-      availableFrom: new Date(),
-    },
-  ],
+  ticketTypes: [],
 }
 
 interface EventFormProps {
@@ -47,61 +41,59 @@ const EventForm: React.FC<EventFormProps> = ({
   submitButtonText = 'Submit',
 }) => {
   const [formData, setFormData] = useState<EventDto>({...defaultEventData})
+  const [ticketTypes, setTicketTypes] = useState<TicketType[]>([{...defaultTicketType}])
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [imagePreview, setImagePreview] = useState<string | null>(
     typeof formData.image === 'string' ? formData.image : null
   )
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({...prev, [name]: value}))
-    if (errors[name]) setErrors({...errors, [name]: ''})
-  }
+    if (errors[name]) setErrors(prev => ({...prev, [name]: ''}))
+  }, [errors]);
 
-  const handleTicketTypeChange = (index: number, field: keyof TicketType, value: any) => {
-    const updatedTicketTypes = [...formData.ticketTypes]
-    updatedTicketTypes[index] = {
-      ...updatedTicketTypes[index],
-      [field]: field === 'maxCount' || field === 'price' ? Number(value) : value,
-    }
-    setFormData({...formData, ticketTypes: updatedTicketTypes})
+  const handleTicketTypeChange = useCallback((index: number, field: keyof TicketType, value: any) => {
+    setTicketTypes(prevTypes => {
+      const updatedTicketTypes = [...prevTypes]
+      updatedTicketTypes[index] = {
+        ...updatedTicketTypes[index],
+        [field]: field === 'maxCount' || field === 'price' ? Number(value) : value,
+      }
+      return updatedTicketTypes
+    })
 
     const errorKey = `ticketTypes[${index}].${field}`
     if (errors[errorKey]) {
-      const newErrors = {...errors}
-      delete newErrors[errorKey]
-      setErrors(newErrors)
+      setErrors(prev => {
+        const newErrors = {...prev}
+        delete newErrors[errorKey]
+        return newErrors
+      })
     }
-  }
+  }, [errors]);
 
-  const addTicketType = () => {
-    setFormData({
-      ...formData,
-      ticketTypes: [
-        ...formData.ticketTypes,
-        {
-          description: '',
-          maxCount: 1,
-          price: 0,
-          currency: 'PLN',
-          availableFrom: new Date(),
-        },
-      ],
-    })
-  }
+  const addTicketType = useCallback(() => {
+    setTicketTypes(prev => [
+      ...prev,
+      {...defaultTicketType},
+    ])
+  }, []);
 
-  const removeTicketType = (index: number) => {
-    if (formData.ticketTypes.length > 1) {
-      const updatedTicketTypes = [...formData.ticketTypes]
+  const removeTicketType = useCallback((index: number) => {
+    setTicketTypes(prev => {
+      if (prev.length <= 1) return prev;
+      
+      const updatedTicketTypes = [...prev]
       updatedTicketTypes.splice(index, 1)
-      setFormData({...formData, ticketTypes: updatedTicketTypes})
-    }
-  }
+      return updatedTicketTypes
+    })
+  }, []);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
-      setFormData({...formData, image: file})
+      setFormData(prev => ({...prev, image: file}))
       
       const reader = new FileReader()
       reader.onload = () => setImagePreview(reader.result as string)
@@ -109,9 +101,9 @@ const EventForm: React.FC<EventFormProps> = ({
       
       if (errors.image) setErrors({...errors, image: ''})
     }
-  }
+  }, [errors]);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {}
 
     if (!formData.name.trim()) newErrors.name = 'Event name is required'
@@ -124,7 +116,7 @@ const EventForm: React.FC<EventFormProps> = ({
       newErrors.end = 'End date/time must be after start date/time'
     }
 
-    formData.ticketTypes.forEach((ticketType, index) => {
+    ticketTypes.forEach((ticketType, index) => {
       if (!ticketType.description.trim()) {
         newErrors[`ticketTypes[${index}].description`] = 'Description is required'
       }
@@ -138,11 +130,17 @@ const EventForm: React.FC<EventFormProps> = ({
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
-  }
+  }, [formData, ticketTypes]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (validateForm()) onSubmit(formData)
+    if (validateForm()) {
+      const completeEventData: EventDto = {
+        ...formData,
+        ticketTypes: ticketTypes
+      }
+      onSubmit(completeEventData)
+    }
   }
 
   return (
@@ -263,107 +261,17 @@ const EventForm: React.FC<EventFormProps> = ({
         </Box>
         <Divider sx={{ mb: 3 }} />
 
-        {formData.ticketTypes.map((ticketType, index) => (
-          <Grid container rowSpacing={1} key={index}>
-            <Grid size={12}>
-              <IconButton
-                size="small"
-                onClick={() => removeTicketType(index)}
-                disabled={formData.ticketTypes.length <= 1}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Grid>
-
-            <Grid size={12}>
-              <Paper 
-              elevation={1} 
-              sx={{ p: 2, mb: 2, position: 'relative' }}
-              >
-                <Grid container spacing={2}>
-                  <Grid size={12}>
-                    <TextField
-                      fullWidth
-                      label="Ticket Description"
-                      value={ticketType.description}
-                      onChange={(e) => handleTicketTypeChange(index, 'description', e.target.value)}
-                      error={!!errors[`ticketTypes[${index}].description`]}
-                      helperText={errors[`ticketTypes[${index}].description`]}
-                      variant="outlined"
-                    />
-                  </Grid>
-                  
-                  <Grid size={{ xs: 12, sm: 6}}>
-                    <TextField
-                      fullWidth
-                      label="Available Tickets"
-                      type="number"
-                      value={ticketType.maxCount}
-                      onChange={(e) => handleTicketTypeChange(index, 'maxCount', e.target.value)}
-                      error={!!errors[`ticketTypes[${index}].maxCount`]}
-                      helperText={errors[`ticketTypes[${index}].maxCount`]}
-                      slotProps={{
-                        input:{
-                          inputProps: { min: 1 }
-                        }
-                      }}
-                      variant="outlined"
-                    />
-                  </Grid>
-                  
-                  <Grid size={{ xs: 12, sm: 6}}>
-                    <TextField
-                      fullWidth
-                      label="Price"
-                      type="number"
-                      value={ticketType.price}
-                      onChange={(e) => handleTicketTypeChange(index, 'price', e.target.value)}
-                      error={!!errors[`ticketTypes[${index}].price`]}
-                      helperText={errors[`ticketTypes[${index}].price`]}
-                      slotProps={{
-                        input: {
-                          startAdornment: (
-                            <InputAdornment position="start">$</InputAdornment>
-                          ),
-                          inputProps: { min: 0, step: 0.01 }
-                        }
-                      }}
-                      variant="outlined"
-                    />
-                  </Grid>
-                  
-                  <Grid size={{ xs: 12, sm: 6}}>
-                    <FormControl fullWidth variant="outlined">
-                      <InputLabel id={`currency-label-${index}`}>Currency</InputLabel>
-                      <Select
-                        labelId={`currency-label-${index}`}
-                        value={ticketType.currency}
-                        onChange={(e) => handleTicketTypeChange(index, 'currency', e.target.value)}
-                        label="Currency"
-                      >
-                        <MenuItem value="PLN">PLN</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  
-                  <Grid size={{ xs: 12, sm: 6}}>
-                    <TextField
-                      fullWidth
-                      label="Available From"
-                      type="datetime-local"
-                      value={ticketType.availableFrom instanceof Date 
-                        ? ticketType.availableFrom.toISOString().slice(0, 16) 
-                        : ticketType.availableFrom}
-                      onChange={(e) => handleTicketTypeChange(index, 'availableFrom', e.target.value)}
-                      slotProps={{ inputLabel: { shrink: true } }}
-                      variant="outlined"
-                    />
-                  </Grid>
-                </Grid>
-              </Paper>
-            </Grid>
-          </Grid>
-        ))}
+        {/* {ticketTypes.map((ticketType, index) => (
+          <TicketTypeItem
+            key={index}
+            ticketType={ticketType}
+            index={index}
+            onChange={handleTicketTypeChange}
+            onRemove={removeTicketType}
+            canRemove={ticketTypes.length > 1}
+            errors={errors}
+          />
+        ))} */}
       </Paper>
 
       <Box sx={{ mt: 4, display: 'flex', justifyContent: 'flex-end' }}>

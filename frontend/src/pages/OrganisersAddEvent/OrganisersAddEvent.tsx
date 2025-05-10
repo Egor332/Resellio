@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { Box, Typography, Container, Paper } from '@mui/material'
+import { Typography, Container, Paper } from '@mui/material'
 import EventForm from '../../components/EventForm/EventForm'
 import useBanner from '../../hooks/useBanner'
 import { useNavigate } from 'react-router-dom'
 import { apiRequest } from '../../services/httpClient'
 import { API_ENDPOINTS } from '../../assets/constants/api'
-import { EventDto } from '../../dtos/EventDto'
+import { EventDto, TicketType } from '../../dtos/EventDto'
+import { Navigation } from '../../assets/constants/navigation'
 
 function OrganisersAddEvent() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -23,7 +24,7 @@ function OrganisersAddEvent() {
       formData.append('Start', new Date(eventData.start).toISOString())
       formData.append('End', new Date(eventData.end).toISOString())
 
-      eventData.ticketTypes.forEach((ticketType) => {
+      eventData.ticketTypes.forEach((ticketType: TicketType) => {
         const ticketTypeJson = JSON.stringify({
           description: ticketType.description,
           maxCount: ticketType.maxCount,
@@ -36,21 +37,18 @@ function OrganisersAddEvent() {
         formData.append('TicketTypeDtos', ticketTypeJson)
       })
 
-      // Add event image
       if (eventData.image && eventData.image instanceof File) {
         formData.append('EventImage', eventData.image)
       }
 
-      const response = await apiRequest(
+      await apiRequest(
         API_ENDPOINTS.CREATE_EVENT,
         formData,
         true // isFormData
       )
 
-      console.log('Event created:', response)
-
       banner.showSuccess('Event created successfully!')
-      navigate('/organiser/events')
+      navigate(Navigation.ORGANISERS)
     } catch (error) {
       console.error('Error creating event:', error)
       banner.showError('Failed to create event. Please try again.')
