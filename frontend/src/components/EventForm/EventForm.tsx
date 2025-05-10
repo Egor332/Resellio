@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 import {
   Box,
   TextField,
@@ -47,13 +47,13 @@ const EventForm: React.FC<EventFormProps> = ({
     typeof formData.image === 'string' ? formData.image : null
   )
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({...prev, [name]: value}))
     if (errors[name]) setErrors(prev => ({...prev, [name]: ''}))
-  }, [errors]);
+  };
 
-  const handleTicketTypeChange = useCallback((index: number, field: keyof TicketType, value: any) => {
+  const handleTicketTypeChange = (index: number, field: keyof TicketType, value: any) => {
     setTicketTypes(prevTypes => {
       const updatedTicketTypes = [...prevTypes]
       updatedTicketTypes[index] = {
@@ -71,16 +71,16 @@ const EventForm: React.FC<EventFormProps> = ({
         return newErrors
       })
     }
-  }, [errors]);
-
-  const addTicketType = useCallback(() => {
+  };
+  
+  const addTicketType = () => {
     setTicketTypes(prev => [
       ...prev,
       {...defaultTicketType},
     ])
-  }, []);
+  };
 
-  const removeTicketType = useCallback((index: number) => {
+  const removeTicketType = (index: number) => {
     setTicketTypes(prev => {
       if (prev.length <= 1) return prev;
       
@@ -88,9 +88,9 @@ const EventForm: React.FC<EventFormProps> = ({
       updatedTicketTypes.splice(index, 1)
       return updatedTicketTypes
     })
-  }, []);
+  };
 
-  const handleImageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
       setFormData(prev => ({...prev, image: file}))
@@ -101,9 +101,9 @@ const EventForm: React.FC<EventFormProps> = ({
       
       if (errors.image) setErrors({...errors, image: ''})
     }
-  }, [errors]);
+  };
 
-  const validateForm = useCallback((): boolean => {
+  const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {}
 
     if (!formData.name.trim()) newErrors.name = 'Event name is required'
@@ -130,7 +130,7 @@ const EventForm: React.FC<EventFormProps> = ({
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
-  }, [formData, ticketTypes]);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -261,7 +261,7 @@ const EventForm: React.FC<EventFormProps> = ({
         </Box>
         <Divider sx={{ mb: 3 }} />
 
-        {/* {ticketTypes.map((ticketType, index) => (
+        {ticketTypes.map((ticketType, index) => (
           <TicketTypeItem
             key={index}
             ticketType={ticketType}
@@ -271,7 +271,7 @@ const EventForm: React.FC<EventFormProps> = ({
             canRemove={ticketTypes.length > 1}
             errors={errors}
           />
-        ))} */}
+        ))}
       </Paper>
 
       <Box sx={{ mt: 4, display: 'flex', justifyContent: 'flex-end' }}>
