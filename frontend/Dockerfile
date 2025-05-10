@@ -20,5 +20,5 @@ EXPOSE 5173
 ENV VITE_API_URL=$VITE_API_URL
 ENV VITE_HOST=$VITE_HOST
 
-# Start the application with hot reloading
+# Start the application with hot reloading - removing the --watch flag
 CMD ["npm", "run", "dev", "--", "--host"]
