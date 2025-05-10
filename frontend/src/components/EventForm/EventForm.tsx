@@ -110,6 +110,7 @@ const EventForm: React.FC<EventFormProps> = ({
     if (!formData.description.trim()) newErrors.description = 'Description is required'
     if (!formData.start) newErrors.start = 'Start date/time is required'
     if (!formData.end) newErrors.end = 'End date/time is required'
+    if (!formData.image) newErrors.image = 'Event image is required'
 
     if (formData.start && formData.end && 
         new Date(formData.end) <= new Date(formData.start)) {
