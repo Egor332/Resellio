@@ -1,33 +1,63 @@
-import { useState } from 'react';
-import { Box, Typography, Container, Paper } from '@mui/material';
-import EventForm from '../../components/EventForm/EventForm';
-import { EventFormDto } from '../../dtos/EventFormDto';
-import useBanner from '../../hooks/useBanner';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react'
+import { Box, Typography, Container, Paper } from '@mui/material'
+import EventForm from '../../components/EventForm/EventForm'
+import useBanner from '../../hooks/useBanner'
+import { useNavigate } from 'react-router-dom'
+import { apiRequest } from '../../services/httpClient'
+import { API_ENDPOINTS } from '../../assets/constants/api'
+import { EventDto } from '../../dtos/EventDto'
 
 function OrganisersAddEvent() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const banner = useBanner();
-  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const banner = useBanner()
+  const navigate = useNavigate()
 
-  const handleSubmit = async (eventData: EventFormDto) => {
-    setIsSubmitting(true);
+  const handleSubmit = async (eventData: EventDto) => {
+    setIsSubmitting(true)
     try {
-      // This would be replaced with actual API call
-      console.log('Submitting event data:', eventData);
-      
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      banner.showSuccess('Event created successfully!');
-      navigate('/organiser/events'); // Navigate to events list
+      // multipart/form-data request
+      const formData = new FormData()
+
+      formData.append('Name', eventData.name)
+      formData.append('Description', eventData.description)
+      formData.append('Start', new Date(eventData.start).toISOString())
+      formData.append('End', new Date(eventData.end).toISOString())
+
+      eventData.ticketTypes.forEach((ticketType) => {
+        const ticketTypeJson = JSON.stringify({
+          description: ticketType.description,
+          maxCount: ticketType.maxCount,
+          price: ticketType.price,
+          currency: ticketType.currency,
+          availableFrom: typeof ticketType.availableFrom === 'string'
+            ? new Date(ticketType.availableFrom).toISOString()
+            : ticketType.availableFrom.toISOString(),
+        })
+        formData.append('TicketTypeDtos', ticketTypeJson)
+      })
+
+      // Add event image
+      if (eventData.image && eventData.image instanceof File) {
+        formData.append('EventImage', eventData.image)
+      }
+
+      const response = await apiRequest(
+        API_ENDPOINTS.CREATE_EVENT,
+        formData,
+        true // isFormData
+      )
+
+      console.log('Event created:', response)
+
+      banner.showSuccess('Event created successfully!')
+      navigate('/organiser/events')
     } catch (error) {
-      console.error('Error creating event:', error);
-      banner.showError('Failed to create event. Please try again.');
+      console.error('Error creating event:', error)
+      banner.showError('Failed to create event. Please try again.')
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <Container maxWidth="md">
@@ -38,15 +68,15 @@ function OrganisersAddEvent() {
         <Typography variant="body1" color="text.secondary" paragraph>
           Fill in the details below to create a new event.
         </Typography>
-        
-        <EventForm 
+
+        <EventForm
           onSubmit={handleSubmit}
           isSubmitting={isSubmitting}
           submitButtonText="Create Event"
         />
       </Paper>
     </Container>
-  );
+  )
 }
 
-export default OrganisersAddEvent;
+export default OrganisersAddEvent
