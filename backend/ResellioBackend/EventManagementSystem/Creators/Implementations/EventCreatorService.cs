@@ -47,7 +47,7 @@ namespace ResellioBackend.EventManagementSystem.Creators.Implementations
                     TicketTypes = new List<TicketType>()
                 };
 
-                foreach (TicketTypeDto ticketTypeDto in eventDto.TicketTypeDtos)
+                foreach (TicketTypeDto ticketTypeDto in eventDto.TicketTypeDtosList)
                 {
                     var result = _ticketTypeCreatorService.CreateTicketType(ticketTypeDto, newEvent);
                     if (result.Success)
