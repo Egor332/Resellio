@@ -88,7 +88,6 @@ const TicketTypeItem = memo(({
                     startAdornment: (
                       <InputAdornment position="start">$</InputAdornment>
                     ),
-                    inputProps: { min: 0, step: 0.01 },
                   },
                 }}
                 variant="outlined"
