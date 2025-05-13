@@ -88,5 +88,17 @@ namespace ResellioBackend.UserManagementSystem.Models.Base
                 ConfirmedSeller = !(this.ConnectedSellingAccount == null)
             };
         }
+
+        public bool ValidateAbilityToSale()
+        {
+            if (string.IsNullOrEmpty(this.ConnectedSellingAccount))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }

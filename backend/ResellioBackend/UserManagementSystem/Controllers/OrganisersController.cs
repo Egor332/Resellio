@@ -20,7 +20,6 @@ namespace ResellioBackend.UserManagementSystem.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterOrganiserDto registrationInfo)
         {
             var result = await _registrationService.RegisterUserAsync(registrationInfo);
-            // TODO if not microservice then we should send an email
             if (result.Success)
             {
                 return Ok(new { result.Id, result.Message });
