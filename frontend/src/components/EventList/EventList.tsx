@@ -25,7 +25,7 @@ export const EventList: React.FC<{ events: (EventDto)[] }> = ({events}) => {
         currentPage * ITEMS_PER_PAGE
     );
     
-    const handlePageChange = (_: any,  page: number) => {
+    const handlePageChange = (_: React.ChangeEvent<unknown>,  page: number) => {
       setCurrentPage(page);  
     };
     
@@ -69,7 +69,7 @@ export const EventList: React.FC<{ events: (EventDto)[] }> = ({events}) => {
             {/* Event Grid */}
             <Grid container spacing={3} justifyContent="center">
                 {paginatedEvents.map((event) => (
-                    <Grid item xs={12} sm={6} md={3} key={event.name}>
+                    <Grid size={{ xs: 12, sm: 6, md: 3 }} key={event.name}>
                         <EventCard event={event} />
                     </Grid>
                 ))}
