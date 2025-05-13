@@ -48,8 +48,8 @@ export const EventCard: React.FC<{ event: EventDto }> = ({event}) => {
 
                 {Array.isArray(event.ticketTypes) && event.ticketTypes.length > 0 && (
                     <Box mt={1}>
-                        {event.ticketTypes.map((ticket, index) => (
-                            <Box key={index} mb={0.5}>
+                        {event.ticketTypes.map((ticket) => (
+                            <Box key={ticket.id} mb={0.5}>
                                 <Typography variant="body2" align="center">
                                     {ticket.description}: {ticket.price.toFixed(2)} {ticket.currency}
                                 </Typography>

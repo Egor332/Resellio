@@ -69,7 +69,7 @@ export const EventList: React.FC<{ events: (EventDto)[] }> = ({events}) => {
             {/* Event Grid */}
             <Grid container spacing={3} justifyContent="center">
                 {paginatedEvents.map((event) => (
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }} key={event.name}>
+                    <Grid size={{ xs: 12, sm: 6, md: 3 }} key={event.id}>
                         <EventCard event={event} />
                     </Grid>
                 ))}

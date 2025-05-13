@@ -1,4 +1,5 @@
 export interface TicketType {
+    id?: number;
     description: string;
     maxCount: number;
     price: number;
@@ -7,6 +8,7 @@ export interface TicketType {
 }
 
 export interface EventDto {
+    id?: number;
     name: string;
     description: string;
     start: Date | string;
