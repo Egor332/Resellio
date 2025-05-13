@@ -46,13 +46,33 @@ public class EventCreatorServiceTests
         // assure that AddAsync was never called on the repository during test execution
         _eventRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Event>()), Times.Never);
     }
-    
+
     [Fact]
-    public async Task CreateEventAsync_ValidEvent_ReturnsSuccessAndCreatesEvent()
+    public async Task CreateEventAsync_WhenOrganiserDoNotHaveConnectedSellerAccount_ReturnsFailureWithApproptriateStatusCode()
     {
         // Arrange
         int organiserId = 1;
-        var organiser = new Organiser();
+        _userRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(organiserId))
+            .ReturnsAsync(new Organiser());
+
+        var eventDto = new EventDto();
+
+        // Act
+        var result = await _eventCreatorService.CreateEventAsync(eventDto, organiserId);
+
+        // Assert
+        Assert.False(result.Success);
+        Assert.Equal(442, result.ErrorCode);
+        _eventRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Event>()), Times.Never);
+    }
+    
+    [Fact]
+    public async Task CreateEventAsync_ValidEventAndOrganiser_ReturnsSuccessAndCreatesEvent()
+    {
+        // Arrange
+        int organiserId = 1;
+        var organiser = new Organiser() { ConnectedSellingAccount = "1" };
         _userRepositoryMock
             .Setup(repo => repo.GetByIdAsync(organiserId))
             .ReturnsAsync(organiser);
