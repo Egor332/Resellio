@@ -2,6 +2,7 @@
 using Moq;
 using ResellioBackend.Results;
 using ResellioBackend.TicketPurchaseSystem.DatabaseServices.Abstractions;
+using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.Services.Implementations;
 using ResellioBackend.TransactionManager;
 using ResellioBackend.UserManagementSystem.Models.Users;
@@ -14,14 +15,16 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
     {
         private readonly Mock<ITicketStatusService> _mockTicketStatusService;
         private readonly Mock<IDatabaseTransactionManager> _mockTransactionManager;
+        private readonly Mock<ITicketUnlockerService> _mockUnlockerService;
         private readonly TicketSellerService _ticketSellerService;
 
         public TicketSellerServiceTests()
         {
             _mockTicketStatusService = new Mock<ITicketStatusService>();
             _mockTransactionManager = new Mock<IDatabaseTransactionManager>();
+            _mockUnlockerService = new Mock<ITicketUnlockerService>();
 
-            _ticketSellerService = new TicketSellerService(_mockTransactionManager.Object, _mockTicketStatusService.Object);
+            _ticketSellerService = new TicketSellerService(_mockTransactionManager.Object, _mockTicketStatusService.Object, _mockUnlockerService.Object);
         }
 
         [Fact]

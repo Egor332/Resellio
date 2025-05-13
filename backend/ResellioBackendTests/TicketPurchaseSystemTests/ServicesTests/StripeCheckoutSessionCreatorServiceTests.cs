@@ -43,12 +43,13 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
         {
             // Arrange
             var userId = 1;
+            int sellerId = 2;
             _mockPurchaseItemCreatorService
-                .Setup(s => s.CreatePurchaseItemListAsync(userId))
+                .Setup(s => s.CreatePurchaseItemListAsync(userId, sellerId))
                 .ReturnsAsync(new PurchaseItemCreationResult { Success = false, Message = "Line item error" });
 
             // Act
-            var result = await _checkoutSessionCreatorService.CreateCheckoutSessionAsync(userId);
+            var result = await _checkoutSessionCreatorService.CreateCheckoutSessionAsync(userId, sellerId);
 
             // Assert
             Assert.False(result.Success);
@@ -59,9 +60,9 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
         {
             // Arrange
             var userId = 1;
-
+            var sellerId = 2;
             _mockPurchaseItemCreatorService
-                .Setup(s => s.CreatePurchaseItemListAsync(userId))
+                .Setup(s => s.CreatePurchaseItemListAsync(userId, sellerId))
                 .ReturnsAsync(new PurchaseItemCreationResult
                 {
                     Success = true,
@@ -73,7 +74,7 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
                 .ReturnsAsync(new ResultBase { Success = false, Message = "Lock failed" });
 
             // Act
-            var result = await _checkoutSessionCreatorService.CreateCheckoutSessionAsync(userId);
+            var result = await _checkoutSessionCreatorService.CreateCheckoutSessionAsync(userId, sellerId);
 
             // Assert
             Assert.False(result.Success);

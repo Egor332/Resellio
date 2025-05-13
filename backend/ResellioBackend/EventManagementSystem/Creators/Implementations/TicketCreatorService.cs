@@ -3,7 +3,6 @@ using ResellioBackend.EventManagementSystem.Models;
 using ResellioBackend.EventManagementSystem.Models.Base;
 using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
 using ResellioBackend.Results;
-using ResellioBackend.UserManagementSystem.Models.Users;
 
 namespace ResellioBackend.EventManagementSystem.Creators.Implementations
 {

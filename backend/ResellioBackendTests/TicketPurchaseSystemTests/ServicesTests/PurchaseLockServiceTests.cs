@@ -19,7 +19,7 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
         private readonly Mock<ITicketsRepository> _mockTicketsRepository;
         private readonly Mock<IRedisService> _mockRedisService;
         private readonly Mock<IDatabaseTransactionManager> _mockTransactionManager;
-        private readonly Mock<ICartRedisRepository> _mockCartRedisRepository;
+        private readonly Mock<ICartCacheRepository> _mockCartRedisRepository;
         private readonly PurchaseLockService _purchaseLockService;
 
         public PurchaseLockServiceTests()
@@ -27,7 +27,7 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
             _mockTicketsRepository = new Mock<ITicketsRepository>();
             _mockRedisService = new Mock<IRedisService>();
             _mockTransactionManager = new Mock<IDatabaseTransactionManager>();
-            _mockCartRedisRepository = new Mock<ICartRedisRepository>();
+            _mockCartRedisRepository = new Mock<ICartCacheRepository>();
 
             var transactionMock = new Mock<IDbContextTransaction>();
             _mockTransactionManager.Setup(m => m.BeginTransactionAsync())

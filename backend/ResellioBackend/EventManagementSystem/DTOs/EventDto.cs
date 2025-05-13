@@ -5,8 +5,6 @@ namespace ResellioBackend.EventManagementSystem.DTOs
 {
     public class EventDto
     {
-        // no organiser here – we will get it from the JWT token
-
         public string Name { get; set; }
 
         public string Description { get; set; }

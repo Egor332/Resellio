@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResellioBackend;
 
@@ -11,9 +12,11 @@ using ResellioBackend;
 namespace ResellioBackend.Migrations
 {
     [DbContext(typeof(ResellioDbContext))]
-    partial class ResellioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250508141549_ConnectedSellerAccountAdded")]
+    partial class ConnectedSellerAccountAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,7 +31,7 @@ namespace ResellioBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("HolderId")
+                    b.Property<int?>("HolderId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("LastLock")
@@ -229,8 +232,7 @@ namespace ResellioBackend.Migrations
                     b.HasOne("ResellioBackend.UserManagementSystem.Models.Base.UserBase", "Holder")
                         .WithMany()
                         .HasForeignKey("HolderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ResellioBackend.UserManagementSystem.Models.Users.Customer", "PurchaseIntender")
                         .WithMany()
