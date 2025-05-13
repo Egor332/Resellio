@@ -1,7 +1,6 @@
 import React from 'react';
 import {Card, CardContent, Typography, Box, Button, CardMedia} from '@mui/material';
-import {EventBaseDto} from "../../dtos/EventBaseDto.tsx";
-import {EventExtendedDto} from "../../dtos/EventExtendedDto.tsx";
+import {EventDto} from "../../dtos/EventDto.ts";
 import {useSelector} from "react-redux";
 
 const selectCurrentUserRole = (state: any): string | null => {
@@ -11,7 +10,7 @@ const selectCurrentUserRole = (state: any): string | null => {
 // placeholder image
 const defaultImage = "https://via.placeholder.com/400x200?text=Event";
 
-export const EventCard: React.FC<{ event: EventBaseDto | EventExtendedDto }> = ({event}) => {
+export const EventCard: React.FC<{ event: EventDto }> = ({event}) => {
     const role = useSelector(selectCurrentUserRole);
     const isOrganiser = role === 'Organiser';
     
@@ -47,21 +46,26 @@ export const EventCard: React.FC<{ event: EventBaseDto | EventExtendedDto }> = (
                     {new Date(event.start).toLocaleString()} – {new Date(event.end).toLocaleString()}
                 </Typography>
 
-                {/* Organizator */}
-                {!isOrganiser && (
-                    <Typography variant="caption" display="block" mt={1} align="center" noWrap>
-                        Organizer: {event.organiserName}
-                    </Typography>
+                {Array.isArray(event.ticketTypes) && event.ticketTypes.length > 0 && (
+                    <Box mt={1}>
+                        {event.ticketTypes.map((ticket, index) => (
+                            <Box key={index} mb={0.5}>
+                                <Typography variant="body2" align="center">
+                                    {ticket.description}: {ticket.price.toFixed(2)} {ticket.currency}
+                                </Typography>
+                                <Typography variant="caption" color="textSecondary" align="center" display="block">
+                                    Available from: {new Date(ticket.availableFrom).toLocaleDateString()}
+                                </Typography>
+                                <Typography variant="caption" color="textSecondary" align="center" display="block">
+                                    Max: {ticket.maxCount} tickets
+                                </Typography>
+                            </Box>
+                        ))}
+                    </Box>
                 )}
 
-                {/* Bilety */}
-                {('ticketsSold' in event && 'ticketsTotal' in event) && (
-                    <Typography variant="body2" mt={1} align="center">
-                        Sold: {event.ticketsSold} / {event.ticketsTotal}
-                    </Typography>
-                )}
 
-                {/* Przycisk */}
+                        {/* Przycisk */}
                 <Box mt="auto" display="flex" justifyContent="center" pt={2}>
                     {isOrganiser ? (
                         <Button variant="outlined" color="primary" size="small">

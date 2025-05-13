@@ -1,12 +1,11 @@
-import {EventBaseDto} from "../../dtos/EventBaseDto.tsx";
-import {EventExtendedDto} from "../../dtos/EventExtendedDto.tsx";
+import {EventDto} from "../../dtos/EventDto.ts";
 import React, {useState} from "react";
 import {EventCard} from "../EventCard/EventCard.tsx";
 import {Box, Checkbox, FormControlLabel, Grid, Pagination, Stack, TextField} from '@mui/material';
 
 const ITEMS_PER_PAGE = 3;
 
-export const EventList: React.FC<{ events: (EventBaseDto | EventExtendedDto)[] }> = ({events}) => {
+export const EventList: React.FC<{ events: (EventDto)[] }> = ({events}) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     // future events are those which have not ended by now
@@ -70,7 +69,7 @@ export const EventList: React.FC<{ events: (EventBaseDto | EventExtendedDto)[] }
             {/* Event Grid */}
             <Grid container spacing={3} justifyContent="center">
                 {paginatedEvents.map((event) => (
-                    <Grid item xs={12} sm={6} md={3} key={event.id}>
+                    <Grid item xs={12} sm={6} md={3} key={event.name}>
                         <EventCard event={event} />
                     </Grid>
                 ))}
