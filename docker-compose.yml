@@ -8,6 +8,9 @@ services:
       VITE_HOST: 0.0.0.0
     ports: 
       - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - backend
 

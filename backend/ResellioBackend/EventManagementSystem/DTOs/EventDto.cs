@@ -1,3 +1,6 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 namespace ResellioBackend.EventManagementSystem.DTOs
 {
     public class EventDto
@@ -12,7 +15,15 @@ namespace ResellioBackend.EventManagementSystem.DTOs
 
         public DateTime End { get; set; }
 
-        public List<TicketTypeDto> TicketTypeDtos { get; set; }
+        public string TicketTypeDtos { get; set; }
+
+        [JsonIgnore]
+        public List<TicketTypeDto> TicketTypeDtosList => string.IsNullOrEmpty(TicketTypeDtos)
+            ? new List<TicketTypeDto>()
+            : JsonSerializer.Deserialize<List<TicketTypeDto>>(TicketTypeDtos, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            })!;
 
         public IFormFile EventImage { get; set; }
     }
