@@ -27,7 +27,7 @@ namespace ResellioBackend.EventManagementSystem.Services.Implementations
         {
             var ticket = await _ticketRepository.GetTicketByIdAsync(sellingData.TicketId);
             var user = await _userRepository.GetByIdAsync(userId);
-            if ((ticket == null) || (ticket.HolderId == userId) || (user == null)) 
+            if ((ticket == null) || (ticket.HolderId != userId) || (user == null)) 
             {
                 return new ResultBase()
                 {
@@ -69,7 +69,7 @@ namespace ResellioBackend.EventManagementSystem.Services.Implementations
 
             var ticket = await _ticketRepository.GetTicketByIdWithExclusiveRowLockAsync(ticketData.TicketId);
             var user = await _userRepository.GetByIdAsync(userId);
-            if ((ticket == null) || (ticket.HolderId == userId) || (user == null))
+            if ((ticket == null) || (ticket.HolderId != userId) || (user == null))
             {
                 return new ResultBase()
                 {
