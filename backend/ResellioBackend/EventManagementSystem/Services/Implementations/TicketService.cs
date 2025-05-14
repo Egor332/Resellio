@@ -5,6 +5,7 @@ using ResellioBackend.EventManagementSystem.Mapper;
 using ResellioBackend.EventManagementSystem.Models.Base;
 using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
 using ResellioBackend.EventManagementSystem.Services.Abstractions;
+using ResellioBackend.Results;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ResellioBackend.EventManagementSystem.Services.Implementations

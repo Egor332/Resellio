@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using ResellioBackend.EventManagementSystem.Enums;
 using ResellioBackend.UserManagementSystem.Models.Base;
@@ -52,6 +51,29 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
             {
                 return null;
             }
+        }
+
+        public bool PutTicketOnSele(decimal ammount, string currency)
+        {
+            var price = new Money();
+            if (!price.SetPrice(ammount, currency))
+            {
+                return false;
+            }
+
+            this.CurrentPrice = price;
+            LastLock = null;
+            PurchaseIntender = null;
+            PurchaseIntenderId = null;
+            TicketState = TicketStates.Available;
+
+            return true;
+        }
+
+        public void StopSellingTicket()
+        {
+            this.CurrentPrice = null;
+            TicketState = TicketStates.Sold;
         }
     }
 }
