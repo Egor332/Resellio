@@ -39,7 +39,7 @@ namespace ResellioBackend.EventManagementSystem.Services.Implementations
         {         
             var ticketsQuery = _ticketRepository.GetTicketsOfTypeNoTracking(ticketTypeId);
             ticketsQuery = ticketsQuery
-                .Where(t => (t.LastLock < DateTime.UtcNow) && 
+                .Where(t => ((t.LastLock == null) || (t.LastLock < DateTime.UtcNow)) && 
                             ((t.TicketState == Enums.TicketStates.Available) || (t.TicketState == Enums.TicketStates.Reserved)));
             try
             {
