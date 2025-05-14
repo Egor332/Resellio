@@ -1,6 +1,6 @@
 ﻿namespace ResellioBackend.EventManagementSystem.DTOs
 {
-    public class SellTicketDto
+    public class ResellDto
     {
         public Guid TicketId { get; set; }
         public decimal Price { get; set; }

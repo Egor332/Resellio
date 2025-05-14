@@ -5,7 +5,7 @@ namespace ResellioBackend.EventManagementSystem.Services.Abstractions
 {
     public interface ITicketSellingStateService
     {
-        public Task<ResultBase> PutTicketOnSaleAsync(SellTicketDto sellingData, int userId);
+        public Task<ResultBase> ResellTicketAsync(ResellDto sellingData, int userId);
         public Task<ResultBase> StopSellingTicket(StopSellingTicketDto ticketData, int userId);
     }
 }

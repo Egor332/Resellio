@@ -23,7 +23,7 @@ namespace ResellioBackend.EventManagementSystem.Services.Implementations
             _transactionManager = transactionManager;
         }
 
-        public async Task<ResultBase> PutTicketOnSaleAsync(SellTicketDto sellingData, int userId)
+        public async Task<ResultBase> ResellTicketAsync(ResellDto sellingData, int userId)
         {
             var ticket = await _ticketRepository.GetTicketByIdAsync(sellingData.TicketId);
             var user = await _userRepository.GetByIdAsync(userId);

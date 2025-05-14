@@ -38,12 +38,12 @@ namespace ResellioBackendTests.EventManagementSystemTests.ServicesTests
         }
 
         [Fact]
-        public async Task PutTicketOnSaleAsync_WhenAllValid_ShouldSucceed()
+        public async Task ResellTicketAsync_WhenAllValid_ShouldSucceed()
         {
             // Arrange
             var ticketId = Guid.NewGuid();
             var userId = 123;
-            var dto = new SellTicketDto { TicketId = ticketId, Price = 10, Currency = "PLN" };
+            var dto = new ResellDto { TicketId = ticketId, Price = 10, Currency = "PLN" };
 
             var user = new Customer()
             {
@@ -61,21 +61,21 @@ namespace ResellioBackendTests.EventManagementSystemTests.ServicesTests
             _mockUserRepo.Setup(r => r.GetByIdAsync(userId)).ReturnsAsync(user);
 
             // Act
-            var result = await _service.PutTicketOnSaleAsync(dto, userId);
+            var result = await _service.ResellTicketAsync(dto, userId);
 
             // Assert
             Assert.True(result.Success);
         }
 
         [Fact]
-        public async Task PutTicketOnSaleAsync_WhenTicketNotFound_ShouldFail()
+        public async Task ResellTicketAsync_WhenTicketNotFound_ShouldFail()
         {
             // Arrange
-            var dto = new SellTicketDto { TicketId = Guid.NewGuid() };
+            var dto = new ResellDto { TicketId = Guid.NewGuid() };
             _mockTicketRepo.Setup(r => r.GetTicketByIdAsync(dto.TicketId)).ReturnsAsync((Ticket)null);
 
             // Act
-            var result = await _service.PutTicketOnSaleAsync(dto, 123);
+            var result = await _service.ResellTicketAsync(dto, 123);
 
             // Assert
             Assert.False(result.Success);
@@ -83,10 +83,10 @@ namespace ResellioBackendTests.EventManagementSystemTests.ServicesTests
 
 
         [Fact]
-        public async Task PutTicketOnSaleAsync_WhenUserNotFound_ShouldFail()
+        public async Task ResellTicketAsync_WhenUserNotFound_ShouldFail()
         {
             // Arrange
-            var dto = new SellTicketDto { TicketId = Guid.NewGuid() };
+            var dto = new ResellDto { TicketId = Guid.NewGuid() };
             var userId = 123;
             var ticket = new Ticket { HolderId = userId };
 
@@ -94,17 +94,17 @@ namespace ResellioBackendTests.EventManagementSystemTests.ServicesTests
             _mockUserRepo.Setup(r => r.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((UserBase)null);
 
             // Act
-            var result = await _service.PutTicketOnSaleAsync(dto, userId);
+            var result = await _service.ResellTicketAsync(dto, userId);
 
             // Assert
             Assert.False(result.Success);
         }
 
         [Fact]
-        public async Task PutTicketOnSaleAsync_WhenUserNotHolder_ShouldFail()
+        public async Task ResellTicketAsync_WhenUserNotHolder_ShouldFail()
         {
             // Arrange
-            var dto = new SellTicketDto { TicketId = Guid.NewGuid() };
+            var dto = new ResellDto { TicketId = Guid.NewGuid() };
             var userId = 123;
             var ticket = new Ticket { HolderId = userId };
 
@@ -112,17 +112,17 @@ namespace ResellioBackendTests.EventManagementSystemTests.ServicesTests
             _mockUserRepo.Setup(r => r.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((UserBase)null);
 
             // Act
-            var result = await _service.PutTicketOnSaleAsync(dto, userId);
+            var result = await _service.ResellTicketAsync(dto, userId);
 
             // Assert
             Assert.False(result.Success);
         }
 
         [Fact]
-        public async Task PutTicketOnSaleAsync_WhenUserCannotSell_ShouldFail()
+        public async Task ResellTicketAsync_WhenUserCannotSell_ShouldFail()
         {
             // Arrange
-            var dto = new SellTicketDto { TicketId = Guid.NewGuid() };
+            var dto = new ResellDto { TicketId = Guid.NewGuid() };
             int userId = 123; 
             var ticket = new Ticket { HolderId = userId };            
 
@@ -135,17 +135,17 @@ namespace ResellioBackendTests.EventManagementSystemTests.ServicesTests
             _mockUserRepo.Setup(r => r.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(user);
 
             // Act
-            var result = await _service.PutTicketOnSaleAsync(dto, userId);
+            var result = await _service.ResellTicketAsync(dto, userId);
 
             // Assert
             Assert.False(result.Success);
         }
 
         [Fact]
-        public async Task PutTicketOnSaleAsync_WhenCurrencyInvalid_ShouldFail()
+        public async Task ResellTicketAsync_WhenCurrencyInvalid_ShouldFail()
         {
             // Arrange
-            var dto = new SellTicketDto { TicketId = Guid.NewGuid(), Currency = "INVALID" };
+            var dto = new ResellDto { TicketId = Guid.NewGuid(), Currency = "INVALID" };
             int userId = 123;
             
             var ticket = new Ticket() { HolderId = userId };
@@ -160,7 +160,7 @@ namespace ResellioBackendTests.EventManagementSystemTests.ServicesTests
             _mockUserRepo.Setup(r => r.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(user);
 
             // Act
-            var result = await _service.PutTicketOnSaleAsync(dto, userId);
+            var result = await _service.ResellTicketAsync(dto, userId);
 
             // Assert
             Assert.False(result.Success);
