@@ -45,7 +45,7 @@ namespace ResellioBackend.EventManagementSystem.Services.Implementations
                 };
             }
 
-            if (!ticket.PutTicketOnSele(sellingData.Price, sellingData.Currency))
+            if (!ticket.PutTicketOnSale(sellingData.Price, sellingData.Currency))
             {
                 return new ResultBase()
                 {

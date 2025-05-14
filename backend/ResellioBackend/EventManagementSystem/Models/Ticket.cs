@@ -53,10 +53,10 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
             }
         }
 
-        public bool PutTicketOnSele(decimal ammount, string currency)
+        public bool PutTicketOnSale(decimal amount, string currency)
         {
             var price = new Money();
-            if (!price.SetPrice(ammount, currency))
+            if (!price.SetPrice(amount, currency))
             {
                 return false;
             }
