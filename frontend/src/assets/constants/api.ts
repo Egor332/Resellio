@@ -1,5 +1,11 @@
 import getEnvVariable from '../../utils/envUtils'
 
+export enum BodyTypes {
+  JSON = 'application/json',
+  FORM_URLENCODED = 'application/x-www-form-urlencoded',
+  MULTIPART_FORM_DATA = 'multipart/form-data',
+}
+
 export interface TApiEndpoint {
   url: string
   method: 'GET' | 'POST' | 'PUT' | 'DELETE'
@@ -8,7 +14,7 @@ export interface TApiEndpoint {
 
 export type TApiEndpoints = Record<string, TApiEndpoint>
 
-export const apiEndpoints: TApiEndpoints = {
+export const API_ENDPOINTS: TApiEndpoints = {
   CUSTOMERS_REGISTER: {
     url: '/api/Customers/register',
     method: 'POST',
@@ -34,9 +40,9 @@ export const apiEndpoints: TApiEndpoints = {
     method: 'POST',
     isAuthRequired: false,
   },
-  USER_INFO: {
-    url: '/api/Users/user-info',
-    method: 'GET',
+  CREATE_EVENT: {
+    url: '/api/Events/event',
+    method: 'POST',
     isAuthRequired: true,
   },
 }

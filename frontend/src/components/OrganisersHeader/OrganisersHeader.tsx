@@ -2,6 +2,7 @@ import BaseHeader, { NavItem } from '../BaseHeader/BaseHeader'
 import { ROLE_COLORS } from '../../theme/themeConstants'
 import { Navigation } from '../../assets/constants/navigation'
 import PersonIcon from '@mui/icons-material/Person'
+import AddIcon from '@mui/icons-material/Add'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store/store'
 import { logout } from '../../store/auth/authSlice'
@@ -12,6 +13,11 @@ function OrganisersHeader() {
   const navigate = useNavigate()
 
   const organiserNavItems: NavItem[] = [
+    {
+      icon: <AddIcon />,
+      path: Navigation.ORGANISERS_ADD_EVENT,
+      tooltip: 'Add Event',
+    },
     {
       icon: <PersonIcon />,
       tooltip: 'Account',

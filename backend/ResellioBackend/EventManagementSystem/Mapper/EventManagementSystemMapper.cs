@@ -45,6 +45,7 @@ namespace ResellioBackend.EventManagementSystem.Mapper
                 IsHoldByOrganiser = (model.HolderId == model.TicketType.Event.OrganiserId),
                 EventId = model.TicketType.TypeId,
                 TicketTypeId = model.TicketTypeId,
+                SellerId = model.HolderId,
             };
         }
     }

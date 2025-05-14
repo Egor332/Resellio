@@ -3,7 +3,7 @@ using StackExchange.Redis;
 
 namespace ResellioBackend.TicketPurchaseSystem.RedisRepositories.Implementations
 {
-    public class CartRedisRepository : ICartRedisRepository
+    public class CartRedisRepository : ICartCacheRepository
     {
         private readonly IDatabase _redisDb;
 

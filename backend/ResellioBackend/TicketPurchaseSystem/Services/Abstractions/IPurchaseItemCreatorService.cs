@@ -5,6 +5,6 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Abstractions
 {
     public interface IPurchaseItemCreatorService
     {
-        public Task<PurchaseItemCreationResult> CreatePurchaseItemListAsync(int userId);
+        public Task<PurchaseItemCreationResult> CreatePurchaseItemListAsync(int userId, int sellerId);
     }
 }
