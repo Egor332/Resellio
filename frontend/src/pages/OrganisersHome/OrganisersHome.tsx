@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material'
+import {EventList} from "../../components/EventList/EventList.tsx";
 
 function OrganisersHome() {
   return (
@@ -6,6 +7,7 @@ function OrganisersHome() {
         <Typography variant="h4" component="h1" gutterBottom>
             Organiser Homepage
         </Typography>
+        <EventList/>
     </Box>
   )
 }
