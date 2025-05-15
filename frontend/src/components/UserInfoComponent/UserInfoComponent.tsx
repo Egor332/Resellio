@@ -21,7 +21,7 @@ const UserInfoComponent: React.FC<{ userInfo: UserInfoDto | null }> = ({ userInf
                 <Typography variant="h6">Last name: {userInfo.lastName}</Typography>
                 <Typography variant="body1">Email: {userInfo.email}</Typography>
                 <Typography variant="body1">
-                    With us since: {userInfo.createdDate ? (userInfo.createdDate instanceof Date ? userInfo.createdDate.toLocaleDateString() : userInfo.createdDate) : 'N/A'}
+                    With us since: {userInfo.createdDate ? new Date(userInfo.createdDate).toLocaleDateString() : 'N/A'}
                 </Typography>
             </Box>
         

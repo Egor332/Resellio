@@ -17,11 +17,11 @@ export const apiRequest = async (
   isFormData?: boolean,
   timeout?: number
 ): Promise<any> => {
+  console.log("apiRequest starts")
   try {
     const token = endpoint.isAuthRequired
       ? localStorage.getItem('auth_token')
       : null
-
     const controller = new AbortController()
     const timeoutId = setTimeout(
       () => controller.abort(),
