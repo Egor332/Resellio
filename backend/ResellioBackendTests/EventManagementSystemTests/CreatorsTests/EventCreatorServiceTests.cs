@@ -46,19 +46,37 @@ public class EventCreatorServiceTests
         // assure that AddAsync was never called on the repository during test execution
         _eventRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Event>()), Times.Never);
     }
-    
+
     [Fact]
-    public async Task CreateEventAsync_ValidEvent_ReturnsSuccessAndCreatesEvent()
+    public async Task CreateEventAsync_WhenOrganiserDoNotHaveConnectedSellerAccount_ReturnsFailureWithApproptriateStatusCode()
     {
         // Arrange
         int organiserId = 1;
-        var organiser = new Organiser();
+        _userRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(organiserId))
+            .ReturnsAsync(new Organiser());
+
+        var eventDto = new EventDto();
+
+        // Act
+        var result = await _eventCreatorService.CreateEventAsync(eventDto, organiserId);
+
+        // Assert
+        Assert.False(result.Success);
+        Assert.Equal(442, result.ErrorCode);
+        _eventRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Event>()), Times.Never);
+    }
+    
+    [Fact]
+    public async Task CreateEventAsync_ValidEventAndOrganiser_ReturnsSuccessAndCreatesEvent()
+    {
+        // Arrange
+        int organiserId = 1;
+        var organiser = new Organiser() { ConnectedSellingAccount = "1" };
         _userRepositoryMock
             .Setup(repo => repo.GetByIdAsync(organiserId))
             .ReturnsAsync(organiser);
 
-        var ticketTypeDto1 = new TicketTypeDto();
-        var ticketTypeDto2 = new TicketTypeDto();
 
         var eventDto = new EventDto
         {
@@ -66,15 +84,12 @@ public class EventCreatorServiceTests
             Description = "Awesome stuff's goin' on",
             Start = DateTime.Now,
             End = DateTime.Now.AddHours(3),
-            TicketTypeDtos = new List<TicketTypeDto> { ticketTypeDto1, ticketTypeDto2 }
+            TicketTypeDtos = "[{\"description\":\"1\",\"maxCount\":1,\"price\":13,\"currency\":\"PLN\",\"availableFrom\":\"2025-05-11T13:53:12.899Z\"},{\"description\":\"1\",\"maxCount\":1,\"price\":13,\"currency\":\"PLN\",\"availableFrom\":\"2025-05-11T13:53:12.899Z\"}]"
         };
 
         // Creating ticket types simulation
         _ticketTypeCreatorServiceMock
-            .Setup(service => service.CreateTicketType(ticketTypeDto1, It.IsAny<Event>()))
-            .Returns(new GeneralResult<TicketType>(){Success = true, Data = new TicketType()});
-        _ticketTypeCreatorServiceMock
-            .Setup(service => service.CreateTicketType(ticketTypeDto2, It.IsAny<Event>()))
+            .Setup(service => service.CreateTicketType(It.IsAny<TicketTypeDto>(), It.IsAny<Event>()))
             .Returns(new GeneralResult<TicketType>(){Success = true, Data = new TicketType()});
 
         // Act
@@ -85,8 +100,7 @@ public class EventCreatorServiceTests
 
         // Verification of method calls 
         _userRepositoryMock.Verify(repo => repo.GetByIdAsync(organiserId), Times.Once);
-        _ticketTypeCreatorServiceMock.Verify(service => service.CreateTicketType(ticketTypeDto1, It.IsAny<Event>()), Times.Once);
-        _ticketTypeCreatorServiceMock.Verify(service => service.CreateTicketType(ticketTypeDto2, It.IsAny<Event>()), Times.Once);
+        _ticketTypeCreatorServiceMock.Verify(service => service.CreateTicketType(It.IsAny<TicketTypeDto>(), It.IsAny<Event>()), Times.Exactly(2));
         _eventRepositoryMock.Verify(repo => repo.AddAsync(It.Is<Event>(e =>
             e.Organiser == organiser &&
             e.Name == eventDto.Name &&

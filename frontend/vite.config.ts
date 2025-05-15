@@ -1,14 +1,14 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
+import getEnvVariable from './src/utils/envUtils'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
 
-  const API_URL = `${env.VITE_API_URL ?? 'http://localhost:80'}`;
-  console.log('API_URL in vite.config.ts:', API_URL); // Log the API URL for debugging
-  const PORT = parseInt(env.VITE_FRONTEND_PORT ?? '5173');
-  const HOST = `${env.VITE_HOST ?? 'localhost'}`;
+  const API_URL = getEnvVariable(env, 'VITE_API_URL');
+  const PORT = parseInt(getEnvVariable(env, 'VITE_FRONTEND_PORT'));
+  const HOST = getEnvVariable(env, 'VITE_HOST');
 
   return {
     plugins: [react()],

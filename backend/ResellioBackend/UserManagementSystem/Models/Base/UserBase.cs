@@ -1,4 +1,5 @@
 ﻿using ResellioBackend.Results;
+using ResellioBackend.UserManagementSystem.DTOs.Base;
 using ResellioBackend.UserManagementSystem.Statics;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
@@ -33,6 +34,8 @@ namespace ResellioBackend.UserManagementSystem.Models.Base
 
         [Required]
         public bool IsActive { get; set; }
+
+        public string? ConnectedSellingAccount {  get; set; }
 
         public abstract List<Claim> GetClaims();
 
@@ -72,6 +75,30 @@ namespace ResellioBackend.UserManagementSystem.Models.Base
             claims.Add(emailClaim);
             claims.Add(idClaim);
             return claims;
+        }
+
+        public virtual UserInfoDto GetMyInfo()
+        {
+            return new UserInfoDto()
+            {
+                Email = this.Email,
+                FirstName = this.FirstName,
+                LastName = this.LastName,
+                CreatedDate = this.CreatedDate,
+                ConfirmedSeller = !(this.ConnectedSellingAccount == null)
+            };
+        }
+
+        public bool ValidateAbilityToSale()
+        {
+            if (string.IsNullOrEmpty(this.ConnectedSellingAccount))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }

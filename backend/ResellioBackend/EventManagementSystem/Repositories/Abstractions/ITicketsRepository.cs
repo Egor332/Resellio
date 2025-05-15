@@ -12,6 +12,11 @@ namespace ResellioBackend.EventManagementSystem.Repositories.Abstractions
         public Task<Ticket?> GetTicketByIdWithExclusiveRowLockAsync(Guid ticketId);
 
         public Task UpdateAsync(Ticket ticket);
+
         public Task<Ticket?> GetTicketWithAllDependenciesByIdAsync(Guid ticketId);
+
+        public IQueryable<Ticket> GetMyTicketsAsQueryableNoTracking(int userId);
+
+        public IQueryable<Ticket> GetTicketsOfTypeNoTracking(int ticketTypeId);
     }
 }

@@ -16,10 +16,10 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
         private readonly ITicketsRepository _ticketsRepository;
         private readonly IRedisService _redisService;
         private readonly IDatabaseTransactionManager _transactionManager;
-        private readonly ICartRedisRepository _cartRedisRepository;
+        private readonly ICartCacheRepository _cartRedisRepository;
 
         public PurchaseLockService(ITicketsRepository ticketsRepository, IRedisService redisService, 
-            IDatabaseTransactionManager transactionManager, ICartRedisRepository cartRedisRepository)
+            IDatabaseTransactionManager transactionManager, ICartCacheRepository cartRedisRepository)
         { 
             _ticketsRepository = ticketsRepository;
             _redisService = redisService;

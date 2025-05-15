@@ -12,8 +12,6 @@ using ResellioBackend.UserManagementSystem.Services.Abstractions;
 using ResellioBackend.UserManagementSystem.Services.Implementations;
 using ResellioBackend.UserManagementSystem.Statics;
 using StackExchange.Redis;
-using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using ResellioBackend.EventManagementSystem.Creators.Abstractions;
 using ResellioBackend.EventManagementSystem.Creators.Implementations;
@@ -29,6 +27,9 @@ using ResellioBackend.TicketPurchaseSystem.RedisServices.Implementations;
 using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
 using ResellioBackend.TicketPurchaseSystem.Services.Implementations;
 using Stripe;
+using ResellioBackend.Common.Paging;
+using ResellioBackend.EventManagementSystem.Services.Abstractions;
+using ResellioBackend.EventManagementSystem.Services.Implementations;
 
 namespace ResellioBackend
 {
@@ -55,18 +56,15 @@ namespace ResellioBackend
             builder.Services.AddHttpContextAccessor();
             // builder.Services.AddTransient<LinkGenerator>();
 
-            // Kafka
+            // Message broker
             builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
 
-            // Redis
+            // Cache
             builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
             {
                 var redisConnectionString = configuration["Redis:ConnectionString"];
                 return ConnectionMultiplexer.Connect(redisConnectionString);
-            });
-            builder.Services.AddScoped<ICartRedisRepository, CartRedisRepository>();
-            builder.Services.AddScoped<ITicketRedisRepository, TicketRedisRepository>();
-            builder.Services.AddScoped<IRedisService, RedisService>();
+            });            
 
             // Authentication and Authorization
             builder.Services.AddAuthentication(options =>
@@ -145,6 +143,15 @@ namespace ResellioBackend
             builder.Services.AddTransient<ICheckoutEventProcessor, StripeCheckoutEventProcessor>();
             builder.Services.AddScoped<ICheckoutSessionManagerService, StripeCheckoutSessionManagerService>();
             builder.Services.AddScoped<IRefundService, StripeRefundService>();
+            builder.Services.AddTransient<IPaginationService, PaginationService>();
+            builder.Services.AddTransient<IGetRequestService, GetRequestService>();
+            builder.Services.AddTransient<IEventService, EventManagementSystem.Services.Implementations.EventService>();
+            builder.Services.AddTransient<ITicketTypeService, TicketTypeService>();
+            builder.Services.AddTransient<ITicketService, TicketService >();
+            builder.Services.AddTransient<IShoppingCartService, ShoppingCartService>();
+            builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<ISellerRegistrationStateService, SellerRegistrationStateService>();
+            builder.Services.AddTransient<ISellerRegistrationService, SellerRegistrationService>();
 
             // Database services
             builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();
@@ -155,8 +162,12 @@ namespace ResellioBackend
             builder.Services.AddScoped<IEventsRepository, EventsRepository>();
             builder.Services.AddScoped<ITicketTypesRepository, TicketTypesRepository>();
             builder.Services.AddScoped<ITicketsRepository, TicketsRepository>();
-            
-            
+            builder.Services.AddScoped<ICartCacheRepository, CartRedisRepository>();
+            builder.Services.AddScoped<ITicketCacheRepository, TicketRedisRepository>();
+            builder.Services.AddScoped<IRedisService, RedisService>();
+            builder.Services.AddScoped<IStateCacheRepository, StateRedisRepository>();
+
+
             // Factory
             builder.Services.AddTransient<IUserFactory, UserFactory>();
 

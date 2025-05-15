@@ -23,9 +23,9 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             _cancelLink = configuration["FrontEndLinks:PaymentCancel"]!;
         }
 
-        public async Task<CheckoutSessionCreationResult> CreateCheckoutSessionAsync(int userId)
+        public async Task<CheckoutSessionCreationResult> CreateCheckoutSessionAsync(int userId, int sellerId)
         {
-            var lineItemsResult = await _purchaseItemCreatorService.CreatePurchaseItemListAsync(userId);
+            var lineItemsResult = await _purchaseItemCreatorService.CreatePurchaseItemListAsync(userId, sellerId);
             if (!lineItemsResult.Success) 
             {
                 return new CheckoutSessionCreationResult()
@@ -50,6 +50,16 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                 Mode = "payment",
                 SuccessUrl = _successLink,
                 CancelUrl = _cancelLink,
+
+                PaymentIntentData = new SessionPaymentIntentDataOptions
+                {
+                    ApplicationFeeAmount = 0,
+                    TransferData = new SessionPaymentIntentDataTransferDataOptions
+                    {
+                        Destination = lineItemsResult.SellerAccountId,
+                    }
+                },
+
                 Metadata = new Dictionary<string, string>()
                 {
                     { CheckoutSessionMetadataKeys.UserId, userId.ToString() }

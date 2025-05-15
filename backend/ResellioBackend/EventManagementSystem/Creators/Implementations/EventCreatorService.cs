@@ -6,6 +6,7 @@ using ResellioBackend.Results;
 using ResellioBackend.UserManagementSystem.Models.Base;
 using ResellioBackend.UserManagementSystem.Models.Users;
 using ResellioBackend.UserManagementSystem.Repositories.Abstractions;
+using ResellioBackend.UserManagementSystem.Statics;
 
 namespace ResellioBackend.EventManagementSystem.Creators.Implementations
 {
@@ -35,6 +36,16 @@ namespace ResellioBackend.EventManagementSystem.Creators.Implementations
                 };
             }
 
+            if (!organiser.ValidateAbilityToSale())
+            {
+                return new ResultBase()
+                {
+                    Success = false,
+                    Message = "You have not connect selling account", 
+                    ErrorCode = UserManagementSystemErrorsCodes.UserDoesNotConnectSellerAccount
+                };
+            }
+
             try
             {
                 var newEvent = new Event
@@ -47,7 +58,7 @@ namespace ResellioBackend.EventManagementSystem.Creators.Implementations
                     TicketTypes = new List<TicketType>()
                 };
 
-                foreach (TicketTypeDto ticketTypeDto in eventDto.TicketTypeDtos)
+                foreach (TicketTypeDto ticketTypeDto in eventDto.TicketTypeDtosList)
                 {
                     var result = _ticketTypeCreatorService.CreateTicketType(ticketTypeDto, newEvent);
                     if (result.Success)

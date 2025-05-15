@@ -119,7 +119,7 @@ function BaseHeader({
                           }
                         }}
                         component={menuItem.path ? Link : 'li'}
-                        to={menuItem.path}
+                        {...(menuItem.path ? { to: menuItem.path } : {})}
                       >
                         {menuItem.label}
                       </MenuItem>

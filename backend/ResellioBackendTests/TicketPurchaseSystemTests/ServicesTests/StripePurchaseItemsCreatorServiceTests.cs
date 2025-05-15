@@ -10,18 +10,20 @@ using System.Text;
 using System.Threading.Tasks;
 using ResellioBackend.TicketPurchaseSystem.Services.Implementations;
 using ResellioBackend.TicketPurchaseSystem.Statics;
+using ResellioBackend.UserManagementSystem.Models.Base;
+using ResellioBackend.UserManagementSystem.Models.Users;
 
 namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
 {
     public class StripePurchaseItemsCreatorServiceTests
     {
-        private readonly Mock<ICartRedisRepository> _mockCartRedisRepo;
+        private readonly Mock<ICartCacheRepository> _mockCartRedisRepo;
         private readonly Mock<ITicketsRepository> _mockTicketsRepo;
         private readonly StripePurchaseItemsCreatorService _service;
 
         public StripePurchaseItemsCreatorServiceTests()
         {
-            _mockCartRedisRepo = new Mock<ICartRedisRepository>();
+            _mockCartRedisRepo = new Mock<ICartCacheRepository>();
             _mockTicketsRepo = new Mock<ITicketsRepository>();
             _service = new StripePurchaseItemsCreatorService(_mockCartRedisRepo.Object, _mockTicketsRepo.Object);
         }
@@ -33,22 +35,25 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
             int userId = 1;
             _mockCartRedisRepo.Setup(x => x.GetAllTicketsAsync(userId))
                 .ReturnsAsync(Enumerable.Empty<Guid>());
+            int sellerId = 0;
 
             // Act
-            var result = await _service.CreatePurchaseItemListAsync(userId);
+            var result = await _service.CreatePurchaseItemListAsync(userId, sellerId);
 
             // Assert
             Assert.False(result.Success);
         }
 
         [Fact]
-        public async Task CreatePurchaseItemListAsync_ValidTickets_ReturnsSuccessWithLineItems()
+        public async Task CreatePurchaseItemListAsync_ValidTickets_ReturnsSuccessWithLineItemsOfThisSeller()
         {
             // Arrange
             int userId = 3;
             var ticket1Id = Guid.NewGuid();
             var ticket2Id = Guid.NewGuid();
             var ticketIds = new List<Guid> { ticket1Id, ticket2Id };
+            var holderId = 1;
+            var expectedSellerAccount = "expected account";
 
             var tickets = new List<Ticket>
             {
@@ -63,7 +68,9 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
                     {
                         Amount = (decimal)10.00,
                         CurrencyCode = "USD"
-                    }
+                    },
+                    Holder = new Organiser { ConnectedSellingAccount = expectedSellerAccount },
+                    HolderId = holderId,
                 },
                 new Ticket
                 {
@@ -76,7 +83,24 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
                     {
                         Amount = (decimal)10.00,
                         CurrencyCode = "USD"
-                    }
+                    },
+                    Holder = new Organiser { ConnectedSellingAccount = expectedSellerAccount },
+                    HolderId = holderId,
+                },
+                new Ticket
+                {
+                    TicketId = ticket2Id,
+                    TicketType = new TicketType
+                    {
+                        Event = new Event { Name = "Conference" }
+                    },
+                    CurrentPrice = new Money()
+                    {
+                        Amount = (decimal)10.00,
+                        CurrencyCode = "USD"
+                    },
+                    Holder = new Organiser { ConnectedSellingAccount = "1" },
+                    HolderId = holderId + 1,
                 }
             };
 
@@ -85,7 +109,7 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
                 .ReturnsAsync((Guid id) => tickets.First(t => t.TicketId == id));
 
             // Act
-            var result = await _service.CreatePurchaseItemListAsync(userId);
+            var result = await _service.CreatePurchaseItemListAsync(userId, holderId);
 
             // Assert
             Assert.True(result.Success);

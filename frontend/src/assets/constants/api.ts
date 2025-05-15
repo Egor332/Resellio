@@ -1,3 +1,11 @@
+import getEnvVariable from '../../utils/envUtils'
+
+export enum BodyTypes {
+  JSON = 'application/json',
+  FORM_URLENCODED = 'application/x-www-form-urlencoded',
+  MULTIPART_FORM_DATA = 'multipart/form-data',
+}
+
 export interface TApiEndpoint {
   url: string
   method: 'GET' | 'POST' | 'PUT' | 'DELETE'
@@ -6,7 +14,7 @@ export interface TApiEndpoint {
 
 export type TApiEndpoints = Record<string, TApiEndpoint>
 
-export const apiEndpoints: TApiEndpoints = {
+export const API_ENDPOINTS: TApiEndpoints = {
   CUSTOMERS_REGISTER: {
     url: '/api/Customers/register',
     method: 'POST',
@@ -32,9 +40,14 @@ export const apiEndpoints: TApiEndpoints = {
     method: 'POST',
     isAuthRequired: false,
   },
+  CREATE_EVENT: {
+    url: '/api/Events/event',
+    method: 'POST',
+    isAuthRequired: true,
+  },
 }
 
-const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:80'
+const apiUrl = getEnvVariable(import.meta.env, 'VITE_API_URL')
 
 export const getApiEndpoint = (endpoint: TApiEndpoint): TApiEndpoint => {
   // Use relative paths in development to leverage the proxy
