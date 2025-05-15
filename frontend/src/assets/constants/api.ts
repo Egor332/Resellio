@@ -45,6 +45,11 @@ export const API_ENDPOINTS: TApiEndpoints = {
     method: 'POST',
     isAuthRequired: true,
   },
+  GET_EVENTS: {
+    url: `/api/Events/events`,
+    method: 'GET',
+    isAuthRequired: true,
+  },
 }
 
 const apiUrl = getEnvVariable(import.meta.env, 'VITE_API_URL')
