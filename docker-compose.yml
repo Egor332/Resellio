@@ -1,12 +1,13 @@
 services:
   frontend:
-    build: 
+    build:
       context: ./frontend
       dockerfile: Dockerfile
     environment:
       VITE_API_URL: http://backend:80
       VITE_HOST: 0.0.0.0
-    ports: 
+      VITE_FRONTEND_PORT: 5173
+    ports:
       - "5173:5173"
     volumes:
       - ./frontend:/app
@@ -39,7 +40,7 @@ services:
       - "81:81"
     depends_on:
       - kafka
-    
+
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
@@ -49,7 +50,7 @@ services:
       - "1433:1433"
     volumes:
       - mssql_data:/var/opt/mssql
-  
+
   redis:
     image: redis:latest
     ports:
