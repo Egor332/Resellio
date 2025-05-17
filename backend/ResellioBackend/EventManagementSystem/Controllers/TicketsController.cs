@@ -14,10 +14,12 @@ namespace ResellioBackend.EventManagementSystem.Controllers
     public class TicketsController : ControllerBase
     {
         private readonly ITicketService _ticketService;
+        private readonly ITicketSellingStateService _ticketSellingStateService;
 
-        public TicketsController(ITicketService ticketService)
+        public TicketsController(ITicketService ticketService, ITicketSellingStateService ticketSellingStateService)
         {
             _ticketService = ticketService;
+            _ticketSellingStateService = ticketSellingStateService;
         }
 
         [Authorize(Policy = AuthorizationPolicies.CustomerPolicy)]
@@ -56,6 +58,51 @@ namespace ResellioBackend.EventManagementSystem.Controllers
                 return BadRequest(ex.Message);
             }
             return Ok(paginationResponse);
+        }
+
+        [Authorize]
+        [HttpPatch("resell")]
+        public async Task<IActionResult> Resell([FromBody]ResellDto dto)
+        {
+            var userIdString = User.FindFirst(BearerTokenClaimsNames.Id);
+            if (userIdString == null)
+            {
+                return Unauthorized();
+            }
+            var userId = int.Parse(userIdString.Value);
+
+            var result = await _ticketSellingStateService.ResellTicketAsync(dto, userId);
+            if (result.Success)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(new { result.Message, result.ErrorCode });
+            }
+        }
+
+        [Authorize]
+        [HttpPatch("stop-selling")]
+        public async Task<IActionResult> StopSelling([FromBody]StopSellingTicketDto dto)
+        {
+            var userIdString = User.FindFirst(BearerTokenClaimsNames.Id);
+            if (userIdString == null)
+            {
+                return Unauthorized();
+            }
+            var userId = int.Parse(userIdString.Value);
+
+            var result = await _ticketSellingStateService.StopSellingTicket(dto, userId);
+
+            if (result.Success)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(new { result.Message });
+            }
         }
 
     }
