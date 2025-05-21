@@ -2,6 +2,7 @@
 using ResellioBackend.Common.Paging;
 using ResellioBackend.EventManagementSystem.DTOs;
 using ResellioBackend.EventManagementSystem.Models.Base;
+using ResellioBackend.Results;
 
 namespace ResellioBackend.EventManagementSystem.Services.Abstractions
 {

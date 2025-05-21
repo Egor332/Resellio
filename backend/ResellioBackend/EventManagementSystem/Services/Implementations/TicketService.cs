@@ -5,6 +5,7 @@ using ResellioBackend.EventManagementSystem.Mapper;
 using ResellioBackend.EventManagementSystem.Models.Base;
 using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
 using ResellioBackend.EventManagementSystem.Services.Abstractions;
+using ResellioBackend.Results;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ResellioBackend.EventManagementSystem.Services.Implementations
@@ -38,7 +39,7 @@ namespace ResellioBackend.EventManagementSystem.Services.Implementations
         {         
             var ticketsQuery = _ticketRepository.GetTicketsOfTypeNoTracking(ticketTypeId);
             ticketsQuery = ticketsQuery
-                .Where(t => (t.LastLock < DateTime.UtcNow) && 
+                .Where(t => ((t.LastLock == null) || (t.LastLock < DateTime.UtcNow)) && 
                             ((t.TicketState == Enums.TicketStates.Available) || (t.TicketState == Enums.TicketStates.Reserved)));
             try
             {
