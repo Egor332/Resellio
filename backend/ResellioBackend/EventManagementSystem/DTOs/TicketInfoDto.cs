@@ -16,3 +16,5 @@ namespace ResellioBackend.EventManagementSystem.DTOs
         public int SellerId { get; set; }
     }
 }
+
+

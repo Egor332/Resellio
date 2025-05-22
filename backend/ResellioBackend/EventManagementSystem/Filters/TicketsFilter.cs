@@ -1,4 +1,5 @@
 ﻿using ResellioBackend.Common.Filters;
+using ResellioBackend.EventManagementSystem.Enums;
 using ResellioBackend.EventManagementSystem.Models.Base;
 
 namespace ResellioBackend.EventManagementSystem.Filters
@@ -7,7 +8,7 @@ namespace ResellioBackend.EventManagementSystem.Filters
     {
         public DateTime? StartsAfter { get; set; }
         public DateTime? EndsBefore { get; set; }
-        public bool? OnlyFromOrganiser { get; set; }
+        public TicketSellerFilter? SellerConstraints { get; set; }
         public string? EventNamePart { get; set; }
         
 
@@ -23,10 +24,15 @@ namespace ResellioBackend.EventManagementSystem.Filters
                 query = query.Where(t => t.TicketType.Event.End <= EndsBefore);
             }
 
-            if ((OnlyFromOrganiser != null) && (OnlyFromOrganiser == true))
+            if ((SellerConstraints != null) && (SellerConstraints == TicketSellerFilter.OnlyFromOrganiser))
             {
                 query = query.Where(t => t.TicketType.Event.OrganiserId == t.HolderId);
             }
+            else if ((SellerConstraints != null) && (SellerConstraints == TicketSellerFilter.OnlyNotFromOrganiser))
+            {
+                query = query.Where(t => t.TicketType.Event.OrganiserId != t.HolderId);
+            }
+
 
             if (!string.IsNullOrEmpty(EventNamePart))
             {
