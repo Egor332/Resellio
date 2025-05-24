@@ -3,6 +3,7 @@ using ResellioBackend.EventManagementSystem.Creators.Abstractions;
 using ResellioBackend.EventManagementSystem.Creators.Implementations;
 using ResellioBackend.EventManagementSystem.DTOs;
 using ResellioBackend.EventManagementSystem.Models;
+using ResellioBackend.EventManagementSystem.ObjectStorages.Abstractions;
 using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
 using ResellioBackend.Results;
 using ResellioBackend.UserManagementSystem.Models.Base;
@@ -17,6 +18,7 @@ public class EventCreatorServiceTests
     private readonly EventCreatorService _eventCreatorService;
     private readonly Mock<ITicketTypeCreatorService> _ticketTypeCreatorServiceMock;
     private readonly Mock<IEventsRepository> _eventRepositoryMock;
+    private readonly Mock<IImageStorage> _imageStorageMock;
     private readonly Mock<IUsersRepository<Organiser>> _userRepositoryMock;
 
     public EventCreatorServiceTests()
@@ -24,7 +26,8 @@ public class EventCreatorServiceTests
         _ticketTypeCreatorServiceMock = new Mock<ITicketTypeCreatorService>();
         _eventRepositoryMock = new Mock<IEventsRepository>();
         _userRepositoryMock = new Mock<IUsersRepository<Organiser>>();
-        _eventCreatorService = new EventCreatorService(_userRepositoryMock.Object, _eventRepositoryMock.Object, _ticketTypeCreatorServiceMock.Object);
+        _imageStorageMock = new Mock<IImageStorage>();
+        _eventCreatorService = new EventCreatorService(_userRepositoryMock.Object, _eventRepositoryMock.Object, _ticketTypeCreatorServiceMock.Object, _imageStorageMock.Object);
     }
     
     [Fact]
