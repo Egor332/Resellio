@@ -25,7 +25,6 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                     $"?response_type=code" +
                     $"&client_id={_clientId}" +
                     $"&scope=read_write" +
-                    $"&redirect_uri={redirectUri}" +
                     $"&state={state}";
 
             return stripeUrl;
