@@ -17,7 +17,6 @@ export const apiRequest = async (
   isFormData?: boolean,
   timeout?: number
 ): Promise<any> => {
-  console.log("apiRequest starts")
   try {
     const token = endpoint.isAuthRequired
       ? localStorage.getItem('auth_token')
