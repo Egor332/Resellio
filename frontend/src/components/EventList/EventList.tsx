@@ -54,7 +54,7 @@ export const EventList: React.FC = () => {
             const response = await apiRequest({ ...API_ENDPOINTS.GET_EVENTS, url: fullUrl });
             
             setEvents(response?.items ?? []);
-            setTotalPages(response.TotalPages || Math.ceil(response.TotalAmount / itemsPerPage));
+            setTotalPages(Math.ceil(response.totalAmount / itemsPerPage));
         } 
         catch (error) {
             if (error instanceof Error) {
@@ -94,58 +94,78 @@ export const EventList: React.FC = () => {
     return (
         <Box display="flex" alignItems="center" flexDirection="column" gap={4}>
             {/* Search + Filter */}
-            <Box display="flex" flexDirection="column" alignItems="center" gap={2} mb={2}>
-                <TextField
-                    label="Search events"
-                    variant="outlined"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={showFutureOnly}
-                            onChange={(e) => setShowFutureOnly(e.target.checked)}
-                            color="primary"
+            <Box width="100%" maxWidth="1000px" px={2}>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <TextField
+                            fullWidth
+                            label="Search events"
+                            variant="outlined"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
-                    }
-                    label="Hide past events"
-                />
-                <TextField
-                    label="Organiser Name Part"
-                    variant="outlined"
-                    value={organiserNamePart}
-                    onChange={(e) => setOrganiserNamePart(e.target.value)}
-                />
-                <TextField
-                    label="Starts After"
-                    type="date"
-                    value={startsAfter}
-                    onChange={(e) => setStartsAfter(e.target.value)}
-                />
-                <TextField
-                    label="Ends Before (YYYY-MM-DD)"
-                    type="date"
-                    value={endsBefore}
-                    onChange={(e) => setEndsBefore(e.target.value)}
-                />
-                <Box display="flex" alignItems="center" gap={2}>
-                    <span>Items per page:</span>
-                    <Select
-                        value={itemsPerPage}
-                        onChange={handleItemsPerPageChange}
-                    >
-                        <MenuItem value={3}>3</MenuItem>
-                        <MenuItem value={5}>5</MenuItem>
-                        <MenuItem value={10}>10</MenuItem>
-                    </Select>
-                </Box>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={showFutureOnly}
+                                    onChange={(e) => setShowFutureOnly(e.target.checked)}
+                                    color="primary"
+                                />
+                            }
+                            label="Hide past events"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <TextField
+                            fullWidth
+                            label="Organiser Name"
+                            variant="outlined"
+                            value={organiserNamePart}
+                            onChange={(e) => setOrganiserNamePart(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <TextField
+                            fullWidth
+                            label="Starts After"
+                            type="date"
+                            InputLabelProps={{ shrink: true }}
+                            value={startsAfter}
+                            onChange={(e) => setStartsAfter(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <TextField
+                            fullWidth
+                            label="Ends Before"
+                            type="date"
+                            InputLabelProps={{ shrink: true }}
+                            value={endsBefore}
+                            onChange={(e) => setEndsBefore(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <Box display="flex" alignItems="center" gap={1}>
+                            <span>Items per page:</span>
+                            <Select
+                                value={itemsPerPage}
+                                onChange={handleItemsPerPageChange}
+                            >
+                                <MenuItem value={3}>3</MenuItem>
+                                <MenuItem value={5}>5</MenuItem>
+                                <MenuItem value={10}>10</MenuItem>
+                            </Select>
+                        </Box>
+                    </Grid>
+                </Grid>
             </Box>
 
             {/* Event Grid */}
             <Grid container spacing={3} justifyContent="center">
                 {events.map((event) => (
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }} key={event.id}>
+                    <Grid item xs={12} sm={6} md={4} key={event.id}>
                         <EventCard event={event} />
                     </Grid>
                 ))}
