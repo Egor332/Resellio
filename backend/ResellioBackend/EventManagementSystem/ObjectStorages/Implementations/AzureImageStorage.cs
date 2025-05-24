@@ -28,7 +28,7 @@ namespace ResellioBackend.EventManagementSystem.ObjectStorages.Implementations
             };
             var uniqueFileName = $"{Path.GetFileNameWithoutExtension(image.FileName)}_{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
             var blobClient = blobContainerClient.GetBlobClient(uniqueFileName);
-            var memoryStream = new MemoryStream();
+            await using var memoryStream = new MemoryStream();
             await image.CopyToAsync(memoryStream);
             memoryStream.Position = 0;
             await blobClient.UploadAsync(memoryStream, new BlobUploadOptions
