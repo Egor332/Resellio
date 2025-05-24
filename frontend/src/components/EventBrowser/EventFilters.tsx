@@ -1,4 +1,4 @@
-import {Box, Checkbox, FormControlLabel, Grid, MenuItem, Select, SelectChangeEvent, TextField} from "@mui/material";
+import {Box, Checkbox, FormControlLabel, Grid, MenuItem, Select, TextField} from "@mui/material";
 import React from "react";
 
 const EventFilters: React.FC<{
@@ -16,25 +16,25 @@ const EventFilters: React.FC<{
     setItemsPerPage: (value: number) => void;
     setCurrentPage: (value: number) => void;
 }> = ({
-                              searchQuery,
-                              setSearchQuery,
-                              showFutureOnly,
-                              setShowFutureOnly,
-                              organiserNamePart,
-                              setOrganiserNamePart,
-                              startsAfter,
-                              setStartsAfter,
-                              endsBefore,
-                              setEndsBefore,
-                              itemsPerPage,
-                              setItemsPerPage,
-                              setCurrentPage,
-                          }) => {
-    const handleItemsPerPageChange = (e: SelectChangeEvent<number>) => {
-        setItemsPerPage(Number(e.target.value));
+          searchQuery,
+          setSearchQuery,
+          showFutureOnly,
+          setShowFutureOnly,
+          organiserNamePart,
+          setOrganiserNamePart,
+          startsAfter,
+          setStartsAfter,
+          endsBefore,
+          setEndsBefore,
+          itemsPerPage,
+          setItemsPerPage,
+          setCurrentPage,
+      }) => {
+    const handleFilterChange = <T,>(setter: (value: T) => void) => (value: T) => {
+        setter(value);
         setCurrentPage(1);
     };
-    
+
     return (
         <Box width="100%" maxWidth="1000px" px={2}>
             <Grid container spacing={2} alignItems="center">
@@ -44,7 +44,7 @@ const EventFilters: React.FC<{
                         label="Search events"
                         variant="outlined"
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => handleFilterChange(setSearchQuery)(e.target.value)}
                     />
                 </Grid>
                 <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
@@ -52,7 +52,7 @@ const EventFilters: React.FC<{
                         control={
                             <Checkbox
                                 checked={showFutureOnly}
-                                onChange={(e) => setShowFutureOnly(e.target.checked)}
+                                onChange={(e) => handleFilterChange(setShowFutureOnly)(e.target.checked)}
                                 color="primary"
                             />
                         }
@@ -65,7 +65,7 @@ const EventFilters: React.FC<{
                         label="Organiser Name"
                         variant="outlined"
                         value={organiserNamePart}
-                        onChange={(e) => setOrganiserNamePart(e.target.value)}
+                        onChange={(e) => handleFilterChange(setOrganiserNamePart)(e.target.value)}
                     />
                 </Grid>
                 <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
@@ -75,7 +75,7 @@ const EventFilters: React.FC<{
                         type="date"
                         InputLabelProps={{ shrink: true }}
                         value={startsAfter}
-                        onChange={(e) => setStartsAfter(e.target.value)}
+                        onChange={(e) => handleFilterChange(setStartsAfter)(e.target.value)}
                     />
                 </Grid>
                 <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
@@ -85,7 +85,7 @@ const EventFilters: React.FC<{
                         type="date"
                         InputLabelProps={{ shrink: true }}
                         value={endsBefore}
-                        onChange={(e) => setEndsBefore(e.target.value)}
+                        onChange={(e) => handleFilterChange(setEndsBefore)(e.target.value)}
                     />
                 </Grid>
                 <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
@@ -93,7 +93,7 @@ const EventFilters: React.FC<{
                         <span>Items per page:</span>
                         <Select
                             value={itemsPerPage}
-                            onChange={handleItemsPerPageChange}
+                            onChange={(e) => handleFilterChange(setItemsPerPage)(Number(e.target.value))}
                         >
                             <MenuItem value={3}>3</MenuItem>
                             <MenuItem value={5}>5</MenuItem>
