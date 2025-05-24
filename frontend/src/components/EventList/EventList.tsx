@@ -96,7 +96,7 @@ export const EventList: React.FC = () => {
             {/* Search + Filter */}
             <Box width="100%" maxWidth="1000px" px={2}>
                 <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
                         <TextField
                             fullWidth
                             label="Search events"
@@ -105,7 +105,7 @@ export const EventList: React.FC = () => {
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
                         <FormControlLabel
                             control={
                                 <Checkbox
@@ -117,7 +117,7 @@ export const EventList: React.FC = () => {
                             label="Hide past events"
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
                         <TextField
                             fullWidth
                             label="Organiser Name"
@@ -126,7 +126,7 @@ export const EventList: React.FC = () => {
                             onChange={(e) => setOrganiserNamePart(e.target.value)}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
                         <TextField
                             fullWidth
                             label="Starts After"
@@ -136,7 +136,7 @@ export const EventList: React.FC = () => {
                             onChange={(e) => setStartsAfter(e.target.value)}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
                         <TextField
                             fullWidth
                             label="Ends Before"
@@ -146,7 +146,7 @@ export const EventList: React.FC = () => {
                             onChange={(e) => setEndsBefore(e.target.value)}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
                         <Box display="flex" alignItems="center" gap={1}>
                             <span>Items per page:</span>
                             <Select
@@ -165,7 +165,7 @@ export const EventList: React.FC = () => {
             {/* Event Grid */}
             <Grid container spacing={3} justifyContent="center">
                 {events.map((event) => (
-                    <Grid item xs={12} sm={6} md={4} key={event.id}>
+                    <Grid size={{xs: 12, sm: 6, md: 4}} key={event.id}>
                         <EventCard event={event} />
                     </Grid>
                 ))}
