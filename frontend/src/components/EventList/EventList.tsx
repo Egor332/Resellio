@@ -36,7 +36,7 @@ export const EventList: React.FC = () => {
         try {
             const now = new Date().toISOString();
 
-            const params = {
+            const rawParams = {
                 "Filter.NamePart": searchQuery || undefined,
                 "Filter.StartsAfter": showFutureOnly ? now : startsAfter || undefined,
                 "Filter.EndsBefore": endsBefore || undefined,
@@ -44,10 +44,16 @@ export const EventList: React.FC = () => {
                 "Pagination.Page": currentPage,
                 "Pagination.PageSize": itemsPerPage,
             };
+            const filteredParams = Object.entries(rawParams)
+                .filter(([, v]) => v !== undefined && v !== '')
+                .map(([k, v]) => [k, String(v)]); // gwarantuje, że każda wartość to string
+            
+            const queryString = new URLSearchParams(filteredParams).toString();
+            const fullUrl = `${getApiEndpoint(API_ENDPOINTS.GET_EVENTS).url}?${queryString}`;
 
-            const response = await apiRequest(getApiEndpoint(API_ENDPOINTS.GET_EVENTS), params);
-
-            setEvents(response.Items);
+            const response = await apiRequest({ ...API_ENDPOINTS.GET_EVENTS, url: fullUrl });
+            
+            setEvents(response?.items ?? []);
             setTotalPages(response.TotalPages || Math.ceil(response.TotalAmount / itemsPerPage));
         } 
         catch (error) {
