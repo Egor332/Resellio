@@ -1,6 +1,8 @@
+using EllipticCurve.Utils;
 using ResellioBackend.EventManagementSystem.Creators.Abstractions;
 using ResellioBackend.EventManagementSystem.DTOs;
 using ResellioBackend.EventManagementSystem.Models;
+using ResellioBackend.EventManagementSystem.ObjectStorages.Abstractions;
 using ResellioBackend.EventManagementSystem.Repositories.Abstractions;
 using ResellioBackend.Results;
 using ResellioBackend.UserManagementSystem.Models.Base;
@@ -16,12 +18,15 @@ namespace ResellioBackend.EventManagementSystem.Creators.Implementations
         private readonly IUsersRepository<Organiser> _userRepository;
         private readonly IEventsRepository _eventRepository;
         private readonly ITicketTypeCreatorService _ticketTypeCreatorService;
+        private readonly IImageStorage _imageStorage;
 
-        public EventCreatorService(IUsersRepository<Organiser> userRepository, IEventsRepository eventRepository, ITicketTypeCreatorService ticketTypeCreatorService)
+        public EventCreatorService(IUsersRepository<Organiser> userRepository, IEventsRepository eventRepository, 
+            ITicketTypeCreatorService ticketTypeCreatorService, IImageStorage imageStorage)
         {
             _userRepository = userRepository;
             _eventRepository = eventRepository;
             _ticketTypeCreatorService = ticketTypeCreatorService;
+            _imageStorage = imageStorage;
         }
 
         public async Task<ResultBase> CreateEventAsync(EventDto eventDto, int organiserId)
@@ -46,6 +51,8 @@ namespace ResellioBackend.EventManagementSystem.Creators.Implementations
                 };
             }
 
+            var imageUrl = await StoreImageAndGetImageOrDefaultUrlAsync(eventDto.EventImage);
+
             try
             {
                 var newEvent = new Event
@@ -55,7 +62,9 @@ namespace ResellioBackend.EventManagementSystem.Creators.Implementations
                     Description = eventDto.Description,
                     Start = eventDto.Start,
                     End = eventDto.End,
-                    TicketTypes = new List<TicketType>()
+                    TicketTypes = new List<TicketType>(),
+                    ImageUrl = imageUrl
+                    
                 };
 
                 foreach (TicketTypeDto ticketTypeDto in eventDto.TicketTypeDtosList)
@@ -86,6 +95,18 @@ namespace ResellioBackend.EventManagementSystem.Creators.Implementations
                     Success = false,
                     Message = $"Error creating event: {ex.Message}"
                 };
+            }
+        }
+
+        private async Task<string> StoreImageAndGetImageOrDefaultUrlAsync(IFormFile image)
+        {
+            try
+            {
+                return await _imageStorage.UploadImageAsync(image);
+            }
+            catch (Exception ex) 
+            {
+                return "https://upload.wikimedia.org/wikipedia/commons/8/83/TrumpPortrait.jpg";
             }
         }
     }
