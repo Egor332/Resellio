@@ -1,9 +1,11 @@
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../store/store'
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState, AppDispatch } from '../../store/store'
 import { Navigation } from '../../assets/constants/navigation'
 import { Role } from '../../store/auth/authSlice'
+
+import { fetchCurrentUser } from '../../store/auth/authSlice'
 
 type ProtectedRouteProps = {
   children: ReactNode
@@ -11,16 +13,20 @@ type ProtectedRouteProps = {
 }
 
 const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
-  const { isAuthenticated, user } = useSelector(
+  const dispatch: AppDispatch = useDispatch()
+  const { isAuthenticated, user, loading } = useSelector(
     (state: RootState) => state.auth
   )
-  const userRole = user?.role
+
+  if (user === null && !loading && localStorage.getItem('auth_token') !== null) {
+    dispatch(fetchCurrentUser())
+  }
 
   if (!isAuthenticated) {
     return <Navigate to={Navigation.LOGIN} replace />
   }
 
-  if (requiredRole && userRole !== requiredRole) {
+  if (requiredRole && user && user.role !== requiredRole) {
     return <Navigate to="-1" />
   }
 

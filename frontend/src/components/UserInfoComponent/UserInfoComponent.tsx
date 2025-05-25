@@ -17,18 +17,17 @@ const UserInfoComponent: React.FC<{ userInfo: UserInfoDto | null }> = ({ userInf
     return (
         <Paper sx={{ p: 3 }}>
             <Box>
-                <Typography variant="h6">First name: {userInfo.firstName}</Typography>
-                <Typography variant="h6">Last name: {userInfo.lastName}</Typography>
-                <Typography variant="body1">Email: {userInfo.email}</Typography>
-                <Typography variant="body1">
-                    With us since: {userInfo.createdDate ? new Date(userInfo.createdDate).toLocaleDateString() : 'N/A'}
+                <Typography variant="h6"><strong>First name:</strong> {userInfo.firstName}</Typography>
+                <Typography variant="h6"><strong>Last name:</strong> {userInfo.lastName}</Typography>
+                <Typography variant="h6"><strong>Email:</strong> {userInfo.email}</Typography>
+                <Typography variant="h6">
+                    <strong>With us since:</strong> {userInfo.createdDate ? new Date(userInfo.createdDate).toLocaleDateString() : 'N/A'}
                 </Typography>
             </Box>
         
-            {/* Render Organiser information */}
-            {userInfo.organiserName && <Box sx={{ mt: 2 }}>Company name: {userInfo.organiserName}</Box>}
-            <Typography variant="body1">
-                {userInfo?.confirmedSeller ? 'is a confirmed seller' : 'seller certification pending...'}
+            {userInfo.organiserName && <Typography variant="h6"><strong>Company name:</strong> {userInfo.organiserName}</Typography>}
+            <Typography variant="h6">
+                <strong>Confirmed seller:</strong> {userInfo?.confirmedSeller ? 'YES' : 'NO'}
             </Typography>
         </Paper>
     );

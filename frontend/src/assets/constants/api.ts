@@ -50,19 +50,29 @@ export const API_ENDPOINTS: TApiEndpoints = {
     method: 'GET',
     isAuthRequired: true,
   },
+  GET_EVENTS: {
+    url: `/api/Events/events`,
+    method: 'GET',
+    isAuthRequired: true,
+  },
 }
 
 const apiUrl = getEnvVariable(import.meta.env, 'VITE_API_URL')
 
-export const getApiEndpoint = (endpoint: TApiEndpoint): TApiEndpoint => {
+export const getApiEndpoint = (endpoint: TApiEndpoint, params?: URLSearchParams): TApiEndpoint => {
+  const urlSufix = params ? `${endpoint.url}?${params}` : endpoint.url
+
   // Use relative paths in development to leverage the proxy
   if (import.meta.env.MODE === 'development') {
-    return endpoint // Relative path (e.g., "/api/customers/register")
+    return {
+      ...endpoint,
+      url: urlSufix
+    }
   }
 
   // Use full URL in production
   return {
     ...endpoint,
-    url: `${apiUrl}${endpoint.url}`,
+    url: `${apiUrl}${urlSufix}`,
   }
 }

@@ -16,9 +16,5 @@ COPY . .
 # Expose the Vite default port
 EXPOSE 5173
 
-# Set environment variables inside the container
-ENV VITE_API_URL=$VITE_API_URL
-ENV VITE_HOST=$VITE_HOST
-
 # Start the application with hot reloading
 CMD ["npm", "run", "dev", "--", "--host"]
