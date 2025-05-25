@@ -16,3 +16,13 @@ export interface EventDto {
     ticketTypes: TicketType[];
     image: File | string | null;
 }
+
+export interface EventDtoFetchResponse {
+    id: number;
+    name: string;
+    description: string;
+    start: string;
+    end: string;
+    imageUri: string;
+    organiserId: number;
+}

@@ -1,9 +1,9 @@
 import React from "react";
-import {EventDto} from "../../dtos/EventDto.ts";
+import { EventDtoFetchResponse } from "../../dtos/EventDto.ts";
 import {Box, Grid, Typography} from "@mui/material";
 import {EventCard} from "../EventCard/EventCard.tsx";
 
-const EventGrid: React.FC<{ events: EventDto[] }> = ({ events }) => {
+const EventGrid: React.FC<{ events: EventDtoFetchResponse[] }> = ({ events }) => {
     return (
         (events.length > 0 ?  
             <Grid container spacing={3} justifyContent="center" sx={{ width: '100%' }}>

@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { Navigation } from '../../assets/constants/navigation';
 
 function OrganisersHome() {
-  const user: User = useSelector((state: RootState) => state.auth.user);
+  const user: User | null = useSelector((state: RootState) => state.auth.user);
   const organiserName: string = user?.organiserName ?? "";
   const banner = useBanner();
   const navigate = useNavigate();

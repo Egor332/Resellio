@@ -1,7 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from '../../services/authService.ts'
 
-export type Role = 'Customer' | 'Admin' | 'Organiser'
+export enum Role {
+  Customer = 'Customer',
+  Organiser = 'Organiser',
+  Admin = 'Admin',
+}
 
 export interface User {
   email: string
@@ -14,8 +18,8 @@ export interface User {
 }
 
 interface AuthState {
-  user: User
-  token: string
+  user: User | null
+  token: string | null
   isAuthenticated: boolean
   loading: boolean
   error: string | null

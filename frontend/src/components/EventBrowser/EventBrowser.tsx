@@ -1,4 +1,4 @@
-import {EventDto} from "../../dtos/EventDto.ts";
+import {EventDtoFetchResponse} from "../../dtos/EventDto.ts";
 import React, {useEffect, useState} from "react";
 import {
     Box,
@@ -15,7 +15,7 @@ export const EventBrowser: React.FC<{
     showOrganiserNameFilter: boolean
     organiserName?: string
 }> = ({showOrganiserNameFilter, organiserName = ""}) => {
-    const [events, setEvents] = useState<EventDto[]>([]);
+    const [events, setEvents] = useState<EventDtoFetchResponse[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [organiserNamePart, setOrganiserNamePart] = useState(organiserName);
