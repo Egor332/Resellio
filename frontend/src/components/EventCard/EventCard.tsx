@@ -44,7 +44,7 @@ export const EventCard: React.FC<{ event: EventDtoFetchResponse }> = ({event}) =
                 </Typography>
 
                 <Box mt="auto" display="flex" justifyContent="center" pt={2}>
-                    {isCustomer ??
+                    {isCustomer &&
                         <Button variant="contained" color="primary" size="small">
                             Add to Cart
                         </Button>
