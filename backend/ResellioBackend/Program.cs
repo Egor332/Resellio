@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -30,6 +29,8 @@ using Stripe;
 using ResellioBackend.Common.Paging;
 using ResellioBackend.EventManagementSystem.Services.Abstractions;
 using ResellioBackend.EventManagementSystem.Services.Implementations;
+using ResellioBackend.EventManagementSystem.ObjectStorages.Abstractions;
+using ResellioBackend.EventManagementSystem.ObjectStorages.Implementations;
 
 namespace ResellioBackend
 {
@@ -167,6 +168,9 @@ namespace ResellioBackend
             builder.Services.AddScoped<ITicketCacheRepository, TicketRedisRepository>();
             builder.Services.AddScoped<IRedisService, RedisService>();
             builder.Services.AddScoped<IStateCacheRepository, StateRedisRepository>();
+
+            // Object storage
+            builder.Services.AddScoped<IImageStorage, AzureImageStorage>();
 
 
             // Factory

@@ -85,7 +85,8 @@ namespace ResellioBackend.UserManagementSystem.Models.Base
                 FirstName = this.FirstName,
                 LastName = this.LastName,
                 CreatedDate = this.CreatedDate,
-                ConfirmedSeller = !(this.ConnectedSellingAccount == null)
+                ConfirmedSeller = !(this.ConnectedSellingAccount == null),
+                Role = GetRole()
             };
         }
 
