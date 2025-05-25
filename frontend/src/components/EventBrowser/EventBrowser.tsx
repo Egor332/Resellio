@@ -64,10 +64,10 @@ export const EventBrowser: React.FC<{
         }
     };
 
-    // Fetch on mount, then only after Apply button click
+    // Fetch on mount, then only after Apply button click or page change
     useEffect(() => {
         fetchEvents();
-    }, []);
+    }, [currentPage]);
 
     const handlePageChange = (_: React.ChangeEvent<unknown>,  page: number) => {
       setCurrentPage(page);  
