@@ -3,11 +3,9 @@ import {Card, CardContent, Typography, Box, Button, CardMedia} from '@mui/materi
 import {EventDto} from "../../dtos/EventDto.ts";
 import {useSelector} from "react-redux";
 
-const selectCurrentUserRole = (state: any): string | null => {
-    return state.auth.user?.role ?? null;
-};
+const selectCurrentUserRole = (state: any): string | null => 
+    state.auth.user?.role ?? null;
 
-// placeholder image
 const defaultImage = "https://via.placeholder.com/400x200?text=Event";
 
 export const EventCard: React.FC<{ event: EventDto }> = ({event}) => {
@@ -19,13 +17,12 @@ export const EventCard: React.FC<{ event: EventDto }> = ({event}) => {
             variant="outlined"
             sx={{
                 height: '100%',
+                width: '100%',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                width: 300 // stała szerokość dla lepszego rozmieszczenia
             }}
         >
-            {/* Obrazek */}
             <CardMedia
                 component="img"
                 height="180"
@@ -34,14 +31,11 @@ export const EventCard: React.FC<{ event: EventDto }> = ({event}) => {
                 sx={{ objectFit: 'cover' }}
             />
 
-            {/* Treść */}
             <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                {/* Nazwa */}
                 <Typography variant="h6" align="center" gutterBottom noWrap>
                     {event.name}
                 </Typography>
 
-                {/* Daty */}
                 <Typography variant="body2" color="textSecondary" align="center" noWrap>
                     {new Date(event.start).toLocaleString()} – {new Date(event.end).toLocaleString()}
                 </Typography>
@@ -64,8 +58,6 @@ export const EventCard: React.FC<{ event: EventDto }> = ({event}) => {
                     </Box>
                 )}
 
-
-                        {/* Przycisk */}
                 <Box mt="auto" display="flex" justifyContent="center" pt={2}>
                     {isOrganiser ? (
                         <Button variant="outlined" color="primary" size="small">

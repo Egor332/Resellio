@@ -5,7 +5,7 @@ function OrganisersHome() {
   return (
     <Box sx={{ textAlign: 'center', width: '100%' }}>
         <Typography variant="h4" component="h1" gutterBottom>
-            Organiser Homepage
+            Your Events
         </Typography>
         <EventBrowser/>
     </Box>

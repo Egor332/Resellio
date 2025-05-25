@@ -5,7 +5,7 @@ function CustomersHome() {
   return (
     <Box sx={{ textAlign: 'center', width: '100%' }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        Customer Homepage
+        Browse Events
       </Typography>
         <EventBrowser/>
     </Box>

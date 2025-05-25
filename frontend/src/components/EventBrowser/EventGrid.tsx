@@ -6,7 +6,7 @@ import {EventCard} from "../EventCard/EventCard.tsx";
 const EventGrid: React.FC<{ events: EventDto[] }> = ({ events }) => {
     return (
         (events.length > 0 ?  
-            <Grid container spacing={3} justifyContent="center">
+            <Grid container spacing={3} justifyContent="center" sx={{ width: '100%' }}>
                 {events.map((event) => (
                     <Grid size={{xs: 12, sm: 6, md: 4}} key={event.id}>
                         <EventCard event={event} />

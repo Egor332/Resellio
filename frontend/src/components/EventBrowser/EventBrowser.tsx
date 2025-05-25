@@ -29,25 +29,24 @@ export const EventBrowser: React.FC = () => {
         try {
             const now = new Date().toISOString();
 
-            const rawParams = {
-                "Filter.NamePart": searchQuery || undefined,
-                "Filter.StartsAfter": showFutureOnly ? now : startsAfter || undefined,
-                "Filter.EndsBefore": endsBefore || undefined,
-                "Filter.OrganiserNamePart": organiserNamePart || undefined,
-                "Pagination.Page": currentPage,
-                "Pagination.PageSize": itemsPerPage,
-            };
-            const filteredParams = Object.entries(rawParams)
-                .filter(([, v]) => v !== undefined && v !== '')
-                .map(([k, v]) => [k, String(v)]); // gwarantuje, że każda wartość to string
-            
-            const queryString = new URLSearchParams(filteredParams).toString();
-            const fullUrl = `${getApiEndpoint(API_ENDPOINTS.GET_EVENTS).url}?${queryString}`;
+            const params = new URLSearchParams({
+                "Pagination.Page": currentPage.toString(),
+                "Pagination.PageSize": itemsPerPage.toString()
+            });
 
-            const response = await apiRequest({ ...API_ENDPOINTS.GET_EVENTS, url: fullUrl });
+            if (searchQuery) 
+                params.append("Filter.NamePart", searchQuery);
+            if (showFutureOnly || startsAfter) 
+                params.append("Filter.StartsAfter", showFutureOnly ? now : startsAfter);
+            if (endsBefore) 
+                params.append("Filter.EndsBefore", endsBefore);
+            if (organiserNamePart) 
+                params.append("Filter.OrganiserNamePart", organiserNamePart);
+        
+            const response = await apiRequest(getApiEndpoint(API_ENDPOINTS.GET_EVENTS, params));
             
-            setEvents(response?.items ?? []);
-            setTotalPages(Math.ceil(response.totalAmount / itemsPerPage));
+            setEvents(response?.items || []);
+            setTotalPages(Math.ceil((response?.totalAmount || 0) / itemsPerPage));
         } 
         catch (error) {
             if (error instanceof Error) {
@@ -61,7 +60,6 @@ export const EventBrowser: React.FC = () => {
         }
     };
 
-    // fetch whenever one of the dependencies changes
     useEffect(() => {
         fetchEvents();
     }, [searchQuery, showFutureOnly, currentPage, itemsPerPage, organiserNamePart, startsAfter, endsBefore]);
