@@ -14,8 +14,8 @@ export interface User {
 }
 
 interface AuthState {
-  user: User | null
-  token: string | null
+  user: User
+  token: string
   isAuthenticated: boolean
   loading: boolean
   error: string | null

@@ -7,7 +7,7 @@ function CustomersHome() {
       <Typography variant="h4" component="h1" gutterBottom>
         Browse Events
       </Typography>
-        <EventBrowser/>
+      <EventBrowser showOrganiserNameFilter={true} />
     </Box>
   )
 }

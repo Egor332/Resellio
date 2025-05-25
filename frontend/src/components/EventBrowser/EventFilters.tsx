@@ -15,6 +15,7 @@ const EventFilters: React.FC<{
     itemsPerPage: number;
     setItemsPerPage: (value: number) => void;
     setCurrentPage: (value: number) => void;
+    showOrganiserNameFilter: boolean;
 }> = ({
           searchQuery,
           setSearchQuery,
@@ -29,6 +30,7 @@ const EventFilters: React.FC<{
           itemsPerPage,
           setItemsPerPage,
           setCurrentPage,
+          showOrganiserNameFilter,
       }) => {
     const handleFilterChange = <T,>(setter: (value: T) => void) => (value: T) => {
         setter(value);
@@ -59,15 +61,18 @@ const EventFilters: React.FC<{
                         label="Hide past events"
                     />
                 </Grid>
-                <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
-                    <TextField
-                        fullWidth
-                        label="Organiser Name"
-                        variant="outlined"
-                        value={organiserNamePart}
-                        onChange={(e) => handleFilterChange(setOrganiserNamePart)(e.target.value)}
-                    />
-                </Grid>
+                {
+                    showOrganiserNameFilter && 
+                    <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
+                        <TextField
+                            fullWidth
+                            label="Organiser Name"
+                            variant="outlined"
+                            value={organiserNamePart}
+                            onChange={(e) => handleFilterChange(setOrganiserNamePart)(e.target.value)}
+                        />
+                    </Grid>
+                }
                 <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
                     <TextField
                         fullWidth

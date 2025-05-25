@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import {
     Box,
     CircularProgress,
+    Button,
 } from '@mui/material';
 import {apiRequest} from "../../services/httpClient.ts";
 import {API_ENDPOINTS, getApiEndpoint} from "../../assets/constants/api.ts";
@@ -10,11 +11,14 @@ import EventGrid from "./EventGrid.tsx";
 import EventPagination from "./EventPagination.tsx";
 import EventFilters from "./EventFilters.tsx";
 
-export const EventBrowser: React.FC = () => {
+export const EventBrowser: React.FC<{
+    showOrganiserNameFilter: boolean
+    organiserName?: string
+}> = ({showOrganiserNameFilter, organiserName = ""}) => {
     const [events, setEvents] = useState<EventDto[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [organiserNamePart, setOrganiserNamePart] = useState('');
+    const [organiserNamePart, setOrganiserNamePart] = useState(organiserName);
     const [startsAfter, setStartsAfter] = useState('');
     const [endsBefore, setEndsBefore] = useState('');
     const [showFutureOnly, setShowFutureOnly] = useState(false); // future events are those which have not ended by now
@@ -60,18 +64,14 @@ export const EventBrowser: React.FC = () => {
         }
     };
 
+    // Fetch on mount, then only after Apply button click
     useEffect(() => {
         fetchEvents();
-    }, [searchQuery, showFutureOnly, currentPage, itemsPerPage, organiserNamePart, startsAfter, endsBefore]);
-
+    }, []);
 
     const handlePageChange = (_: React.ChangeEvent<unknown>,  page: number) => {
       setCurrentPage(page);  
     };
-
-    if (loading) {
-        return <CircularProgress />;
-    }
 
     return (
         <Box display="flex" alignItems="center" flexDirection="column" gap={4}>
@@ -90,9 +90,37 @@ export const EventBrowser: React.FC = () => {
                 itemsPerPage={itemsPerPage}
                 setItemsPerPage={setItemsPerPage}
                 setCurrentPage={setCurrentPage}
+                showOrganiserNameFilter={showOrganiserNameFilter}
             />
 
-            <EventGrid events={events}/>
+            <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                sx={{ 
+                    mt: 2,
+                    width: { xs: '100%', md: '33%' },
+                    alignSelf: 'center'
+                }}
+                disabled={loading}
+                onClick={() => {
+                    fetchEvents();
+                }}
+            >
+                Apply
+            </Button>
+
+            {loading ? (
+                <Box display="flex" justifyContent="center" my={4}>
+                    <CircularProgress 
+                        size={60} 
+                        thickness={12} 
+                        sx={{ color: 'primary' }} 
+                    />
+                </Box>
+            ) : (
+                <EventGrid events={events}/>
+            )}
 
             <EventPagination totalPages={totalPages} currentPage={currentPage} handlePageChange={handlePageChange}/>
             
