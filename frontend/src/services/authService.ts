@@ -56,8 +56,7 @@ const authService = {
 
   getCurrentUser: async (): Promise<Customer | Organiser> => {
     try {
-      // TODO: add full support
-      return await apiRequest(getApiEndpoint(API_ENDPOINTS.CURRENT_USER))
+      return await apiRequest(getApiEndpoint(API_ENDPOINTS.USER_INFO))
     } catch (error: any) {
       throw new Error(error.message || 'Failed to get user info')
     }

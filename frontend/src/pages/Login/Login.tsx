@@ -32,9 +32,9 @@ function Login() {
     setIsLoading(true)
 
     try {
-      const userData = await dispatch(loginUser(loginCredentials)).unwrap()
+      const loginResult = await dispatch(loginUser(loginCredentials)).unwrap()
 
-      const role = userData?.userRole
+      const role = loginResult.user.role
       if (role === 'Customer') {
         navigate(Navigation.CUSTOMERS, { replace: true })
       }
