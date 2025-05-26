@@ -13,12 +13,14 @@ interface CartState {
     groupedTickets: GroupedTickets
     loading: boolean
     error: string | null
+    cartExpirationTime: string | null
 }
 
 const initialState: CartState = {
     groupedTickets: {},
     loading: false,
-    error: null
+    error: null,
+    cartExpirationTime: null
 }
 
 export const fetchCartInfo = createAsyncThunk(
@@ -56,7 +58,7 @@ export const add = createAsyncThunk(
             
             return {
                 ...ticket,
-                lockExpirationTime: response.expirationTime
+                expirationTime: response.expirationTime
             };
         } catch (error: any) {
             return rejectWithValue(error.message);
@@ -90,6 +92,7 @@ const cartSlice = createSlice({
     reducers: {
         clearCart: (state) => {
             state.groupedTickets = {}
+            state.cartExpirationTime = null
         },
     },
     extraReducers: (builder) => {
@@ -100,6 +103,7 @@ const cartSlice = createSlice({
             })
             .addCase(add.fulfilled, (state, action) => {
                 state.loading = false
+                state.cartExpirationTime = action.payload.expirationTime
                 const ticket = action.payload as TicketDto;
                 if (!state.groupedTickets[ticket.sellerId]) {
                     state.groupedTickets[ticket.sellerId] = [];
@@ -142,6 +146,7 @@ const cartSlice = createSlice({
             .addCase(fetchCartInfo.fulfilled, (state, action) => {
                 state.loading = false
                 state.groupedTickets = {}
+                state.cartExpirationTime = action.payload.expirationTime
                 
                 const tickets = action.payload.tickets as TicketDto[];
                 if (tickets && tickets.length > 0) {

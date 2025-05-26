@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store/store'
 import { logout } from '../../store/auth/authSlice'
 import { useNavigate } from 'react-router-dom'
+import CartTimer from '../CartTimer/CartTimer'
 
 function CustomersHeader() {
   const dispatch = useDispatch<AppDispatch>()
@@ -15,6 +16,7 @@ function CustomersHeader() {
   const customerNavItems: NavItem[] = [
     {
       icon: <ShoppingCartIcon />,
+      preIcon: <CartTimer />,
       path: Navigation.CUSTOMERS_CART,
       tooltip: 'Shopping Cart',
     },
