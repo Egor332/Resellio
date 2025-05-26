@@ -16,6 +16,7 @@ import { TicketDto, TicketTypeDto } from '../../dtos/TicketDto';
 import EventPagination from '../EventBrowser/EventPagination';
 import {useSelector} from "react-redux";
 import { Role } from "../../store/auth/authSlice.ts"
+import { RootState } from "../../store/store.ts";
 
 interface TicketListProps {
     ticketType: TicketTypeDto;
@@ -27,9 +28,6 @@ interface TicketListProps {
     onBack: () => void;
 }
 
-const selectCurrentUserRole = (state: any): string | null => 
-    state.auth.user?.role ?? null;
-
 const TicketList: React.FC<TicketListProps> = ({
     ticketType,
     tickets,
@@ -39,7 +37,7 @@ const TicketList: React.FC<TicketListProps> = ({
     handlePageChange,
     onBack
 }) => {
-    const role = useSelector(selectCurrentUserRole);
+    const role = useSelector((state: RootState) => state.auth.user?.role);
     const isCustomer = role === Role.Customer;
 
     return (
