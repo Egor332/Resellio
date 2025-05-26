@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {Card, CardContent, Typography, Box, Button, CardMedia} from '@mui/material';
 import {EventDtoFetchResponse} from "../../dtos/EventDto.ts";
-import {useSelector} from "react-redux";
-import { Role } from "../../store/auth/authSlice.ts"
-
-const selectCurrentUserRole = (state: any): string | null => 
-    state.auth.user?.role ?? null;
+import TicketBrowser from '../TicketBrowser/TicketBrowser.tsx';
 
 export const EventCard: React.FC<{ event: EventDtoFetchResponse }> = ({event}) => {
-    const role = useSelector(selectCurrentUserRole);
-    const isCustomer = role === Role.Customer;
+    const [ticketBrowserOpen, setTicketBrowserOpen] = useState(false);
+
+    const handleOpenTicketBrowser = () => {
+        setTicketBrowserOpen(true);
+    };
+
+    const handleCloseTicketBrowser = () => {
+        setTicketBrowserOpen(false);
+    };
     
     return (
         <Card
@@ -44,13 +47,22 @@ export const EventCard: React.FC<{ event: EventDtoFetchResponse }> = ({event}) =
                 </Typography>
 
                 <Box mt="auto" display="flex" justifyContent="center" pt={2}>
-                    {isCustomer &&
-                        <Button variant="contained" color="primary" size="small">
-                            Add to Cart
-                        </Button>
-                    }
+                    <Button 
+                        variant="contained" 
+                        color="primary" 
+                        size="small"
+                        onClick={handleOpenTicketBrowser}
+                    >
+                        View tickets
+                    </Button>
                 </Box>
             </CardContent>
+
+            <TicketBrowser
+                open={ticketBrowserOpen}
+                onClose={handleCloseTicketBrowser}
+                event={event}
+            />
         </Card>
     );
 };
