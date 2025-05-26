@@ -126,7 +126,6 @@ function CustomersCart() {
         </Paper>
       ))}
 
-      {/* Checkout Button - Future implementation */}
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
         <Button
           variant="contained"

@@ -143,7 +143,6 @@ const cartSlice = createSlice({
                 state.loading = false
                 state.groupedTickets = {}
                 
-                // Group tickets by sellerId
                 const tickets = action.payload.tickets as TicketDto[];
                 if (tickets && tickets.length > 0) {
                     tickets.forEach(ticket => {
