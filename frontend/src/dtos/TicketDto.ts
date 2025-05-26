@@ -1,22 +1,21 @@
+export interface Price {
+  amount: number;
+  currencyCode: string;
+}
+
 export interface TicketTypeDto {
     typeId: number;
     description: string;
     availableFrom: string;
     amountOfTickets: number;
-    basePrice: {
-        amount: number
-        currencyCode: string
-    }
+    basePrice: Price;
     eventId: number;
 }
 
 export interface TicketDto {
     id: string;
     isOnSale: boolean;
-    currentPrice: {
-        amount: number;
-        currencyCode: string;
-    };
+    currentPrice: Price;
     eventName: string;
     eventDescription: string;
     ticketTypeDescription: string;
@@ -36,4 +35,12 @@ export interface TicketFetchResponse {
     items: TicketDto[];
     pageNumber: number;
     totalAmount: number;
+}
+
+export interface TicketLockResponse {
+    ticketId: string;
+    expirationTime: string;
+    success: boolean;
+    message: string;
+    errorCode: number;
 }

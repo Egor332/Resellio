@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Box,
     List,
@@ -14,9 +14,12 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { TicketDto, TicketTypeDto } from '../../dtos/TicketDto';
 import EventPagination from '../EventBrowser/EventPagination';
-import {useSelector} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Role } from "../../store/auth/authSlice.ts"
-import { RootState } from "../../store/store.ts";
+import { RootState, AppDispatch } from "../../store/store.ts";
+import CartActionDialog from '../CartActionDialog/CartActionDialog';
+import { add } from '../../store/cart/cartSlice';
+import useBanner from '../../hooks/useBanner';
 
 interface TicketListProps {
     ticketType: TicketTypeDto;
@@ -26,6 +29,7 @@ interface TicketListProps {
     currentPage: number;
     handlePageChange: (event: React.ChangeEvent<unknown>, page: number) => void;
     onBack: () => void;
+    onDialogClose: () => void;
 }
 
 const TicketList: React.FC<TicketListProps> = ({
@@ -35,10 +39,27 @@ const TicketList: React.FC<TicketListProps> = ({
     totalPages,
     currentPage,
     handlePageChange,
-    onBack
+    onBack,
+    onDialogClose
 }) => {
     const role = useSelector((state: RootState) => state.auth.user?.role);
     const isCustomer = role === Role.Customer;
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const dispatch = useDispatch<AppDispatch>();
+    const banner = useBanner()
+
+    const handleAddToCart = async (ticket: TicketDto) => {
+        try {
+            await dispatch(add(ticket));
+            setIsDialogOpen(true);
+        } catch (error: any) {
+            banner.showError(error.message || "Failed to add ticket to cart");
+        }
+    };
+
+    const handleCloseDialog = () => {
+        setIsDialogOpen(false);
+    };
 
     return (
         <Box width="100%">
@@ -78,6 +99,7 @@ const TicketList: React.FC<TicketListProps> = ({
                                                         variant="contained" 
                                                         color="primary" 
                                                         size="small"
+                                                        onClick={() => handleAddToCart(ticket)}
                                                     >
                                                         Add to cart
                                                     </Button>
@@ -104,6 +126,12 @@ const TicketList: React.FC<TicketListProps> = ({
                     handlePageChange={handlePageChange} 
                 />
             </Box>
+
+            <CartActionDialog 
+                open={isDialogOpen} 
+                onClose={handleCloseDialog}
+                parentDialogClose={onDialogClose}
+            />
         </Box>
     );
 };

@@ -65,6 +65,21 @@ export const API_ENDPOINTS: TApiEndpoints = {
     method: 'GET',
     isAuthRequired: true,
   },
+  LOCK_TICKET: {
+    url: '/api/ShoppingCart/lock-ticket',
+    method: 'POST',
+    isAuthRequired: true,
+  },
+  UNLOCK_TICKET: {
+    url: '/api/ShoppingCart/unlock-ticket',
+    method: 'POST',
+    isAuthRequired: true,
+  },
+  CART_INFO: {
+    url: '/api/ShoppingCart/cart-info',
+    method: 'GET',
+    isAuthRequired: true,
+  },
 }
 
 const apiUrl = getEnvVariable(import.meta.env, 'VITE_API_URL')

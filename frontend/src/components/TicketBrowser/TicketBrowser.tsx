@@ -135,6 +135,7 @@ const TicketBrowser: React.FC<TicketBrowserProps> = ({ open, onClose, event }) =
                         currentPage={currentTicketPage}
                         handlePageChange={handleTicketPageChange}
                         onBack={handleBack}
+                        onDialogClose={onClose}
                     />
                 ) : (
                     <TicketTypeList
