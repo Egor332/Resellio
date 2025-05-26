@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { apiRequest } from '../../services/httpClient'
 import { API_ENDPOINTS, getApiEndpoint } from '../../assets/constants/api'
 import { TicketDto, TicketLockResponse } from '../../dtos/TicketDto'
+import cartService from '../../services/cartService'
 
 
 interface GroupedTickets {
@@ -19,6 +20,26 @@ const initialState: CartState = {
     loading: false,
     error: null
 }
+
+export const fetchCartInfo = createAsyncThunk(
+    'cart/fetchCartInfo',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await cartService.getCartInfo();
+            
+            if (!response || !response.isCartExist) {
+                return { tickets: [], expirationTime: null };
+            }
+            
+            return { 
+                tickets: response.ticketsInCart, 
+                expirationTime: response.cartExpirationTime 
+            };
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to fetch cart info');
+        }
+    }
+)
 
 export const add = createAsyncThunk(
     'cart/add',
@@ -112,6 +133,30 @@ const cartSlice = createSlice({
             .addCase(remove.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload as string || 'Failed to remove ticket from cart'
+            })
+            
+            .addCase(fetchCartInfo.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(fetchCartInfo.fulfilled, (state, action) => {
+                state.loading = false
+                state.groupedTickets = {}
+                
+                // Group tickets by sellerId
+                const tickets = action.payload.tickets as TicketDto[];
+                if (tickets && tickets.length > 0) {
+                    tickets.forEach(ticket => {
+                        if (!state.groupedTickets[ticket.sellerId]) {
+                            state.groupedTickets[ticket.sellerId] = [];
+                        }
+                        state.groupedTickets[ticket.sellerId].push(ticket);
+                    });
+                }
+            })
+            .addCase(fetchCartInfo.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload as string || 'Failed to fetch cart info'
             })
     },
 })
