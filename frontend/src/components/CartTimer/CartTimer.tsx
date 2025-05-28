@@ -21,11 +21,13 @@ const CartTimer = () => {
       const currentTime = new Date().getTime();
       const timeLeftMs = expirationTime - currentTime;
 
-      if (timeLeftMs < 1000) {
+      const timeLeftSeconds =  Math.max(0, Math.floor(timeLeftMs / 1000));
+
+      if (timeLeftSeconds === 0) {
           dispatch(fetchCartInfo());
       }
       
-      return Math.max(0, Math.floor(timeLeftMs / 1000));
+      return timeLeftSeconds;
     };
     
     setSecondsLeft(calculateTimeRemaining());

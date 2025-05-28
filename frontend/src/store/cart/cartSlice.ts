@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { apiRequest } from '../../services/httpClient'
 import { API_ENDPOINTS, getApiEndpoint } from '../../assets/constants/api'
-import { TicketDto, TicketLockResponse } from '../../dtos/TicketDto'
+import { TicketDto } from '../../dtos/TicketDto'
 import cartService from '../../services/cartService'
 
 
@@ -61,7 +61,7 @@ export const add = createAsyncThunk(
                 expirationTime: response.expirationTime
             };
         } catch (error: any) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.message || 'Failed to add ticket to cart');
         }
     }
 )
@@ -81,7 +81,7 @@ export const remove = createAsyncThunk(
             
             return ticketId;
         } catch (error: any) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.message || 'Failed to remove ticket from cart');
         }
     }
 )
@@ -112,7 +112,7 @@ const cartSlice = createSlice({
             })
             .addCase(add.rejected, (state, action) => {
                 state.loading = false
-                state.error = action.payload as string || 'Failed to add ticket to cart'
+                state.error = action.payload as string
             })
             
             .addCase(remove.pending, (state) => {
@@ -136,7 +136,7 @@ const cartSlice = createSlice({
             })
             .addCase(remove.rejected, (state, action) => {
                 state.loading = false
-                state.error = action.payload as string || 'Failed to remove ticket from cart'
+                state.error = action.payload as string
             })
             
             .addCase(fetchCartInfo.pending, (state) => {
@@ -160,7 +160,7 @@ const cartSlice = createSlice({
             })
             .addCase(fetchCartInfo.rejected, (state, action) => {
                 state.loading = false
-                state.error = action.payload as string || 'Failed to fetch cart info'
+                state.error = action.payload as string
             })
     },
 })
