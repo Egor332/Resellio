@@ -104,11 +104,6 @@ const cartSlice = createSlice({
             .addCase(add.fulfilled, (state, action) => {
                 state.loading = false
                 state.cartExpirationTime = action.payload.expirationTime
-                const ticket = action.payload as TicketDto;
-                if (!state.groupedTickets[ticket.sellerId]) {
-                    state.groupedTickets[ticket.sellerId] = [];
-                }
-                state.groupedTickets[ticket.sellerId].push(ticket);
             })
             .addCase(add.rejected, (state, action) => {
                 state.loading = false
