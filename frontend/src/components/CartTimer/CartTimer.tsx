@@ -37,7 +37,7 @@ const CartTimer = () => {
     }, 1000);
     
     return () => clearInterval(interval);
-  }, [cartExpirationTime]);
+  }, [cartExpirationTime, dispatch]);
 
   const formatTime = () => {
     const minutes = Math.floor(secondsLeft / SECONDS_PER_MINUTE);
@@ -51,7 +51,7 @@ const CartTimer = () => {
         <Typography 
           variant="body2" 
           sx={{ 
-            color: secondsLeft < LOW_TIME_THRESHOLD_SECONDS ? 'error.main' : '',
+            color: secondsLeft < LOW_TIME_THRESHOLD_SECONDS ? 'error.main' : undefined,
             fontSize: '1rem',
           }}
         >
