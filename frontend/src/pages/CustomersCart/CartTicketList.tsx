@@ -37,11 +37,11 @@ const CartTicketList: React.FC<CartTicketListProps> = ({
                   secondary={
                     <>
                       <Typography variant="body2" component="span" display="block">
-                        {ticket.eventName || 'Event name not available'}
+                        Event name: {ticket.eventName || 'Event name not available'}
                       </Typography>
-                      {/* <Typography variant="body2" component="span" color="text.secondary" display="block">
-                        Type: {ticket.ticketType?.description || 'Standard'}
-                      </Typography> */}
+                      <Typography variant="body2" component="span" color="text.secondary" display="block">
+                        Type: {ticket.ticketTypeDescription || 'Standard'}
+                      </Typography>
                     </>
                   }
                 />

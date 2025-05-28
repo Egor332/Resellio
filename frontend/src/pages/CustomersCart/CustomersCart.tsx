@@ -41,6 +41,16 @@ function CustomersCart() {
     }
   }
 
+  const calculateTotalPrice = () => {
+    let sum = 0
+    Object.values(groupedTickets).forEach((tickets) => {
+      tickets.forEach((ticket: TicketDto) => {
+        sum += ticket.currentPrice.amount
+      })
+    })
+    return sum.toFixed(2)
+  }
+
   if (loading && !hasItems) {
     return (
       <Box
@@ -125,6 +135,10 @@ function CustomersCart() {
           {index < sellerIds.length - 1 && <Divider sx={{ my: 2 }} />}
         </Paper>
       ))}
+
+      <Typography variant="h5">
+        Total price: {calculateTotalPrice()} PLN
+      </Typography>
 
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
         <Button
