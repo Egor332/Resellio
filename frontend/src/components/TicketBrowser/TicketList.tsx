@@ -30,6 +30,7 @@ interface TicketListProps {
     handlePageChange: (event: React.ChangeEvent<unknown>, page: number) => void;
     onBack: () => void;
     onDialogClose: () => void;
+    onAddToCart: (ticket: TicketDto) => void;
 }
 
 const TicketList: React.FC<TicketListProps> = ({
@@ -40,7 +41,7 @@ const TicketList: React.FC<TicketListProps> = ({
     currentPage,
     handlePageChange,
     onBack,
-    onDialogClose
+    onAddToCart
 }) => {
     const role = useSelector((state: RootState) => state.auth.user?.role);
     const isCustomer = role === Role.Customer;
@@ -52,6 +53,7 @@ const TicketList: React.FC<TicketListProps> = ({
         try {
             await dispatch(add(ticket)).unwrap();
             setIsDialogOpen(true);
+            onAddToCart(ticket);
         } catch (error: any) {
             banner.showError(error || "Failed to add ticket to cart");
         }
@@ -130,7 +132,6 @@ const TicketList: React.FC<TicketListProps> = ({
             <CartActionDialog 
                 open={isDialogOpen} 
                 onClose={handleCloseDialog}
-                parentDialogClose={onDialogClose}
             />
         </Box>
     );

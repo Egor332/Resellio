@@ -12,21 +12,18 @@ import { Navigation } from '../../assets/constants/navigation'
 interface CartActionDialogProps {
   open: boolean
   onClose: () => void
-  parentDialogClose?: () => void
 }
 
-const CartActionDialog = ({ open, onClose, parentDialogClose }: CartActionDialogProps) => {
+const CartActionDialog = ({ open, onClose }: CartActionDialogProps) => {
   const navigate = useNavigate()
 
   const handleGoToCart = () => {
     navigate(Navigation.CUSTOMERS_CART)
     onClose()
-    if (parentDialogClose) parentDialogClose()
   }
 
   const handleContinueShopping = () => {
     onClose()
-    if (parentDialogClose) parentDialogClose()
   }
 
   return (

@@ -107,6 +107,10 @@ const TicketBrowser: React.FC<TicketBrowserProps> = ({ open, onClose, event }) =
         setSelectedTicketType(null);
     };
 
+    const onAddToCart = (ticket: TicketDto) => {
+        setTickets(prevTickets => prevTickets.filter(t => t.id !== ticket.id));
+    }
+
     return (
         <Dialog
             open={open}
@@ -136,6 +140,7 @@ const TicketBrowser: React.FC<TicketBrowserProps> = ({ open, onClose, event }) =
                         handlePageChange={handleTicketPageChange}
                         onBack={handleBack}
                         onDialogClose={onClose}
+                        onAddToCart={onAddToCart}
                     />
                 ) : (
                     <TicketTypeList
