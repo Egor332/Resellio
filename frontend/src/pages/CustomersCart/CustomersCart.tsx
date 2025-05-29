@@ -41,12 +41,10 @@ function CustomersCart() {
     }
   }
 
-  const calculateTotalPrice = () => {
+  const calculatePriceForSeller = (sellerId: number) => {
     let sum = 0
-    Object.values(groupedTickets).forEach((tickets) => {
-      tickets.forEach((ticket: TicketDto) => {
-        sum += ticket.currentPrice.amount
-      })
+    groupedTickets[sellerId].forEach((ticket: TicketDto) => {
+      sum += ticket.currentPrice.amount
     })
     return sum.toFixed(2)
   }
@@ -132,23 +130,30 @@ function CustomersCart() {
             removingId={isRemoving}
           />
 
-          {index < sellerIds.length - 1 && <Divider sx={{ my: 2 }} />}
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            p: 2,
+            borderTop: 1,
+            borderColor: 'divider'
+          }}>
+            <Typography variant="h5">
+              Total price: {calculatePriceForSeller(sellerId)} PLN
+            </Typography>
+            
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+            >
+              Proceed to Checkout
+            </Button>
+          </Box>
+
         </Paper>
       ))}
 
-      <Typography variant="h5">
-        Total price: {calculateTotalPrice()} PLN
-      </Typography>
-
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-        >
-          Proceed to Checkout
-        </Button>
-      </Box>
     </Box>
   )
 }
