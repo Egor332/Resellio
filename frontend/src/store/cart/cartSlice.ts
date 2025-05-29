@@ -128,6 +128,10 @@ const cartSlice = createSlice({
                         delete state.groupedTickets[sellerId];
                     }
                 });
+
+                if (Object.keys(state.groupedTickets).length === 0) {
+                    state.cartExpirationTime = null;
+                }
             })
             .addCase(remove.rejected, (state, action) => {
                 state.loading = false
