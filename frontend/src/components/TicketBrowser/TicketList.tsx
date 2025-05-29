@@ -50,10 +50,10 @@ const TicketList: React.FC<TicketListProps> = ({
 
     const handleAddToCart = async (ticket: TicketDto) => {
         try {
-            await dispatch(add(ticket));
+            await dispatch(add(ticket)).unwrap();
             setIsDialogOpen(true);
         } catch (error: any) {
-            banner.showError(error.message || "Failed to add ticket to cart");
+            banner.showError(error || "Failed to add ticket to cart");
         }
     };
 
