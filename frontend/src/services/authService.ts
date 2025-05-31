@@ -1,6 +1,6 @@
 import { apiRequest } from './httpClient'
 import { API_ENDPOINTS, getApiEndpoint } from '../assets/constants/api'
-import { Customer, Organiser } from '../store/auth/authSlice'
+import { User } from '../store/auth/authSlice'
 import {
   LoginCredentials,
   CustomerRegisterData,
@@ -54,7 +54,7 @@ const authService = {
     }
   },
 
-  getCurrentUser: async (): Promise<Customer | Organiser> => {
+  getCurrentUser: async (): Promise<User> => {
     try {
       return await apiRequest(getApiEndpoint(API_ENDPOINTS.USER_INFO))
     } catch (error: any) {

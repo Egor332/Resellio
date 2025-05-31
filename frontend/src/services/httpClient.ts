@@ -56,9 +56,18 @@ export const apiRequest = async (
     }
 
     if (!response.ok) {
-      throw new Error(
-        `HTTP error! Status: ${response.status} ${response.statusText}`
-      )
+      let errorMessage = `HTTP ${response.status} errror!`
+
+      try {
+        const errorData = await response.text();
+        if (errorData) {
+          errorMessage = errorData
+        }
+      } catch (parseError) {
+        console.warn('Could not parse error response as text', parseError);
+      }
+
+      throw new Error(errorMessage)
     }
 
     try {
