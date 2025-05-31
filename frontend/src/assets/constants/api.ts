@@ -80,6 +80,11 @@ export const API_ENDPOINTS: TApiEndpoints = {
     method: 'GET',
     isAuthRequired: true,
   },
+  MY_TICKETS: {
+    url: '/api/Tickets/my-tickets',
+    method: 'GET',
+    isAuthRequired: true,
+  },
 }
 
 const apiUrl = getEnvVariable(import.meta.env, 'VITE_API_URL')

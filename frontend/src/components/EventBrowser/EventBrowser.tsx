@@ -2,7 +2,6 @@ import {EventDtoFetchResponse} from "../../dtos/EventDto.ts";
 import React, {useEffect, useState} from "react";
 import {
     Box,
-    CircularProgress,
     Button,
 } from '@mui/material';
 import {apiRequest} from "../../services/httpClient.ts";
@@ -10,6 +9,7 @@ import {API_ENDPOINTS, getApiEndpoint} from "../../assets/constants/api.ts";
 import EventGrid from "./EventGrid.tsx";
 import EventPagination from "./EventPagination.tsx";
 import EventFilters from "./EventFilters.tsx";
+import Loading from "../Loading/Loading.tsx";
 
 export const EventBrowser: React.FC<{
     showOrganiserNameFilter: boolean
@@ -111,13 +111,7 @@ export const EventBrowser: React.FC<{
             </Button>
 
             {loading ? (
-                <Box display="flex" justifyContent="center" my={4}>
-                    <CircularProgress 
-                        size={60} 
-                        thickness={12} 
-                        sx={{ color: 'primary' }} 
-                    />
-                </Box>
+                <Loading />
             ) : (
                 <EventGrid events={events}/>
             )}
