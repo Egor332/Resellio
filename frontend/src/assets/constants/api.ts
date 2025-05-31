@@ -80,6 +80,11 @@ export const API_ENDPOINTS: TApiEndpoints = {
     method: 'GET',
     isAuthRequired: true,
   },
+  CONFIRM_SELLER: {
+    url: '/api/SellerRegistration/connect',
+    method: 'GET',
+    isAuthRequired: true,
+  },
 }
 
 const apiUrl = getEnvVariable(import.meta.env, 'VITE_API_URL')
