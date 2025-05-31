@@ -33,13 +33,14 @@ const UserInfoComponent: React.FC<Props> = ({ userInfo, onConfirmed }) => {
     const handleConfirmSeller = async () => {
         try{
             const response = await apiRequest(getApiEndpoint(API_ENDPOINTS.CONFIRM_SELLER))
+            const redirectUrl = response?.redirectStripeUrl;
 
-            if (response?.data?.success) {
-                banner.showSuccess("Successfully confirmed as a seller")
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
                 onConfirmed()
+            } else {
+                banner.showError("Couldn't confirm the seller: missing redirect URL");
             }
-            else
-                banner.showError("Couldn't confirm the seller")
         } catch (error) {
             console.error("Error trying to confirm the user: ", error);
             banner.showError("Couldn't confirm the seller")
