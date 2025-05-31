@@ -8,6 +8,9 @@ namespace ResellioBackend.EventManagementSystem.Mapper
     {
         public static EventInfoDto EventToEventInfoDto(Event model)
         {
+            string imageUrl;
+            if (string.IsNullOrEmpty(model.ImageUrl)) imageUrl = "https://upload.wikimedia.org/wikipedia/commons/8/83/TrumpPortrait.jpg";
+            else imageUrl = model.ImageUrl!;
             return new EventInfoDto()
             {
                 Id = model.EventId,
@@ -16,6 +19,7 @@ namespace ResellioBackend.EventManagementSystem.Mapper
                 Start = model.Start,
                 End = model.End,
                 OrganiserId = model.OrganiserId,
+                ImageUri = imageUrl
             };
         }
 
