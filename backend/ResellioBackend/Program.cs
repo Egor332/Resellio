@@ -154,6 +154,7 @@ namespace ResellioBackend
             builder.Services.AddTransient<ISellerRegistrationStateService, SellerRegistrationStateService>();
             builder.Services.AddTransient<ISellerRegistrationService, SellerRegistrationService>();
             builder.Services.AddTransient<ITicketSellingStateService, TicketSellingStateService>();
+            builder.Services.AddTransient<IQRCodeTemporaryCodeService, QRCodeTemporaryCodeService>();
 
             // Database services
             builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();
@@ -168,6 +169,7 @@ namespace ResellioBackend
             builder.Services.AddScoped<ITicketCacheRepository, TicketRedisRepository>();
             builder.Services.AddScoped<IRedisService, RedisService>();
             builder.Services.AddScoped<IStateCacheRepository, StateRedisRepository>();
+            builder.Services.AddScoped<IQRCodeTemporaryCodeRepository, QRCodeTemporaryCodeRedisRepository>();
 
             // Object storage
             builder.Services.AddScoped<IImageStorage, AzureImageStorage>();
