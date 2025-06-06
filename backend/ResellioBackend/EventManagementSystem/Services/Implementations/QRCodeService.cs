@@ -1,4 +1,8 @@
-﻿using ResellioBackend.EventManagementSystem.Services.Abstractions;
+﻿using Newtonsoft.Json;
+using QRCoder;
+using ResellioBackend.EventManagementSystem.Results;
+using ResellioBackend.EventManagementSystem.Services.Abstractions;
+using System.Text.Json;
 
 namespace ResellioBackend.EventManagementSystem.Services.Implementations
 {
@@ -11,15 +15,35 @@ namespace ResellioBackend.EventManagementSystem.Services.Implementations
             _tempCodeService = tempCodeService;
         }
 
-        public async Task<byte[]> GenerateQRCodeAsync(Guid ticketId)
+        public async Task<QRCodeCreationResult> GenerateQRCodeAsync(Guid ticketId)
         {
             var temporaryCode = await _tempCodeService.CreateAndSaveTemporaryCodeAsync();
+            if (temporaryCode == null)
+            {
+                return new QRCodeCreationResult()
+                {
+                    Success = false,
+                    Message = "Something went wrong please try again"
+                };
+            }
             var payload = new
             {
                 TicketId = ticketId,
                 TemporaryCode = temporaryCode,
             };
-            throw new NotImplementedException();
+
+            string jsonPayload = JsonConvert.SerializeObject(payload);
+            var qrGenerator = new QRCodeGenerator();
+            var qrCodeData = qrGenerator.CreateQrCode(jsonPayload, QRCodeGenerator.ECCLevel.Q);
+            var qrCode = new PngByteQRCode(qrCodeData);
+            var qrCodeImage = qrCode.GetGraphic(20);
+
+            
+
+            return new QRCodeCreationResult {
+                Success = true,
+                QRCodeImage = qrCodeImage
+            };
         }
     }
 }
