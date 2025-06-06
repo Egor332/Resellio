@@ -16,7 +16,7 @@ namespace ResellioBackend.EventManagementSystem.Services.Implementations
         {
             var newCode = Guid.NewGuid();
             var isCodeAdded = await _qrCodeTemporaryCodeRepository.AddTemporaryCodeAsync(newCode);
-            if (isCodeAdded)
+            if (!isCodeAdded)
             {
                 return null;
             }

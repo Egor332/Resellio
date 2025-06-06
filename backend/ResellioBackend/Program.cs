@@ -156,6 +156,7 @@ namespace ResellioBackend
             builder.Services.AddTransient<ITicketSellingStateService, TicketSellingStateService>();
             builder.Services.AddTransient<IQRCodeTemporaryCodeService, QRCodeTemporaryCodeService>();
             builder.Services.AddTransient<IQRCodeService, QRCodeService>();
+            builder.Services.AddTransient<IMyTicketService, MyTicketService>();
 
             // Database services
             builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();

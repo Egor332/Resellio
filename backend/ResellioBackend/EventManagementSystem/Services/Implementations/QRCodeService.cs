@@ -36,7 +36,7 @@ namespace ResellioBackend.EventManagementSystem.Services.Implementations
             var qrGenerator = new QRCodeGenerator();
             var qrCodeData = qrGenerator.CreateQrCode(jsonPayload, QRCodeGenerator.ECCLevel.Q);
             var qrCode = new PngByteQRCode(qrCodeData);
-            var qrCodeImage = qrCode.GetGraphic(20);
+            var qrCodeImage = qrCode.GetGraphic(10);
 
             
 
