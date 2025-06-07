@@ -6,6 +6,8 @@ import { apiRequest } from '../../services/httpClient';
 import EventPagination from '../../components/EventBrowser/EventPagination';
 import Loading from "../../components/Loading/Loading.tsx";
 import TicketCard from '../../components/TicketCard/TicketCard.tsx';
+import { useSelector } from 'react-redux';
+import { RootState } from "../../store/store.ts";
 
 
 function CustomersMyTickets() {
@@ -14,6 +16,7 @@ function CustomersMyTickets() {
     const [currentPage, setCurrentPage] = useState(1);
     const [tickets, setTickets] = useState<TicketDto[]>([]);
     const [totalPages, setTotalPages] = useState(1);
+    const user = useSelector((state: RootState) => state.auth.user);
 
     const handlePageChange = (_: React.ChangeEvent<unknown>,  page: number) => {
         setCurrentPage(page);  
@@ -41,7 +44,7 @@ function CustomersMyTickets() {
 
     useEffect(() => {
         fetchTickets();
-    }, [currentPage, itemsPerPage]);
+    }, [currentPage, itemsPerPage, user?.confirmedSeller]);
 
   return (
     <Box sx={{ textAlign: 'center', width: '100%' }}>
@@ -56,7 +59,7 @@ function CustomersMyTickets() {
                 {tickets.length > 0 ? (
                     <Box>
                         {tickets.map((ticket) => (
-                            <TicketCard key={ticket.id} ticket={ticket} />
+                            <TicketCard key={ticket.id} ticket={ticket} onTicketUpdate={fetchTickets} />
                         ))}
                     </Box>
                 ) : (
