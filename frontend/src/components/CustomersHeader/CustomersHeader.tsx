@@ -3,6 +3,7 @@ import { ROLE_COLORS } from '../../theme/themeConstants'
 import { Navigation } from '../../assets/constants/navigation'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import PersonIcon from '@mui/icons-material/Person'
+import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store/store'
 import { logout } from '../../store/auth/authSlice'
@@ -19,6 +20,11 @@ function CustomersHeader() {
       preIcon: <CartTimer />,
       path: Navigation.CUSTOMERS_CART,
       tooltip: 'Shopping Cart',
+    },
+    {
+      icon: <ConfirmationNumberIcon />,
+      path: Navigation.CUSTOMERS_MY_TICKETS,
+      tooltip: 'My Tickets',
     },
     {
       icon: <PersonIcon />,

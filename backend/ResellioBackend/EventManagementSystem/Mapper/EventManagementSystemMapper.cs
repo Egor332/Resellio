@@ -50,6 +50,7 @@ namespace ResellioBackend.EventManagementSystem.Mapper
                 EventId = model.TicketType.TypeId,
                 TicketTypeId = model.TicketTypeId,
                 SellerId = model.HolderId,
+                IsUsed = model.IsUsed
             };
         }
     }
