@@ -24,9 +24,9 @@ jobs:
           dotnet-version: '8.x'
       - name : Update Database
         run: |
-          dotnet tool install --global dotnet-ef --version 8.*
+          dotnet tool install --global dotnet-ef --version 9.*
           dotnet tool restore
-          dotnet ef --project ./backend/ResellioBackend/ResellioBackend.csproj database update
+          dotnet ef database update --project ./backend/ResellioBackend/ResellioBackend.csproj --startup-project ./backend/ResellioBackend
         env:
           ConnectionStrings__DefaultConnection: ${{ secrets.RESELLIO_DB_CONN_STRING }}
 
