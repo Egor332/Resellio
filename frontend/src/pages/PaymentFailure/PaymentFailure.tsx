@@ -1,22 +1,11 @@
-import { Box, Typography, Paper, Button } from '@mui/material'
 import ErrorIcon from '@mui/icons-material/Error'
-import { useNavigate } from 'react-router-dom'
 import { Navigation } from '../../assets/constants/navigation'
+import PaymentResultPage from '../../components/PaymentResultPage/PaymentResultPage'
 
 function PaymentFailure() {
-  const navigate = useNavigate()
-
-  const handleGoToCart = () => {
-    navigate(Navigation.CUSTOMERS_CART)
-  }
-
-  const handleGoToHome = () => {
-    navigate(Navigation.CUSTOMERS)
-  }
-
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', p: 3 }}>
-      <Paper elevation={3} sx={{ p: 4, width: '100%', maxWidth: 500, textAlign: 'center' }}>
+    <PaymentResultPage
+      icon={
         <ErrorIcon 
           sx={{ 
             fontSize: 80, 
@@ -24,34 +13,19 @@ function PaymentFailure() {
             mb: 2 
           }} 
         />
-        
-        <Typography variant="h4" component="h1" gutterBottom color="error.main">
-          Payment Failed
-        </Typography>
-        
-        <Typography variant="body1" sx={{ mb: 3 }}>
-          Unfortunately, your payment could not be processed. Please check your payment details and try again.
-        </Typography>
-        
-        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleGoToCart}
-          >
-            Return to Cart
-          </Button>
-          
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleGoToHome}
-          >
-            Back to Home
-          </Button>
-        </Box>
-      </Paper>
-    </Box>
+      }
+      title="Payment Failed"
+      message="Unfortunately, your payment could not be processed. Please check your payment details and try again."
+      titleColor="error.main"
+      primaryButton={{
+        text: "Return to Cart",
+        path: Navigation.CUSTOMERS_CART
+      }}
+      secondaryButton={{
+        text: "Back to Home",
+        path: Navigation.CUSTOMERS
+      }}
+    />
   )
 }
 
