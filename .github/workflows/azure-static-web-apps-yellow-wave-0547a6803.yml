@@ -26,6 +26,7 @@ jobs:
             VITE_API_URL: ${{ secrets.VITE_API_URL }}
             VITE_FRONTEND_PORT: ${{ secrets.VITE_FRONTEND_PORT }}
             VITE_HOST: ${{ secrets.VITE_HOST }}
+            VITE_DEFAULT_HTTP_TIMEOUT: ${{ secrets.VITE_DEFAULT_HTTP_TIMEOUT }}
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_YELLOW_WAVE_0547A6803 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
