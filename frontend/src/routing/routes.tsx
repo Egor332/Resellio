@@ -16,6 +16,8 @@ import CustomersProfile from '../pages/CustomersProfile/CustomersProfile'
 import OrganisersProfile from '../pages/OrganisersProfile/OrganisersProfile'
 import OrganisersAddEvent from '../pages/OrganisersAddEvent/OrganisersAddEvent'
 import CustomersMyTickets from '../pages/CustomersMyTickets/CustomersMyTickets'
+import PaymentSuccess from '../pages/PaymentSuccess/PaymentSuccess'
+import PaymentFailure from '../pages/PaymentFailure/PaymentFailure'
 
 export const routes: RouteObject[] = [
   {
@@ -68,6 +70,14 @@ export const routes: RouteObject[] = [
       {
         path: Navigation.CUSTOMERS_MY_TICKETS,
         element: <CustomersMyTickets />,
+      },
+      {
+        path: Navigation.CUSTOMERS_PAYMENT_SUCCESS,
+        element: <PaymentSuccess />,
+      },
+      {
+        path: Navigation.CUSTOMERS_PAYMENT_FAILURE,
+        element: <PaymentFailure />,
       },
     ],
   },
