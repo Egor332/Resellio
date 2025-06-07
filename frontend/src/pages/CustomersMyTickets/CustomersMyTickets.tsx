@@ -5,6 +5,7 @@ import { TicketFetchResponse, TicketDto } from '../../dtos/TicketDto';
 import { apiRequest } from '../../services/httpClient';
 import EventPagination from '../../components/EventBrowser/EventPagination';
 import Loading from "../../components/Loading/Loading.tsx";
+import TicketCard from '../../components/TicketCard/TicketCard.tsx';
 
 
 function CustomersMyTickets() {
@@ -55,11 +56,7 @@ function CustomersMyTickets() {
                 {tickets.length > 0 ? (
                     <Box>
                         {tickets.map((ticket) => (
-                            <Box key={ticket.id} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px' }}>
-                                <Typography variant="h6">{ticket.eventName}</Typography>
-                                <Typography variant="body1">Ticket ID: {ticket.id}</Typography>
-                                <Typography variant="body2">Price: ${ticket.currentPrice.amount}</Typography>
-                            </Box>
+                            <TicketCard key={ticket.id} ticket={ticket} />
                         ))}
                     </Box>
                 ) : (
