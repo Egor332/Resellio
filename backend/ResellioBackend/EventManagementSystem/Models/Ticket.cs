@@ -22,6 +22,9 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
         public int HolderId { get; set; }
         public UserBase Holder { get; set; }
 
+        [Required]
+        public bool IsUsed { get; set; } = false;
+
         public void ChangeLockParameters(DateTime? newLock, TicketStates newStatus, int? intenderId)
         {
             LastLock = newLock;
@@ -74,6 +77,16 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
         {
             this.CurrentPrice = null;
             TicketState = TicketStates.Sold;
+        }
+
+        public bool MarkAsUsed()
+        {
+            if (IsUsed)
+            {
+                return false;
+            }
+            IsUsed = true;
+            return true;
         }
     }
 }
