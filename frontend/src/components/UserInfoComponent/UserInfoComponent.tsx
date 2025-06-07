@@ -36,8 +36,8 @@ const UserInfoComponent: React.FC<Props> = ({ userInfo, onConfirmed }) => {
             const redirectUrl = response?.redirectStripeUrl;
 
             if (redirectUrl) {
-                window.location.href = redirectUrl;
                 onConfirmed()
+                window.location.href = redirectUrl;
             } else {
                 banner.showError("Couldn't confirm the seller: missing redirect URL");
             }
