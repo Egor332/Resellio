@@ -10,11 +10,11 @@ namespace ResellioBackend.EventManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MyTicketsController : ControllerBase
+    public class TicketsValidationController : ControllerBase
     {
         private readonly IMyTicketService _myTicketService;
 
-        public MyTicketsController(IMyTicketService myTicketService)
+        public TicketsValidationController(IMyTicketService myTicketService)
         {
             _myTicketService = myTicketService;
         }
@@ -40,6 +40,13 @@ namespace ResellioBackend.EventManagementSystem.Controllers
             {
                 return BadRequest(new { result.Message });
             }
+        }
+
+        [HttpPost("validate-ticket")]
+        public async Task<IActionResult> ValidateQRCode([FromBody]QRCodePayloadDto dto)
+        {
+            var validationResult = await _myTicketService.ValidateTicketAsync(dto.TicketId, dto.TemporaryCode);
+            return Ok(new { validationResult });
         }
         
     }
