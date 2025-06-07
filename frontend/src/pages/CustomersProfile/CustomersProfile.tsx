@@ -3,7 +3,7 @@ import UserInfoComponent from "../../components/UserInfoComponent/UserInfoCompon
 import {useUserInfo} from "../../hooks/useUserInfo.ts";
 
 function CustomersProfile() {
-  const { userInfo } = useUserInfo();
+  const { userInfo, refetch } = useUserInfo();
   
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
@@ -12,7 +12,7 @@ function CustomersProfile() {
           Your Profile
         </Typography>
         <Box sx={{ mt: 3 }}>
-          <UserInfoComponent userInfo={userInfo}/>
+          <UserInfoComponent userInfo={userInfo} onConfirmed={refetch}/>
         </Box>
       </Paper>
     </Box>
