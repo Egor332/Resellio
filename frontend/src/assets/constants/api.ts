@@ -8,7 +8,7 @@ export enum BodyTypes {
 
 export interface TApiEndpoint {
   url: string
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
   isAuthRequired: boolean
 }
 
@@ -78,6 +78,21 @@ export const API_ENDPOINTS: TApiEndpoints = {
   CART_INFO: {
     url: '/api/ShoppingCart/cart-info',
     method: 'GET',
+    isAuthRequired: true,
+  },
+  MY_TICKETS: {
+    url: '/api/Tickets/my-tickets',
+    method: 'GET',
+    isAuthRequired: true,
+  },
+  RESELL_TICKET: {
+    url: '/api/Tickets/resell',
+    method: 'PATCH',
+    isAuthRequired: true,
+  },
+  STOP_RESELLING: {
+    url: '/api/Tickets/stop-selling',
+    method: 'PATCH',
     isAuthRequired: true,
   },
 }
