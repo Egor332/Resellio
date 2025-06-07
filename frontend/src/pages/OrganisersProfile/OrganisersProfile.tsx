@@ -3,7 +3,7 @@ import {useUserInfo} from "../../hooks/useUserInfo.ts";
 import UserInfoComponent from "../../components/UserInfoComponent/UserInfoComponent.tsx";
 
 function OrganisersProfile() {
-  const { userInfo } = useUserInfo();
+  const { userInfo, refetch } = useUserInfo();
   
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
@@ -12,7 +12,7 @@ function OrganisersProfile() {
           Organiser Profile
         </Typography>
         <Box sx={{ mt: 3 }}>
-          <UserInfoComponent userInfo={userInfo}/>
+          <UserInfoComponent userInfo={userInfo}  onConfirmed={refetch}/>
         </Box>
       </Paper>
     </Box>

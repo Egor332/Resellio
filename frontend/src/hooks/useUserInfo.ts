@@ -7,20 +7,20 @@ export const useUserInfo = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const fetchUserInfo = async () => {
+        try {
+            const data = await userService.getUserInfo();
+            setUserInfo(data);
+        } catch (err: any) {
+            setError(err.message || 'Failed to fetch user info');
+        } finally {
+            setLoading(false);
+        }
+    };
+    
     useEffect(() => {
-        const fetchUserInfo = async () => {
-            try {
-                const data = await userService.getUserInfo();
-                setUserInfo(data);
-            } catch (err: any) {
-                setError(err.message || 'Failed to fetch user info');
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchUserInfo();
     }, []);
 
-    return { userInfo, loading, error };
+    return { userInfo, loading, error, refetch: fetchUserInfo };
 };

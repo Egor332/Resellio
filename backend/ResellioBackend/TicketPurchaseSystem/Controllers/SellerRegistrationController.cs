@@ -11,10 +11,13 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
     public class SellerRegistrationController : ControllerBase
     {
         private readonly ISellerRegistrationService _sellerRegistrationService;
+        private readonly string _organiserProfilePageUrl;
 
-        public SellerRegistrationController(ISellerRegistrationService sellerRegistrationService)
+        public SellerRegistrationController(ISellerRegistrationService sellerRegistrationService, 
+            IConfiguration configuration)
         {
             _sellerRegistrationService = sellerRegistrationService;
+            _organiserProfilePageUrl = configuration["FrontEndLinks:OrganisersProfilePage"];
         }
 
         [Authorize]
@@ -32,7 +35,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
             var callbackUrl = hostInfo + "/api/SellerRegistration/oauth-callback";
             string redirectStripeUrl = await _sellerRegistrationService.StartRegistrationAsync(userId, callbackUrl);
 
-            return Redirect(redirectStripeUrl);
+            return Ok(new {redirectStripeUrl} );
         }
 
         [HttpGet("oauth-callback")]
@@ -41,7 +44,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
             var result = await _sellerRegistrationService.CompleteRegistrationAsync(code, state);
             if (result)
             {
-                return Ok();
+                return Redirect(_organiserProfilePageUrl);
             }
             else
             {
