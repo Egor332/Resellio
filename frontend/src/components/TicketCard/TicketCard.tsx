@@ -5,7 +5,7 @@ import { RootState } from "../../store/store.ts";
 import { useState } from 'react';
 import ResellDialog from '../ResellDialog/ResellDialog';
 import { apiRequest } from '../../services/httpClient.ts';
-import { API_ENDPOINTS } from '../../assets/constants/api';
+import { API_ENDPOINTS, getApiEndpoint } from '../../assets/constants/api';
 
 const TicketCard: React.FC<{ 
     ticket: TicketDto; 
@@ -29,12 +29,12 @@ const TicketCard: React.FC<{
             price: price,
             currency: ticket.currentPrice.currencyCode
         }
-        await apiRequest(API_ENDPOINTS.RESELL_TICKET, resellData)
+        await apiRequest(getApiEndpoint(API_ENDPOINTS.RESELL_TICKET), resellData)
         onTicketUpdate()
     };
 
     const handleStopReselling = async () => {
-        await apiRequest(API_ENDPOINTS.STOP_RESELLING, { ticketId: ticket.id });
+        await apiRequest(getApiEndpoint(API_ENDPOINTS.STOP_RESELLING), { ticketId: ticket.id });
         onTicketUpdate()
     };
 
