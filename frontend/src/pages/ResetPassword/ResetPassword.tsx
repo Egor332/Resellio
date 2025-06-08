@@ -1,28 +1,17 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useSearchParams, Navigate } from 'react-router-dom'
+import { useState } from 'react'
+import { useNavigate, useParams, Navigate } from 'react-router-dom'
 import { Button, TextField, Typography, Box, Paper } from '@mui/material'
 import { Navigation } from '../../assets/constants/navigation'
 import authService from '../../services/authService'
 import useBanner from '../../hooks/useBanner'
 
 function ResetPassword() {
-  const [token, setToken] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
   const banner = useBanner()
-  const [searchParams] = useSearchParams()
-  const [validAccess, setValidAccess] = useState(false)
-
-  // Check if token exists in URL parameters when component mounts
-  useEffect(() => {
-    const tokenFromUrl = searchParams.get('token')
-    if (tokenFromUrl) {
-      setToken(tokenFromUrl)
-      setValidAccess(true)
-    }
-  }, [searchParams])
+  const { token: tokenFromUrl } = useParams<{ token: string }>()
 
   const handleResetPassword = async () => {
     if (newPassword !== confirmPassword) {
@@ -33,7 +22,7 @@ function ResetPassword() {
     setIsLoading(true)
 
     try {
-      await authService.resetPassword(token, newPassword)
+      await authService.resetPassword(tokenFromUrl!, newPassword)
       banner.showSuccess('Password reset successful')
       navigate(Navigation.LOGIN)
     } catch (err: any) {
@@ -44,8 +33,7 @@ function ResetPassword() {
   }
 
   // If no token is provided in the URL, redirect to login
-  // This prevents direct access to this page
-  if (!validAccess) {
+  if (!tokenFromUrl) {
     return <Navigate to={Navigation.LOGIN} />
   }
 

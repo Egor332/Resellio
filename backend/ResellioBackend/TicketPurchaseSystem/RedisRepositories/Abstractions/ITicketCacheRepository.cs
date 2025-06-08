@@ -1,6 +1,6 @@
 ﻿namespace ResellioBackend.TicketPurchaseSystem.RedisRepositories.Abstractions
 {
-    public interface ITicketRedisRepository
+    public interface ITicketCacheRepository
     {
         public Task<bool> LockTicketAsync(Guid id, TimeSpan timeSpan, int userId);
         public Task<bool> SetExpirationTimeAsync(Guid id, TimeSpan timeSpan);

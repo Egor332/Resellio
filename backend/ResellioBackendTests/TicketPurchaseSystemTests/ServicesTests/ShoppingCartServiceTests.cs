@@ -14,13 +14,13 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
 {
     public class ShoppingCartServiceTests
     {
-        private readonly Mock<ICartRedisRepository> _mockCartRepository;
+        private readonly Mock<ICartCacheRepository> _mockCartRepository;
         private readonly Mock<ITicketsRepository> _mockTicketsRepository;
         private readonly ShoppingCartService _shoppingCartService;
 
         public ShoppingCartServiceTests()
         {
-            _mockCartRepository = new Mock<ICartRedisRepository>();
+            _mockCartRepository = new Mock<ICartCacheRepository>();
             _mockTicketsRepository = new Mock<ITicketsRepository>();
             _shoppingCartService = new ShoppingCartService(_mockCartRepository.Object, _mockTicketsRepository.Object);
         }
@@ -48,8 +48,8 @@ namespace ResellioBackendTests.TicketPurchaseSystemTests.ServicesTests
                     {
                         CurrencyCode = "USD",
                         Amount = 10,
-                    }
-                   
+                    },
+                    HolderId = 1,                   
                 }; 
                 _mockTicketsRepository.Setup(repo => repo.GetTicketWithAllDependenciesByIdAsync(ticketId))
                                       .ReturnsAsync(ticket);

@@ -1,6 +1,10 @@
 import { Box, Typography, Paper } from '@mui/material'
+import UserInfoComponent from "../../components/UserInfoComponent/UserInfoComponent.tsx";
+import {useUserInfo} from "../../hooks/useUserInfo.ts";
 
 function CustomersProfile() {
+  const { userInfo, refetch } = useUserInfo();
+  
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
       <Paper elevation={3} sx={{ p: 4, width: '100%', maxWidth: 600 }}>
@@ -8,10 +12,7 @@ function CustomersProfile() {
           Your Profile
         </Typography>
         <Box sx={{ mt: 3 }}>
-          <Typography variant="body1">
-            This is your customer profile page. Here you can view and update
-            your personal information.
-          </Typography>
+          <UserInfoComponent userInfo={userInfo} onConfirmed={refetch}/>
         </Box>
       </Paper>
     </Box>

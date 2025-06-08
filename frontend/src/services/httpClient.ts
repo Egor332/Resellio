@@ -1,7 +1,9 @@
 import { TApiEndpoint } from '../assets/constants/api'
 import getEnvVariable from '../utils/envUtils'
 
-const DEFAULT_TIMEOUT = parseInt(getEnvVariable(import.meta.env, 'VITE_DEFAULT_HTTP_TIMEOUT'))
+const DEFAULT_TIMEOUT = parseInt(
+  getEnvVariable(import.meta.env, 'VITE_DEFAULT_HTTP_TIMEOUT')
+)
 
 /**
  * A generic HTTP client function to make API requests.
@@ -11,14 +13,14 @@ const DEFAULT_TIMEOUT = parseInt(getEnvVariable(import.meta.env, 'VITE_DEFAULT_H
  */
 export const apiRequest = async (
   endpoint: TApiEndpoint,
-  data?: Record<string, any>,
+  data?: Record<string, any> | FormData,
+  isFormData?: boolean,
   timeout?: number
 ): Promise<any> => {
   try {
     const token = endpoint.isAuthRequired
       ? localStorage.getItem('auth_token')
       : null
-
     const controller = new AbortController()
     const timeoutId = setTimeout(
       () => controller.abort(),
@@ -28,10 +30,14 @@ export const apiRequest = async (
     const response = await fetch(endpoint.url, {
       method: endpoint.method,
       headers: {
-        ...(data ? { 'Content-Type': 'application/json' } : {}),
+        ...(data && !isFormData ? { 'Content-Type': 'application/json' } : {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
-      body: data ? JSON.stringify(data) : undefined,
+      body: data
+        ? isFormData
+          ? (data as FormData)
+          : JSON.stringify(data)
+        : undefined,
       signal: controller.signal,
     })
 
@@ -50,9 +56,18 @@ export const apiRequest = async (
     }
 
     if (!response.ok) {
-      throw new Error(
-        `HTTP error! Status: ${response.status} ${response.statusText}`
-      )
+      let errorMessage = `HTTP ${response.status} errror!`
+
+      try {
+        const errorData = await response.text();
+        if (errorData) {
+          errorMessage = errorData
+        }
+      } catch (parseError) {
+        console.warn('Could not parse error response as text', parseError);
+      }
+
+      throw new Error(errorMessage)
     }
 
     try {

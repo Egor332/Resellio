@@ -45,7 +45,7 @@ namespace ResellioBackend.EventManagementSystem.Controllers
             }
             else
             {
-                return BadRequest(new { result.Message });
+                return BadRequest(new { result.Message , result.ErrorCode });
             }
         }
 

@@ -1,8 +1,7 @@
-﻿using StackExchange.Redis;
-
+﻿
 namespace ResellioBackend.TicketPurchaseSystem.RedisRepositories.Abstractions
 {
-    public interface ICartRedisRepository
+    public interface ICartCacheRepository
     {
         public Task<bool> CheckCartForExistenceAsync(int userId);
 

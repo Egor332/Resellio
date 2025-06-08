@@ -12,11 +12,13 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
     {
         private readonly IDatabaseTransactionManager _transactionManager;
         private readonly ITicketStatusService _ticketStatusService;
+        private readonly ITicketUnlockerService _ticketUnlockerService;
 
-        public TicketSellerService(IDatabaseTransactionManager transactionManager, ITicketStatusService ticketStatusService)
+        public TicketSellerService(IDatabaseTransactionManager transactionManager, ITicketStatusService ticketStatusService, ITicketUnlockerService ticketUnlockerService)
         {
             _transactionManager = transactionManager;
             _ticketStatusService = ticketStatusService;
+            _ticketUnlockerService = ticketUnlockerService;
         }
 
         public async Task<ResultBase> TryMarkTicketsAsSoldAsync(List<Guid> ticketIds, Customer buyer)
@@ -40,6 +42,12 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                 }
 
                 await _transactionManager.CommitTransactionAsync(transaction);
+
+                foreach (var ticketId in ticketIds)
+                {
+                    await _ticketUnlockerService.UnlockTicketAsync(buyer.UserId, ticketId); // No validation in case of error, but it seems me that it is not necessary here, TODO: if something goes wrong look here
+                }
+
                 return new ResultBase()
                 {
                     Success = true,

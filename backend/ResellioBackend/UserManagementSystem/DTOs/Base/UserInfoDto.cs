@@ -7,6 +7,8 @@
         public string LastName { get; set; }
         public DateTime CreatedDate { get; set; }
         public string? OrganiserName { get; set; }
+        public bool ConfirmedSeller { get; set; }
+        public string Role { get; set; }
         
     }
 }

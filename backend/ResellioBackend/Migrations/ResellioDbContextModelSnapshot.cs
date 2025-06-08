@@ -28,8 +28,11 @@ namespace ResellioBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("HolderId")
+                    b.Property<int>("HolderId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastLock")
                         .HasColumnType("datetime2");
@@ -69,6 +72,9 @@ namespace ResellioBackend.Migrations
 
                     b.Property<DateTime>("End")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -123,6 +129,9 @@ namespace ResellioBackend.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+
+                    b.Property<string>("ConnectedSellingAccount")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -226,7 +235,8 @@ namespace ResellioBackend.Migrations
                     b.HasOne("ResellioBackend.UserManagementSystem.Models.Base.UserBase", "Holder")
                         .WithMany()
                         .HasForeignKey("HolderId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ResellioBackend.UserManagementSystem.Models.Users.Customer", "PurchaseIntender")
                         .WithMany()

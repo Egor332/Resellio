@@ -1,6 +1,6 @@
 import { apiRequest } from './httpClient'
-import { apiEndpoints, getApiEndpoint } from '../assets/constants/api'
-import { Customer, Organiser } from '../store/auth/authSlice'
+import { API_ENDPOINTS, getApiEndpoint } from '../assets/constants/api'
+import { User } from '../store/auth/authSlice'
 import {
   LoginCredentials,
   CustomerRegisterData,
@@ -22,7 +22,7 @@ interface RegistersResponse {
 const authService = {
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
     try {
-      return await apiRequest(getApiEndpoint(apiEndpoints.LOGIN), credentials)
+      return await apiRequest(getApiEndpoint(API_ENDPOINTS.LOGIN), credentials)
     } catch (error: any) {
       throw new Error(error.message || 'Login failed')
     }
@@ -33,7 +33,7 @@ const authService = {
   ): Promise<RegistersResponse> => {
     try {
       return await apiRequest(
-        getApiEndpoint(apiEndpoints.CUSTOMERS_REGISTER),
+        getApiEndpoint(API_ENDPOINTS.CUSTOMERS_REGISTER),
         customerData
       )
     } catch (error: any) {
@@ -46,7 +46,7 @@ const authService = {
   ): Promise<RegistersResponse> => {
     try {
       return await apiRequest(
-        getApiEndpoint(apiEndpoints.ORGANISERS_REGISTER),
+        getApiEndpoint(API_ENDPOINTS.ORGANISERS_REGISTER),
         organiserData
       )
     } catch (error: any) {
@@ -54,10 +54,9 @@ const authService = {
     }
   },
 
-  getCurrentUser: async (): Promise<Customer | Organiser> => {
+  getCurrentUser: async (): Promise<User> => {
     try {
-      // TODO: add full support
-      return await apiRequest(getApiEndpoint(apiEndpoints.CURRENT_USER))
+      return await apiRequest(getApiEndpoint(API_ENDPOINTS.USER_INFO))
     } catch (error: any) {
       throw new Error(error.message || 'Failed to get user info')
     }
@@ -66,7 +65,7 @@ const authService = {
   requestPasswordReset: async (email: string): Promise<{ message: string }> => {
     try {
       return await apiRequest(
-        getApiEndpoint(apiEndpoints.REQUEST_PASSWORD_RESET),
+        getApiEndpoint(API_ENDPOINTS.REQUEST_PASSWORD_RESET),
         { email }
       )
     } catch (error: any) {
@@ -79,7 +78,7 @@ const authService = {
     newPassword: string
   ): Promise<{ message: string }> => {
     try {
-      return await apiRequest(getApiEndpoint(apiEndpoints.RESET_PASSWORD), {
+      return await apiRequest(getApiEndpoint(API_ENDPOINTS.RESET_PASSWORD), {
         token,
         newPassword,
       })

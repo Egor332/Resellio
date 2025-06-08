@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using ResellioBackend.EventManagementSystem.Enums;
 using ResellioBackend.UserManagementSystem.Models.Base;
@@ -20,8 +19,11 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
         public DateTime? LastLock { get; set; }
         public int? PurchaseIntenderId { get; set; }        
         public Customer? PurchaseIntender { get; set; }
-        public int? HolderId { get; set; }
-        public UserBase? Holder { get; set; }
+        public int HolderId { get; set; }
+        public UserBase Holder { get; set; }
+
+        [Required]
+        public bool IsUsed { get; set; } = false;
 
         public void ChangeLockParameters(DateTime? newLock, TicketStates newStatus, int? intenderId)
         {
@@ -52,6 +54,39 @@ namespace ResellioBackend.EventManagementSystem.Models.Base
             {
                 return null;
             }
+        }
+
+        public bool PutTicketOnSale(decimal amount, string currency)
+        {
+            var price = new Money();
+            if (!price.SetPrice(amount, currency))
+            {
+                return false;
+            }
+
+            this.CurrentPrice = price;
+            LastLock = null;
+            PurchaseIntender = null;
+            PurchaseIntenderId = null;
+            TicketState = TicketStates.Available;
+
+            return true;
+        }
+
+        public void StopSellingTicket()
+        {
+            this.CurrentPrice = null;
+            TicketState = TicketStates.Sold;
+        }
+
+        public bool MarkAsUsed()
+        {
+            if (IsUsed)
+            {
+                return false;
+            }
+            IsUsed = true;
+            return true;
         }
     }
 }

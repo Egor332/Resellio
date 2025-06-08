@@ -1,6 +1,10 @@
 import { Box, Typography, Paper } from '@mui/material'
+import {useUserInfo} from "../../hooks/useUserInfo.ts";
+import UserInfoComponent from "../../components/UserInfoComponent/UserInfoComponent.tsx";
 
 function OrganisersProfile() {
+  const { userInfo, refetch } = useUserInfo();
+  
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
       <Paper elevation={3} sx={{ p: 4, width: '100%', maxWidth: 600 }}>
@@ -8,10 +12,7 @@ function OrganisersProfile() {
           Organiser Profile
         </Typography>
         <Box sx={{ mt: 3 }}>
-          <Typography variant="body1">
-            This is your organiser profile page. Here you can manage your
-            organiser information and settings.
-          </Typography>
+          <UserInfoComponent userInfo={userInfo}  onConfirmed={refetch}/>
         </Box>
       </Paper>
     </Box>

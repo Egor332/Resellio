@@ -21,6 +21,7 @@ interface MenuItemType {
 // Define the structure for navigation icons
 export interface NavItem {
   icon: ReactNode
+  preIcon?: ReactNode // Added this field for content before the icon (like CartTimer)
   path?: string // Optional - if direct link without dropdown
   menuItems?: MenuItemType[] // Optional - for dropdown menus
   tooltip?: string
@@ -80,7 +81,12 @@ function BaseHeader({
           {/* Navigation Items */}
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {navItems.map((item, index) => (
-              <Box key={index}>
+              <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
+                {/* Display preIcon content if it exists */}
+                {item.preIcon && (
+                  <Box sx={{ mr: 1 }}>{item.preIcon}</Box>
+                )}
+                
                 {item.path ? (
                   // Direct link icon
                   <IconButton

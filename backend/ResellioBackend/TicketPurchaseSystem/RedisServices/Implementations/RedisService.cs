@@ -6,10 +6,10 @@ namespace ResellioBackend.TicketPurchaseSystem.RedisServices.Implementations
 {
     public class RedisService : IRedisService
     {
-        private readonly ITicketRedisRepository _ticketRepository;
-        private readonly ICartRedisRepository _cartRepository;
+        private readonly ITicketCacheRepository _ticketRepository;
+        private readonly ICartCacheRepository _cartRepository;
 
-        public RedisService(ITicketRedisRepository ticketRepository, ICartRedisRepository cartRepository)
+        public RedisService(ITicketCacheRepository ticketRepository, ICartCacheRepository cartRepository)
         {
             _ticketRepository = ticketRepository;
             _cartRepository = cartRepository;

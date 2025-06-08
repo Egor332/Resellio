@@ -1,5 +1,6 @@
 import { RouteObject, Navigate } from 'react-router-dom'
 import { Navigation } from '../assets/constants/navigation'
+import { Role } from '../store/auth/authSlice'
 import GuestWrapperPage from '../pages/GuestWrapperPage/GuestWrapperPage'
 import CustomersWrapperPage from '../pages/CustomersWrapperPage/CustomersWrapperPage'
 import OrganisersWrapperPage from '../pages/OrganisersWrapperPage/OrganisersWrapperPage'
@@ -13,6 +14,11 @@ import CustomersCart from '../pages/CustomersCart/CustomersCart'
 import OrganisersHome from '../pages/OrganisersHome/OrganisersHome'
 import CustomersProfile from '../pages/CustomersProfile/CustomersProfile'
 import OrganisersProfile from '../pages/OrganisersProfile/OrganisersProfile'
+import OrganisersAddEvent from '../pages/OrganisersAddEvent/OrganisersAddEvent'
+import CustomersMyTickets from '../pages/CustomersMyTickets/CustomersMyTickets'
+import CustomersCheckout from "../pages/CustomersCheckout/CustomersCheckout.tsx";
+import PaymentSuccess from '../pages/PaymentSuccess/PaymentSuccess'
+import PaymentFailure from '../pages/PaymentFailure/PaymentFailure'
 
 export const routes: RouteObject[] = [
   {
@@ -45,7 +51,7 @@ export const routes: RouteObject[] = [
   {
     path: Navigation.CUSTOMERS,
     element: (
-      <ProtectedRoute requiredRole="Customer">
+      <ProtectedRoute requiredRole={Role.Customer}>
         <CustomersWrapperPage />
       </ProtectedRoute>
     ),
@@ -62,13 +68,29 @@ export const routes: RouteObject[] = [
         path: Navigation.CUSTOMERS_PROFILE,
         element: <CustomersProfile />,
       },
+      {
+        path: Navigation.CUSTOMERS_MY_TICKETS,
+        element: <CustomersMyTickets />,
+      },
+      {
+        path: Navigation.CUSTOMERS_CHECKOUT_FOR_ORGANISER,
+        element: <CustomersCheckout />,
+      },
+      {
+        path: Navigation.CUSTOMERS_PAYMENT_SUCCESS,
+        element: <PaymentSuccess />,
+      },
+      {
+        path: Navigation.CUSTOMERS_PAYMENT_FAILURE,
+        element: <PaymentFailure />,
+      },
     ],
   },
 
   {
     path: Navigation.ORGANISERS,
     element: (
-      <ProtectedRoute requiredRole="Organiser">
+      <ProtectedRoute requiredRole={Role.Organiser}>
         <OrganisersWrapperPage />
       </ProtectedRoute>
     ),
@@ -80,6 +102,10 @@ export const routes: RouteObject[] = [
       {
         path: Navigation.ORGANISERS_PROFILE,
         element: <OrganisersProfile />,
+      },
+      {
+        path: Navigation.ORGANISERS_ADD_EVENT,
+        element: <OrganisersAddEvent />,
       },
     ],
   },

@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer, { logout } from './auth/authSlice'
 import bannerReducer from './banner/bannerSlice'
+import cartReducer from './cart/cartSlice'
 
 const authMiddleware = (store: any) => {
   let listenerAdded = false
@@ -25,6 +26,7 @@ const store = configureStore({
   reducer: {
     auth: authReducer,
     banner: bannerReducer,
+    cart: cartReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(authMiddleware),

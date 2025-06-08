@@ -24,14 +24,7 @@ namespace ResellioBackend.UserManagementSystem.Controllers
         public async Task<IActionResult> RequestResetPassword([FromBody]RequestResetPasswordDto dto)
         {
             var result = await _passwordResetService.RequestResetPasswordAsync(dto.Email);
-            if (result.Success)
-            {
-                return Ok(new { result.Message });
-            }
-            else
-            {
-                return BadRequest(new { result.Message });
-            }
+            return Ok(new { result.Message });
         }
 
         [HttpGet("redirect-to-form")]

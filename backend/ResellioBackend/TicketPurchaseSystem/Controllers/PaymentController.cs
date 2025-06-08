@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ResellioBackend.TicketPurchaseSystem.DTOs;
 using ResellioBackend.TicketPurchaseSystem.Services.Abstractions;
 using ResellioBackend.UserManagementSystem.Statics;
 using Stripe;
@@ -26,7 +27,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
 
         [Authorize(Policy = AuthorizationPolicies.CustomerPolicy)]
         [HttpPost("create-checkout-session")]
-        public async Task<IActionResult> CreateCheckoutSession()
+        public async Task<IActionResult> CreateCheckoutSession([FromBody] CreateCheckoutSessionDto dto)
         {
             var userIdClaim = User.FindFirst(BearerTokenClaimsNames.Id);
             if (userIdClaim == null)
@@ -34,7 +35,7 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
                 return Unauthorized();
             }
             var userId = int.Parse(userIdClaim.Value);
-            var sessionCreationResult = await _checkoutSessionCreatorService.CreateCheckoutSessionAsync(userId);
+            var sessionCreationResult = await _checkoutSessionCreatorService.CreateCheckoutSessionAsync(userId, dto.SellerId);
             if (sessionCreationResult.Success)
             {
                 return Ok(new { PublishableKey = _publishableKey, SessionId = sessionCreationResult.CreatedSession.Id });

@@ -1,25 +1,24 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from '../../services/authService.ts'
 
-export type Role = 'Customer' | 'Admin' | 'Organiser'
-
-export interface Customer {
-  email: string
-  firstName: string
-  lastName: string
-  role: Role
+export enum Role {
+  Customer = 'Customer',
+  Organiser = 'Organiser',
+  Admin = 'Admin',
 }
 
-export interface Organiser {
+export interface User {
   email: string
   firstName: string
   lastName: string
-  organiserName: string
+  createdDate: string,
+  organiserName: string | null
+  confirmedSeller: boolean,
   role: Role
 }
 
 interface AuthState {
-  user: Customer | Organiser | null
+  user: User | null
   token: string | null
   isAuthenticated: boolean
   loading: boolean
@@ -54,33 +53,35 @@ const initialState: AuthState = {
   error: null,
 }
 
-const createEmptyUserByRole = (role: Role): Customer | Organiser => {
-  if (role === 'Organiser') {
-    return {
-      email: '',
-      firstName: '',
-      lastName: '',
-      organiserName: '',
-      role: role,
-    } as Organiser
-  } else if (role === 'Customer') {
-    return {
-      email: '',
-      firstName: '',
-      lastName: '',
-      role: role,
-    } as Customer
-  } else {
-    throw new Error('Invalid role')
-  }
-}
 
 export const loginUser = createAsyncThunk(
   'auth/login',
   async (credentials: LoginCredentials, { rejectWithValue }) => {
     try {
-      return await authService.login(credentials)
+      const loginResponse = await authService.login(credentials)
+      localStorage.setItem('auth_token', loginResponse.token)
+
+      const userData = await authService.getCurrentUser()
+
+      return {
+        token: loginResponse.token,
+        user: userData,
+        message: loginResponse.message,
+      }
     } catch (error: any) {
+      return rejectWithValue(error.message)
+    }
+  }
+)
+
+export const fetchCurrentUser = createAsyncThunk(
+  'auth/fetchCurrentUser',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await authService.getCurrentUser()
+    } catch (error: any) {
+      // If we can't fetch user data, the token is likely invalid
+      localStorage.removeItem('auth_token')
       return rejectWithValue(error.message)
     }
   }
@@ -128,11 +129,8 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false
         state.isAuthenticated = true
-
-        state.user = createEmptyUserByRole(action.payload.userRole)
-
+        state.user = action.payload.user
         state.token = action.payload.token
-        localStorage.setItem('auth_token', action.payload.token)
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false
@@ -162,6 +160,21 @@ const authSlice = createSlice({
       .addCase(registerOrganiser.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload as string
+      })
+
+      .addCase(fetchCurrentUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(fetchCurrentUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+        state.isAuthenticated = false;
+        state.token = null;
       })
   },
 })

@@ -13,5 +13,10 @@ namespace ResellioBackend.EventManagementSystem.DTOs
         public bool IsHoldByOrganiser { get; set; }
         public int EventId { get; set; }
         public int TicketTypeId { get; set; }
+        public int SellerId { get; set; }
+        public bool IsUsed { get; set; }
+
     }
 }
+
+

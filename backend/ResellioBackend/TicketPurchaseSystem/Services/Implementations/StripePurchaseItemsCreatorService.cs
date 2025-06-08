@@ -13,15 +13,15 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
     public class StripePurchaseItemsCreatorService : IPurchaseItemCreatorService
     {
         private readonly ITicketsRepository _ticketsRepository;
-        private readonly ICartRedisRepository _cartRedisRepository;
+        private readonly ICartCacheRepository _cartRedisRepository;
 
-        public StripePurchaseItemsCreatorService(ICartRedisRepository cartRedisRepository, ITicketsRepository ticketsRepository)
+        public StripePurchaseItemsCreatorService(ICartCacheRepository cartRedisRepository, ITicketsRepository ticketsRepository)
         {
             _cartRedisRepository = cartRedisRepository;
             _ticketsRepository = ticketsRepository;
         }
 
-        public async Task<PurchaseItemCreationResult> CreatePurchaseItemListAsync(int userId)
+        public async Task<PurchaseItemCreationResult> CreatePurchaseItemListAsync(int userId, int sellerId)
         {
             var ticketIdsEnumeration = await _cartRedisRepository.GetAllTicketsAsync(userId);
             if (ticketIdsEnumeration.Count() == 0)
@@ -33,10 +33,22 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
                 };
             }
             List<Ticket> ticketList = new List<Ticket>();
+            string? sellerAccountId = null;
             foreach (var ticketId in ticketIdsEnumeration)
             {
                 var ticket = await _ticketsRepository.GetTicketWithAllDependenciesByIdAsync(ticketId); // TODO: consider some ticket != null verification
-                ticketList.Add(ticket!);                                                              
+                if ((ticket != null) && (ticket.HolderId == sellerId))
+                {
+                    ticketList.Add(ticket);
+                    if (sellerAccountId == null)
+                    {
+                        sellerAccountId = ticket.Holder.ConnectedSellingAccount;
+                    }
+                    else if (sellerAccountId != ticket.Holder.ConnectedSellingAccount)
+                    {
+                        throw new InvalidDataException("Missmatch of connected stripe accounts of one user"); 
+                    }
+                }                                                                              
             }
 
             List<SessionLineItemOptions> lineItems = new List<SessionLineItemOptions>();
@@ -77,7 +89,8 @@ namespace ResellioBackend.TicketPurchaseSystem.Services.Implementations
             {
                 Success = true,
                 Message = "",
-                ItemList = lineItems
+                ItemList = lineItems,
+                SellerAccountId = sellerAccountId                
             };
         }
     }
