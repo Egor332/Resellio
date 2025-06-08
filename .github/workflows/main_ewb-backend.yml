@@ -33,7 +33,7 @@ jobs:
           dotnet tool restoreAdd commentMore actions
           dotnet ef database update --project ./backend/ResellioBackend/ResellioBackend.csproj --startup-project ./backend/ResellioBackend
         env:
-          ConnectionStrings__DefaultConnection: ${{ secrets.RESELLIO_DB_CONN_STRING }}
+          ConnectionStrings__DefaultConnection: "${{ secrets.RESELLIO_DB_CONN_STRING }}"
 
       - name: Build with dotnet
         run: dotnet build ./backend/ResellioBackend/ResellioBackend.sln --configuration Release
