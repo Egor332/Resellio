@@ -8,6 +8,7 @@ export enum Navigation {
   CUSTOMERS_PROFILE = '/customers/profile',
   CUSTOMERS_CART = '/customers/cart',
   CUSTOMERS_MY_TICKETS = '/customers/my-tickets',
+  CUSTOMERS_CHECKOUT = '/customers/checkout',
   ORGANISERS = '/organisers',
   ORGANISERS_PROFILE = '/organisers/profile',
   ORGANISERS_ADD_EVENT = '/organisers/add-event',

@@ -4,7 +4,6 @@ import {
   Box,
   Typography,
   Paper,
-  Divider,
   CircularProgress,
   Button,
 } from '@mui/material'
@@ -13,10 +12,13 @@ import { fetchCartInfo, remove } from '../../store/cart/cartSlice'
 import useBanner from '../../hooks/useBanner'
 import CartTicketList from './CartTicketList'
 import { TicketDto } from '../../dtos/TicketDto'
+import {useNavigate} from "react-router-dom";
+import {Navigation} from '../../assets/constants/navigation'
 
 function CustomersCart() {
   const dispatch = useDispatch<AppDispatch>()
   const banner = useBanner()
+  const navigate = useNavigate()
   const [isRemoving, setIsRemoving] = useState<string | null>(null)
 
   const { groupedTickets, loading, error } = useSelector(
@@ -39,6 +41,10 @@ function CustomersCart() {
     } finally {
       setIsRemoving(null)
     }
+  }
+  
+  const handleProceedToCheckout = () => {
+    navigate(Navigation.CUSTOMERS_CHECKOUT)
   }
 
   const calculatePriceForSeller = (sellerId: number) => {
@@ -146,6 +152,7 @@ function CustomersCart() {
               variant="contained"
               color="primary"
               size="large"
+              onClick={handleProceedToCheckout}
             >
               Proceed to Checkout
             </Button>

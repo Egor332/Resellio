@@ -16,6 +16,7 @@ import CustomersProfile from '../pages/CustomersProfile/CustomersProfile'
 import OrganisersProfile from '../pages/OrganisersProfile/OrganisersProfile'
 import OrganisersAddEvent from '../pages/OrganisersAddEvent/OrganisersAddEvent'
 import CustomersMyTickets from '../pages/CustomersMyTickets/CustomersMyTickets'
+import CustomersCheckout from "../pages/CustomersCheckout/CustomersCheckout.tsx";
 
 export const routes: RouteObject[] = [
   {
@@ -68,6 +69,10 @@ export const routes: RouteObject[] = [
       {
         path: Navigation.CUSTOMERS_MY_TICKETS,
         element: <CustomersMyTickets />,
+      },
+      {
+        path: Navigation.CUSTOMERS_CHECKOUT,
+        element: <CustomersCheckout />,
       },
     ],
   },
