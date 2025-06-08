@@ -100,6 +100,11 @@ export const API_ENDPOINTS: TApiEndpoints = {
     method: 'PATCH',
     isAuthRequired: true,
   },
+  GET_QR_CODE: {
+    url: '/api/TicketsValidation/qr-code',
+    method: 'GET',
+    isAuthRequired: true,
+  }
 }
 
 const apiUrl = getEnvVariable(import.meta.env, 'VITE_API_URL')
