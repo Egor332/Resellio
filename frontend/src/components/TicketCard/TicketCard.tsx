@@ -113,6 +113,7 @@ const TicketCard: React.FC<{
                         color="secondary"
                         startIcon={<QrCode2Icon />}
                         onClick={handleShowQr}
+                        disabled={ticket.isOnSale}
                         sx={{
                             fontWeight: 600,
                             textTransform: 'none',
