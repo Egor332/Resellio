@@ -75,6 +75,8 @@ export const routes: RouteObject[] = [
       {
         path: Navigation.CUSTOMERS_CHECKOUT_FOR_ORGANISER,
         element: <CustomersCheckout />,
+      },
+      {
         path: Navigation.CUSTOMERS_PAYMENT_SUCCESS,
         element: <PaymentSuccess />,
       },
