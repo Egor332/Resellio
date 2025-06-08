@@ -1,6 +1,5 @@
 import { Box, Typography, Paper, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { Navigation } from '../../assets/constants/navigation'
 
 interface PaymentResultPageProps {
   icon: React.ReactNode

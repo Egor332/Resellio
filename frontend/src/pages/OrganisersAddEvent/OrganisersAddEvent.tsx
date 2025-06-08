@@ -5,7 +5,7 @@ import useBanner from '../../hooks/useBanner'
 import { useNavigate } from 'react-router-dom'
 import { apiRequest } from '../../services/httpClient'
 import { API_ENDPOINTS } from '../../assets/constants/api'
-import { EventDto, TicketType } from '../../dtos/EventDto'
+import { EventDto } from '../../dtos/EventDto'
 import { Navigation } from '../../assets/constants/navigation'
 
 function OrganisersAddEvent() {
