@@ -12,15 +12,18 @@ import { TicketDto } from '../../dtos/TicketDto';
 
 interface CartTicketListProps {
   tickets: TicketDto[];
-  onRemove: (ticket: TicketDto) => void;
-  removingId: string | null;
+  onRemove?: (ticket: TicketDto) => void;
+  removingId?: string | null;
+  showRemoveButton?: boolean;
 }
 
 const CartTicketList: React.FC<CartTicketListProps> = ({
   tickets,
   onRemove,
-  removingId
+  removingId,
+    showRemoveButton = true,
 }) => {
+  
   return (
     <List disablePadding>
       {tickets.map((ticket, index) => (
@@ -51,17 +54,19 @@ const CartTicketList: React.FC<CartTicketListProps> = ({
                 <Typography variant="subtitle1" fontWeight="bold">
                   {ticket.currentPrice.amount.toFixed(2)} {ticket.currentPrice.currencyCode}
                 </Typography>
-                
-                <Button
-                  variant="outlined"
-                  color="error"
-                  size="small"
-                  onClick={() => onRemove(ticket)}
-                  disabled={removingId === ticket.id}
-                  startIcon={removingId === ticket.id ? <CircularProgress size={16} /> : null}
-                >
-                  {removingId === ticket.id ? 'Removing...' : 'Remove'}
-                </Button>
+
+                {showRemoveButton && onRemove && (
+                    <Button
+                        variant="outlined"
+                        color="error"
+                        size="small"
+                        onClick={() => onRemove(ticket)}
+                        disabled={removingId === ticket.id}
+                        startIcon={removingId === ticket.id ? <CircularProgress size={16} /> : null}
+                    >
+                      {removingId === ticket.id ? 'Removing...' : 'Remove'}
+                    </Button>
+                )}
               </Box>
             </Box>
           </ListItem>
