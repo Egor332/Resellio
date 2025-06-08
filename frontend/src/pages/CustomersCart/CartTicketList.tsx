@@ -55,7 +55,7 @@ const CartTicketList: React.FC<CartTicketListProps> = ({
                   {ticket.currentPrice.amount.toFixed(2)} {ticket.currentPrice.currencyCode}
                 </Typography>
 
-                {showRemoveButton && onRemove && removingId !== undefined && (
+                {showRemoveButton && onRemove && (
                     <Button
                         variant="outlined"
                         color="error"
