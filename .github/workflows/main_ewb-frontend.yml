@@ -36,7 +36,9 @@ jobs:
             VITE_DEFAULT_HTTP_TIMEOUT: ${{ secrets.VITE_DEFAULT_HTTP_TIMEOUT }}
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./frontend/* -r
+        run: |
+          cd frontend
+          zip release.zip * -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
