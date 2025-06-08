@@ -12,7 +12,7 @@ const CustomersCheckout = () => {
     const sid = Number(sellerId)
     
     const groupedTickets = useSelector((state: RootState) => state.cart.groupedTickets);
-    const tickets = groupedTickets[sid]
+    const tickets = groupedTickets[sid] || [];
 
     const total = tickets.reduce((sum, t) => sum + t.currentPrice.amount, 0);
 
@@ -20,12 +20,8 @@ const CustomersCheckout = () => {
         try {
             const response = await apiRequest(getApiEndpoint(API_ENDPOINTS.CREATE_CHECKOUT_SESSION),{ sellerId: sid })
             const { publishableKey, sessionId } = response
-
-            console.log(response)
             
             const stripe = await loadStripe(publishableKey);
-            
-            console.log(stripe)
             
             if (stripe){
                 await stripe.redirectToCheckout({sessionId})
