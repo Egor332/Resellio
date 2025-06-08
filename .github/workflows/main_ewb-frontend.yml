@@ -29,6 +29,11 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
+        env:
+            VITE_API_URL: ${{ secrets.VITE_API_URL }}
+            VITE_FRONTEND_PORT: ${{ secrets.VITE_FRONTEND_PORT }}
+            VITE_HOST: ${{ secrets.VITE_HOST }}
+            VITE_DEFAULT_HTTP_TIMEOUT: ${{ secrets.VITE_DEFAULT_HTTP_TIMEOUT }}
 
       - name: Zip artifact for deployment
         run: zip release.zip ./frontend/* -r
