@@ -104,7 +104,7 @@ export const API_ENDPOINTS: TApiEndpoints = {
     url: '/api/TicketsValidation/qr-code',
     method: 'GET',
     isAuthRequired: true,
-  }
+  },
   CREATE_CHECKOUT_SESSION: {
     url: '/api/Payment/create-checkout-session',
     method: 'POST',
