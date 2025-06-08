@@ -43,8 +43,8 @@ function CustomersCart() {
     }
   }
   
-  const handleProceedToCheckout = () => {
-    navigate(Navigation.CUSTOMERS_CHECKOUT)
+  const handleProceedToCheckout = (sellerId: number) => {
+    navigate(Navigation.CUSTOMERS_CHECKOUT_FOR_ORGANISER.replace(':sellerId', sellerId.toString()))
   }
 
   const calculatePriceForSeller = (sellerId: number) => {
@@ -120,7 +120,7 @@ function CustomersCart() {
         Your Cart
       </Typography>
 
-      {sellerIds.map((sellerId, index) => (
+      {sellerIds.map((sellerId) => (
         <Paper
           key={sellerId}
           elevation={3}
@@ -152,7 +152,7 @@ function CustomersCart() {
               variant="contained"
               color="primary"
               size="large"
-              onClick={handleProceedToCheckout}
+              onClick={() => handleProceedToCheckout(sellerId)}
             >
               Proceed to Checkout
             </Button>

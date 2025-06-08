@@ -71,7 +71,7 @@ export const routes: RouteObject[] = [
         element: <CustomersMyTickets />,
       },
       {
-        path: Navigation.CUSTOMERS_CHECKOUT,
+        path: Navigation.CUSTOMERS_CHECKOUT_FOR_ORGANISER,
         element: <CustomersCheckout />,
       },
     ],
