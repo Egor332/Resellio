@@ -3,6 +3,9 @@ import CartTicketList from "../CustomersCart/CartTicketList.tsx";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store.ts";
 import {Box, Button, Divider, Paper, Typography} from "@mui/material";
+import {apiRequest} from "../../services/httpClient.ts";
+import {API_ENDPOINTS, getApiEndpoint} from "../../assets/constants/api.ts";
+import { loadStripe } from "@stripe/stripe-js";
 
 const CustomersCheckout = () => {
     const {sellerId} = useParams<{sellerId: string}>()
@@ -12,7 +15,32 @@ const CustomersCheckout = () => {
     const tickets = groupedTickets[sid]
 
     const total = tickets.reduce((sum, t) => sum + t.currentPrice.amount, 0);
-    
+
+    async function handlePayment() {
+        try {
+            const response = await apiRequest(getApiEndpoint(API_ENDPOINTS.CREATE_CHECKOUT_SESSION),{ sellerId: sid })
+            const { publishableKey, sessionId } = response
+
+            console.log(response)
+            
+            const stripe = await loadStripe(publishableKey);
+            
+            console.log(stripe)
+            
+            if (stripe){
+                await stripe.redirectToCheckout({sessionId})
+            } else {
+                throw new Error("Stripe did not load")
+            }
+        } catch (error: any) {
+            if (error instanceof Error) {
+                console.error("Error creating stripe checkout session:", error.message);
+            } else {
+                console.error("Error creating stripe checkout session:", error);
+            }
+        }
+    }
+
     return (
         <Box
             sx={{
@@ -79,6 +107,7 @@ const CustomersCheckout = () => {
                     size="large"
                     fullWidth
                     sx={{ mt: 2, py: 1.5, fontSize: 18 }}
+                    onClick={handlePayment}
                 >
                     Pay now via Stripe
                 </Button>
