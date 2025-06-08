@@ -22,18 +22,12 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-      - name: Install dotnet-ef
-        run: dotnet tool install --global dotnet-ef --version 9.*
-  
-      - name: Debug Connection String
-        run: echo "Conn: $env:ConnectionStrings__DefaultConnection"
-        shell: pwsh
-        env:
-          ConnectionStrings__DefaultConnection: ${{ secrets.RESELLIO_DB_CONN_STRING }}
-  
-      - name: Update Database
-        run: dotnet ef database update --project ./backend/ResellioBackend/ResellioBackend.csproj --startup-project ./backend/ResellioBackend
-        shell: pwsh
+      - name : Update Database
+        run: |
+          echo "Conn: $env:ConnectionStrings__DefaultConnection"
+          dotnet tool install --global dotnet-ef --version 9.*
+          dotnet tool restoreAdd commentMore actions
+          dotnet ef database update --project ./backend/ResellioBackend/ResellioBackend.csproj --startup-project ./backend/ResellioBackend
         env:
           ConnectionStrings__DefaultConnection: ${{ secrets.RESELLIO_DB_CONN_STRING }}
 
