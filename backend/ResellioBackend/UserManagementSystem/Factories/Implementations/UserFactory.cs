@@ -31,7 +31,7 @@ namespace ResellioBackend.UserManagementSystem.Factories.Implementations
                         LastName = organiserDto.LastName,
                         CreatedDate = DateTime.Now.Date,
                         IsActive = false,
-                        IsVerified = false
+                        IsVerified = true // set as true because lack of admin
                     };
                     return newOrganiser;
                 default:
