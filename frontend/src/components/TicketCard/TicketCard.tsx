@@ -65,14 +65,14 @@ const TicketCard: React.FC<{
             const response = await apiRequest(getApiEndpoint(API_ENDPOINTS.GET_QR_CODE, urlParams));
 
             const imageSrc = `data:image/png;base64,${response.qrCodeImage}`;
-            console.log(imageSrc)
+            
             if (response?.qrCodeImage) {
                 setQrImage(imageSrc);
             } else {
-                setQrError("Nie udało się pobrać kodu QR.");
+                setQrError("QR code fetching failed");
             }
         } catch (err) {
-            setQrError("Błąd pobierania kodu QR");
+            setQrError("QR code fetchin failed");
         } finally {
             setQrLoading(false);
         }
