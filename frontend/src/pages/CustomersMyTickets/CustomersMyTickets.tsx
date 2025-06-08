@@ -12,7 +12,7 @@ import { RootState } from "../../store/store.ts";
 
 function CustomersMyTickets() {
     const [loadingTickets, setLoadingTickets] = useState(false);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const itemsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(1);
     const [tickets, setTickets] = useState<TicketDto[]>([]);
     const [totalPages, setTotalPages] = useState(1);
