@@ -24,7 +24,11 @@ jobs:
           dotnet-version: '8.x'
       - name : Update Database
         run: |
-          echo "Conn: $env:ConnectionStrings__DefaultConnection"
+          if (-not $env:ConnectionStrings__DefaultConnection) {
+              throw "Connection string not found!"
+            } else {
+              Write-Host "Connection string length: $($env:ConnectionStrings__DefaultConnection.Length)"
+            }
           dotnet tool install --global dotnet-ef --version 9.*
           dotnet tool restoreAdd commentMore actions
           dotnet ef database update --project ./backend/ResellioBackend/ResellioBackend.csproj --startup-project ./backend/ResellioBackend
