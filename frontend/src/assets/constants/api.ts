@@ -100,6 +100,11 @@ export const API_ENDPOINTS: TApiEndpoints = {
     method: 'PATCH',
     isAuthRequired: true,
   },
+  CREATE_CHECKOUT_SESSION: {
+    url: '/api/Payment/create-checkout-session',
+    method: 'POST',
+    isAuthRequired: true,
+  },
 }
 
 const apiUrl = getEnvVariable(import.meta.env, 'VITE_API_URL')
