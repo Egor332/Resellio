@@ -26,14 +26,21 @@ namespace ResellioBackend.UserManagementSystem.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginCredentialsDto credentials)
         {
-            var result = await _authenticationService.LoginAsync(credentials);
-            if (result.Success)
+            try
             {
-                return Ok(new { result.Token, result.UserRole, result.Message });
+                var result = await _authenticationService.LoginAsync(credentials);
+                if (result.Success)
+                {
+                    return Ok(new { result.Token, result.UserRole, result.Message });
+                }
+                else
+                {
+                    return BadRequest(new { result.Message });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(new { result.Message });
+                return BadRequest(new { ex.Message });
             }
         }
 
