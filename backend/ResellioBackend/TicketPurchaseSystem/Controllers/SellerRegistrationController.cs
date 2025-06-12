@@ -33,9 +33,16 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
             var request = HttpContext.Request;
             var hostInfo = $"{request.Scheme}://{request.Host.Value}";
             var callbackUrl = hostInfo + "/api/SellerRegistration/oauth-callback";
-            string redirectStripeUrl = await _sellerRegistrationService.StartRegistrationAsync(userId, callbackUrl);
+            try
+            {
+                string redirectStripeUrl = await _sellerRegistrationService.StartRegistrationAsync(userId, callbackUrl);
 
-            return Ok(new {redirectStripeUrl} );
+                return Ok(new { redirectStripeUrl });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message, ex.StackTrace, ex.InnerException, ex.Source });
+            }
         }
 
         [HttpGet("oauth-callback")]

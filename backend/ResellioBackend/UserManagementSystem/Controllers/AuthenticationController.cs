@@ -40,7 +40,7 @@ namespace ResellioBackend.UserManagementSystem.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { ex.Message, ex.StackTrace, ex.InnerException, ex.Source, ex.DataTes });
+                return BadRequest(new { ex.Message, ex.StackTrace, ex.InnerException, ex.Source });
             }
         }
 
