@@ -36,17 +36,24 @@ namespace ResellioBackend.EventManagementSystem.Controllers
             }
 
             int organiserId = int.Parse(organiserIdClaim.Value);
-            
-            var result = await _eventCreatorService.CreateEventAsync(eventDto, organiserId);
-            
-            if (result.Success)
+
+            try
             {
-                return Ok(new { result.Message });
+                var result = await _eventCreatorService.CreateEventAsync(eventDto, organiserId);
+                if (result.Success)
+                {
+                    return Ok(new { result.Message });
+                }
+                else
+                {
+                    return BadRequest(new { result.Message, result.ErrorCode });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(new { result.Message , result.ErrorCode });
-            }
+                return BadRequest(new { ex.Message, ex.StackTrace, ex.InnerException, ex.Source });
+            }            
+           
         }
 
         [HttpGet("events")]
