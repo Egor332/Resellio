@@ -4,7 +4,7 @@ import EventForm from '../../components/EventForm/EventForm'
 import useBanner from '../../hooks/useBanner'
 import { useNavigate } from 'react-router-dom'
 import { apiRequest } from '../../services/httpClient'
-import { API_ENDPOINTS } from '../../assets/constants/api'
+import {API_ENDPOINTS, getApiEndpoint} from '../../assets/constants/api'
 import { EventDto } from '../../dtos/EventDto'
 import { Navigation } from '../../assets/constants/navigation'
 
@@ -41,7 +41,7 @@ function OrganisersAddEvent() {
       }
 
       await apiRequest(
-        API_ENDPOINTS.CREATE_EVENT,
+        getApiEndpoint(API_ENDPOINTS.CREATE_EVENT),
         formData,
         true // isFormData
       )
