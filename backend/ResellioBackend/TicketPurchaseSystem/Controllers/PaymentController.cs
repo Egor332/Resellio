@@ -35,14 +35,21 @@ namespace ResellioBackend.TicketPurchaseSystem.Controllers
                 return Unauthorized();
             }
             var userId = int.Parse(userIdClaim.Value);
-            var sessionCreationResult = await _checkoutSessionCreatorService.CreateCheckoutSessionAsync(userId, dto.SellerId);
-            if (sessionCreationResult.Success)
+            try
             {
-                return Ok(new { PublishableKey = _publishableKey, SessionId = sessionCreationResult.CreatedSession.Id });
+                var sessionCreationResult = await _checkoutSessionCreatorService.CreateCheckoutSessionAsync(userId, dto.SellerId);
+                if (sessionCreationResult.Success)
+                {
+                    return Ok(new { PublishableKey = _publishableKey, SessionId = sessionCreationResult.CreatedSession.Id });
+                }
+                else
+                {
+                    return BadRequest(sessionCreationResult.Message);
+                }
             }
-            else
+            catch (Exception ex) 
             {
-                return BadRequest(sessionCreationResult.Message);
+                return BadRequest(new { ex.Message, ex.StackTrace, ex.InnerException, ex.Source });
             }
         }
 
