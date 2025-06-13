@@ -21,6 +21,10 @@ namespace NotificationService
             // Services 
             builder.Services.AddTransient<ICustomEmailSender, SendGridEmailSender>();
 
+            builder.Services.AddHealthChecks().AddCheck<KafkaHealthCheck>("kafka");
+
+
+
             builder.Services.AddHostedService<KafkaConsumer>();
 
             var app = builder.Build();
@@ -38,6 +42,8 @@ namespace NotificationService
 
 
             app.MapControllers();
+
+            app.MapHealthChecks("/health/kafka");
 
             app.Run();
         }
