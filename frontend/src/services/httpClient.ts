@@ -27,6 +27,7 @@ export const apiRequest = async (
       timeout ?? DEFAULT_TIMEOUT
     )
 
+    console.log("Making API request to:", endpoint.url)
     const response = await fetch(endpoint.url, {
       method: endpoint.method,
       headers: {
