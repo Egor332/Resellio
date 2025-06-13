@@ -1,5 +1,7 @@
 ﻿using Confluent.Kafka;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using static Confluent.Kafka.ConfigPropertyNames;
+using System.Text.Json;
 
 namespace NotificationService.Services.Implementations
 {
@@ -19,8 +21,9 @@ namespace NotificationService.Services.Implementations
                 var config = new ProducerConfig { BootstrapServers = _bootstrapServers };
 
                 using var producer = new ProducerBuilder<Null, string>(config).Build();
-                producer.InitTransactions(TimeSpan.FromSeconds(1));
-
+                var jsonMessage = JsonSerializer.Serialize("message");
+                var kafkaMessage = new Message<Null, string>() { Value = jsonMessage };
+                producer.Produce("test", kafkaMessage);
                 return Task.FromResult(HealthCheckResult.Healthy("Kafka is reachable."));
             }
             catch (Exception ex)
