@@ -127,6 +127,9 @@ const EventForm: React.FC<EventFormProps> = ({
       if (ticketType.price < 0) {
         newErrors[`ticketTypes[${index}].price`] = 'Price cannot be negative'
       }
+      else if (ticketType.price <= 1) {
+        newErrors[`ticketTypes[${index}].price`] = 'Price must be greater than 1'
+      }
     })
 
     setErrors(newErrors)
