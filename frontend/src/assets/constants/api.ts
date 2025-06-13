@@ -110,6 +110,11 @@ export const API_ENDPOINTS: TApiEndpoints = {
     method: 'POST',
     isAuthRequired: true,
   },
+  RESENT_VERIFICATION_EMAIL: {
+    url: '/api/Authentication/resent-verification-email',
+    method: 'POST',
+    isAuthRequired: false,
+  },
 }
 
 const apiUrl = getEnvVariable(import.meta.env, 'VITE_API_URL')

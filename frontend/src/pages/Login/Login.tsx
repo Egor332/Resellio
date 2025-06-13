@@ -8,6 +8,7 @@ import { AppDispatch } from '../../store/store.ts'
 import { Button, TextField, Typography, Box } from '@mui/material'
 import RegistrationDialog from '../../components/RegistrationDialog/RegistrationDialog'
 import RequestPasswordResetDialog from '../../components/RequestPasswordResetDialog/RequestPasswordResetDialog'
+import ResendVerificationEmailDialog from '../../components/ResendVerificationEmailDialog/ResendVerificationEmailDialog'
 import useBanner from '../../hooks/useBanner'
 
 function Login() {
@@ -18,6 +19,7 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false)
   const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false)
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false)
+  const [isResendVerificationDialogOpen, setIsResendVerificationDialogOpen] = useState(false)
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const banner = useBanner()
@@ -66,6 +68,14 @@ function Login() {
 
   const closeResetDialog = () => {
     setIsResetDialogOpen(false)
+  }
+
+  const openResendVerificationDialog = () => {
+    setIsResendVerificationDialogOpen(true)
+  }
+
+  const closeResendVerificationDialog = () => {
+    setIsResendVerificationDialogOpen(false)
   }
 
   return (
@@ -127,6 +137,20 @@ function Login() {
             Register
           </Button>
         </Box>
+        
+        <Box sx={{ mt: 1, display: 'flex', justifyContent: 'flex-start' }}>
+          <Button
+            variant="text"
+            color="inherit"
+            onClick={openResendVerificationDialog}
+            disabled={isLoading}
+            sx={{ 
+              opacity: 0.75,
+            }}
+          >
+            Resend verification email
+          </Button>
+        </Box>
       </form>
 
       <RegistrationDialog
@@ -136,6 +160,10 @@ function Login() {
       <RequestPasswordResetDialog
         open={isResetDialogOpen}
         onClose={closeResetDialog}
+      />
+      <ResendVerificationEmailDialog
+        open={isResendVerificationDialogOpen}
+        onClose={closeResendVerificationDialog}
       />
     </Box>
   )
